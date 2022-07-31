@@ -2,12 +2,12 @@ package main
 
 import (
 	"io"
+	
 	// "github.com/chromedp/chromedp"
 	// "context"
 	// "errors"
 	"fmt"
 	"github.com/joho/godotenv"
-
 	// "math/rand"
 	// "net/http"
 	// "path/filepath"
@@ -23,6 +23,7 @@ import (
 	// "github.com/go-rod/rod/lib/proto"
 	// "github.com/go-rod/rod/lib/utils"
 	// "github.com/ysmood/gson"
+	// "github.com/otiai10/gosseract/v2"
 )
 
 type PolicyProvider interface {
@@ -49,15 +50,24 @@ func main() {
 		log.Fatalf("Some error occured. Err: %s", err)
 	}
 
+	//login to the page
 	username := os.Getenv("USERNAME")
-	password := os.Getenv("PASSWORD")
-
-	fmt.Println(username)
-	fmt.Println(password)
-
-	
+	password := os.Getenv("PASSWORD")	
 	page.MustElement("input[name='email']").MustInput(username).MustType(input.Enter)
 	page.MustElement("input[name='password']").MustInput(password).MustType(input.Enter)
-	page.MustWaitLoad().MustScreenshot("a.png")
 
+	//start a sandbox
+	page.MustElementR("button","Start AWS Sandbox").MustClick()
+	page.MustWaitLoad().MustScreenshot("creds.png")
+		
+	//MustElements immediately returns empty list if no element found, so we wait for it. 
+	time.Sleep(6 * time.Second)
+
+	// div[attr^="elem"]
+	vals :=	page.MustElements("div[class^='CopyableInstanceField__Value']")
+	
+	for _, v := range vals {
+		fmt.Println(v.MustText())
+	}
+		
 }
