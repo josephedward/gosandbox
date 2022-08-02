@@ -38,8 +38,10 @@ func TestLogin(t *testing.T){
 	if err != nil {
 		fmt.Println(err)
 		panic(err)
-	}
-	fmt.Println("creds : ",creds)
+	}	
+	
+
+	
 }
 
 	

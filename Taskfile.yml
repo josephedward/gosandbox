@@ -3,11 +3,21 @@ version: "3"
 tasks:
   test-env:
     cmds:
-      - echo "Task Test"
+      - echo "Task test-env"
+      - go clean -modcache
+      - go test ./test/env_test.go -v 
+  test-env-slow:
+    cmds:
+      - echo "Task test-env-slow
       - go clean -modcache
       - go test ./test/env_test.go -v -rod="show,slow=1s,trace"   
   test-interactive:
     cmds:
-      - echo "Task Test"
+      - echo "Task test-interactive"
       - go clean -testcache
       - go test ./test/interactive_test.go -v
+  test-interactive-slow:
+    cmds:
+      - echo "Task test-interactive-slow"
+      - go clean -testcache
+      - go test ./test/interactive_test.go -v -rod="show,slow=1s,trace"   

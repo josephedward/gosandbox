@@ -24,9 +24,7 @@ type PolicyProvider interface {
 func DocumentDownload(downloadKey string, page *rod.Page) (io.ReadCloser, error){
 	//start a sandbox
 
-
 	// page.MustWaitLoad().MustScreenshot(downloadKey)
-
 	f, err := os.OpenFile(downloadKey, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Println(err)

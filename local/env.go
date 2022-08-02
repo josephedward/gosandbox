@@ -1,18 +1,9 @@
 package local
 
 import(
-	// "github.com/josephedward/glovebox-go-code-challenge/acloud"
-	// "github.com/josephedward/glovebox-go-code-challenge/local"
-	// "testing"
-	// "github.com/go-rod/rod"
-	// "github.com/go-rod/rod/lib/input"
 	"github.com/joho/godotenv"
-	// "golang.design/x/clipboard"
-	// "io"
 	"log"
 	"os"
-	// "reflect"
-	// "time"
 	"fmt"
 )
 
