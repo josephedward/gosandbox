@@ -14,22 +14,22 @@ import (
 )
 
 
-const (
-	aCloudUrl = "https://learn.acloud.guru/cloud-playground/cloud-sandboxes"
-)
+// const (
+// 	aCloudUrl = "https://learn.acloud.guru/cloud-playground/cloud-sandboxes"
+// )
 
-var (
-	username = os.Getenv("USERNAME")
-	password = os.Getenv("PASSWORD")
-)
+// var (
+// 	username = os.Getenv("USERNAME")
+// 	password = os.Getenv("PASSWORD")
+// )
 
-type SandboxCredentials struct {
-	User string
-	Password string
-	URL string
-	KeyID string
-	AccessKey string
-}
+// type SandboxCredentials struct {
+// 	User string
+// 	Password string
+// 	URL string
+// 	KeyID string
+// 	AccessKey string
+// }
 
 
 func getSandboxCreds() {
@@ -81,7 +81,7 @@ func getSandboxCreds() {
 
 	// write/read text format data of the clipboard, and
 	// the byte buffer regarding the text are UTF8 encoded.
-	keyid := clipboard.Read(clipboard.FmtText)
+	keyid := clipboard.Read(clipboard.FmtText )
 
 	//zero out the clipboard just in case
 	clipboard.Write(clipboard.FmtText, nil)

@@ -5,7 +5,7 @@ tasks:
     cmds:
       - echo "Task Test"
       - go clean -modcache
-      - go test ./test/env_test.go -v
+      - go test ./test/env_test.go -v -rod="show,slow=1s,trace"   
   test-interactive:
     cmds:
       - echo "Task Test"

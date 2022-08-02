@@ -1,44 +1,33 @@
 package proxy
 
 import (
-	"fmt"
+	// "fmt"
+	"goscraper/local"
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/input"
-	"github.com/go-rod/rod/lib/launcher"
-	"os"
-	"io"
-	"reflect"
+	// "github.com/go-rod/rod/lib/launcher"
+	// "os"
+	// "io"
+	// "reflect"
 )
 
-type AccessInstance struct {
-	browser *rod.Browser
-	page *rod.Page
+type Connection struct {
+	Browser *rod.Browser
+	Page *rod.Page
 }
 
 
-func Login(username, password, webpage string) error {
-	
+func Login(login local.WebsiteLogin) (Connection, error ){
 	// Launch a new browser with default options, and connect to it.
-	browser := rod.New().MustConnect()
-	
-	// Even you forget to close, rod will close it after main process ends.
-	defer browser.MustClose()
+	browser:= rod.New().MustConnect()
 	
 	// Create a new page
-	page := browser.MustPage(webpage)
-	fmt.Println(reflect.TypeOf(webpage))
-	fmt.Println(page)
-
-	page.MustElement("input[name='email']").MustInput(username).MustType(input.Enter)
-	page.MustElement("input[name='password']").MustInput(password).MustType(input.Enter)
-	page.MustElementR("button", "Start AWS Sandbox").MustClick()
-
-	// div[attr^="elem"]
-	keys := page.MustElements("div[class^='CopyableInstanceField__Value'] label")
-	vals := page.MustElements("div[class^='CopyableInstanceField__Value']")	
+	page := browser.MustPage(login.Url)
+	// fmt.Println(page)
 	
-	Policies(keys,vals)
-	DocumentDownload("download", page)
-
-	return nil 
+	//login to the page
+	page.MustElement("input[name='email']").MustInput(login.Username).MustType(input.Enter)
+	page.MustElement("input[name='password']").MustInput(login.Password).MustType(input.Enter)
+	
+	return Connection{Browser: browser, Page: page}, nil
 }

@@ -3,11 +3,11 @@ package proxy
 import (
 	"fmt"
 	"github.com/go-rod/rod"
-	"github.com/go-rod/rod/lib/input"
-	"github.com/go-rod/rod/lib/launcher"
+	// "github.com/go-rod/rod/lib/input"
+	// "github.com/go-rod/rod/lib/launcher"
 	"os"
 	"io"
-	"reflect"
+	// "reflect"
 )
 
 
@@ -16,6 +16,7 @@ type PolicyProvider interface {
 	Policies(rod.Elements, rod.Elements) ([]Policy, error)
 	DocumentDownload(downloadKey string, page *rod.Page)  (io.ReadCloser, error)
 }
+
 
 
 

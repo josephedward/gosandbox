@@ -2,7 +2,7 @@ package proxy
 
 import(
 	"goscraper/local"
-	// "goscraper/acloud"
+	"goscraper/acloud"
 	"goscraper/proxy"
 	"testing"
 	"fmt"
@@ -11,12 +11,36 @@ import(
 
 func TestLogin(t *testing.T){
 	
-	login := local.LoadEnv()
-	fmt.Println(login)
-	t.Log("Login Test Passed")
+	//load env credentials from .env file
+	login, err := local.LoadEnv()
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	fmt.Println("login : ",login)
 
-	//call the login function
-	proxy.Login(login.username, login.password, login.url)
+	//connect to website
+	connect, err := proxy.Login(login)
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	fmt.Println("connect : ",connect)
 
+	//scrape credentials
+	vals, err := acloud.Sandbox(connect, login.Url)
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	fmt.Println("vals : ",vals)
+	creds , err := acloud.Copy(vals)
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	fmt.Println("creds : ",creds)
 }
+
+	
 

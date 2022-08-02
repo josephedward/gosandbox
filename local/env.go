@@ -17,15 +17,15 @@ import(
 )
 
 
-type AcloudLogin struct {
+type WebsiteLogin struct {
 	Url string
-	User string
+	Username string
 	Password string
 }
 
-func LoadEnv() AcloudLogin{
+func LoadEnv() (login WebsiteLogin, err error) {
 	//load env variables
-	err := godotenv.Load("../.env")
+	err = godotenv.Load("../.env")
 	if err != nil {
 		log.Fatalf("Could not load .env file - Err: %s", err)
 	}
@@ -36,5 +36,5 @@ func LoadEnv() AcloudLogin{
 	fmt.Println(username)
 	fmt.Println(password)
 	fmt.Println(url)
-	return AcloudLogin{Url: url, User: username, Password: password}
+	return WebsiteLogin{Url:url, Username:username, Password:password}, err
 }

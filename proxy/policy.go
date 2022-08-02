@@ -1,13 +1,13 @@
 package proxy
 
 import (
-	"fmt"
+	// "fmt"
 	"github.com/go-rod/rod"
-	"github.com/go-rod/rod/lib/input"
-	"github.com/go-rod/rod/lib/launcher"
-	"os"
-	"io"
-	"reflect"
+	// "github.com/go-rod/rod/lib/input"
+	// "github.com/go-rod/rod/lib/launcher"
+	// "os"
+	// "io"
+	// "reflect"
 )
 
 type Policy struct {
