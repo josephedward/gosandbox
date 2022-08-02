@@ -1,4 +1,4 @@
-package main
+package acloud
 
 import (
 	"fmt"
@@ -12,6 +12,24 @@ import (
 	// "reflect"
 	"time"
 )
+
+
+const (
+	aCloudUrl = "https://learn.acloud.guru/cloud-playground/cloud-sandboxes"
+)
+
+var (
+	username = os.Getenv("USERNAME")
+	password = os.Getenv("PASSWORD")
+)
+
+type SandboxCredentials struct {
+	User string
+	Password string
+	URL string
+	KeyID string
+	AccessKey string
+}
 
 
 func getSandboxCreds() {

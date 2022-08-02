@@ -1,0 +1,13 @@
+version: "3"
+
+tasks:
+  test-env:
+    cmds:
+      - echo "Task Test"
+      - go clean -modcache
+      - go test ./test/env_test.go -v
+  test-interactive:
+    cmds:
+      - echo "Task Test"
+      - go clean -testcache
+      - go test ./test/interactive_test.go -v
