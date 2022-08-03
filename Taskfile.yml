@@ -8,7 +8,7 @@ tasks:
       - go test ./test/env_test.go -v 
   test-env-slow:
     cmds:
-      - echo "Task test-env-slow
+      - echo "Task test-env-slow"
       - go clean -modcache
       - go test ./test/env_test.go -v -rod="show,slow=1s,trace"   
   test-interactive:

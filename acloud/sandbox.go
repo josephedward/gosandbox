@@ -1,7 +1,6 @@
 package acloud
 
 import (
-	"fmt"
 	"goscraper/proxy"
 	"github.com/go-rod/rod"
 	"golang.design/x/clipboard"
@@ -44,7 +43,6 @@ func Copy(vals rod.Elements) (SandboxCredentials, error) {
 	un := clipboard.Read(clipboard.FmtText)
 	//zero out the clipboard just in case
 	clipboard.Write(clipboard.FmtText, nil)
-	fmt.Println(string(un))
 
 	vals[1].MustElement("svg[aria-label='copy icon']").MustClick()
 	pw := clipboard.Read(clipboard.FmtText)

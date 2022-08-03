@@ -1,13 +1,8 @@
 package proxy
 
 import (
-	// "fmt"
-	"github.com/go-rod/rod"
-	// "github.com/go-rod/rod/lib/input"
-	// "github.com/go-rod/rod/lib/launcher"
-	// "os"
-	// "io"
-	// "reflect"
+	"fmt"
+	// "github.com/go-rod/rod"
 )
 
 type Policy struct {
@@ -16,16 +11,21 @@ type Policy struct {
 }
 
 
-func Policies(keys, vals rod.Elements) ([]Policy, error) {
-	//create policy objects with keys and vals
+func Policies(keys, vals []string) ([]Policy, error) {
+	//if keys and vals aren't the same length, return an error
+	if len(keys) != len(vals) {
+		return nil, fmt.Errorf("keys and vals must be the same length")
+	}
+
+	//create a slice of policies
 	policies := make([]Policy, len(keys))
 
-	for i := 0; i < 3; i++ {
-		policies[i] = Policy{
-			CarrierID:    keys[i].MustText(),
-			PolicyNumber: vals[i].MustText(),
-		}
+	//loop through the keys and vals and assign the values to the policies
+	for i, key := range keys {
+		policies[i].CarrierID = key
+		policies[i].PolicyNumber = vals[i]
 	}
-	
+
 	return policies, nil
 }
+

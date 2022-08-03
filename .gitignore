@@ -1,3 +1,5 @@
 .env
 misc
 *.png
+.txt
+test/creds.txt
