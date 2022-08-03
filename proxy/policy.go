@@ -2,7 +2,6 @@ package proxy
 
 import (
 	"fmt"
-	// "github.com/go-rod/rod"
 )
 
 type Policy struct {

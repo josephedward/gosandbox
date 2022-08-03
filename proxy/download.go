@@ -5,12 +5,9 @@ import (
 	"os"
 )
 
-
-
-
-func DocumentDownload(downloadKey string, policies []Policy)  error{
+func DocumentDownload(downloadKey string, policies []Policy) error {
 	//create a file with list of policies
-	file, err := os.Create(downloadKey+".txt")
+	file, err := os.Create(downloadKey + ".txt")
 	if err != nil {
 		return err
 	}
@@ -27,7 +24,3 @@ func DocumentDownload(downloadKey string, policies []Policy)  error{
 	return nil
 
 }
-
-
-
-

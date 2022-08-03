@@ -6,31 +6,10 @@ import (
 	"github.com/go-rod/rod/lib/input"
 	"github.com/joho/godotenv"
 	"golang.design/x/clipboard"
-	// "io"
 	"log"
 	"os"
-	// "reflect"
 	"time"
 )
-
-
-// const (
-// 	aCloudUrl = "https://learn.acloud.guru/cloud-playground/cloud-sandboxes"
-// )
-
-// var (
-// 	username = os.Getenv("USERNAME")
-// 	password = os.Getenv("PASSWORD")
-// )
-
-// type SandboxCredentials struct {
-// 	User string
-// 	Password string
-// 	URL string
-// 	KeyID string
-// 	AccessKey string
-// }
-
 
 func getSandboxCreds() {
 	// Launch a new browser with default options, and connect to it.
@@ -81,7 +60,7 @@ func getSandboxCreds() {
 
 	// write/read text format data of the clipboard, and
 	// the byte buffer regarding the text are UTF8 encoded.
-	keyid := clipboard.Read(clipboard.FmtText )
+	keyid := clipboard.Read(clipboard.FmtText)
 
 	//zero out the clipboard just in case
 	clipboard.Write(clipboard.FmtText, nil)
@@ -98,10 +77,7 @@ func getSandboxCreds() {
 	//append access key to the file
 	appendLine("aws_secret_access_key = " + string(accessKey))
 
-	
 }
-
-
 
 func appendLine(newLine string) {
 	f, err := os.OpenFile("../../../.aws/credentials", os.O_APPEND|os.O_WRONLY, 0644)
