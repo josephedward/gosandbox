@@ -5,12 +5,12 @@ tasks:
     cmds:
       - echo "Task test-env"
       - go clean -modcache
-      - go test ./test/env_test.go -v 
+      - go test ./test/methods_test.go -v 
   test-env-slow:
     cmds:
       - echo "Task test-env-slow"
       - go clean -modcache
-      - go test ./test/env_test.go -v -rod="show,slow=1s,trace"   
+      - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"   
   test-interactive:
     cmds:
       - echo "Task test-interactive"

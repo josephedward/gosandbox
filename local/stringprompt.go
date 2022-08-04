@@ -21,7 +21,19 @@ func StringPrompt(label string) string {
     return strings.TrimSpace(s)
 }
 
+
+
 // func main() {
 //     name := StringPrompt("What is your name?")
 //     fmt.Printf("Hello, %s!\n", name)
 // }
+
+
+
+
+func PanicIfErr(err error) {
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+}

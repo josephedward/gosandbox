@@ -37,7 +37,7 @@ func CreateLocalCreds(un, keyid, accesskey string) (LocalCreds, error) {
 }
 
 func AppendAwsCredentials(creds LocalCreds) error {
-	newLine := fmt.Sprintf("[%s]\n\n\n", creds.User)
+	newLine := fmt.Sprintf("\n\n\n[%s]\n", creds.User)
 	newLine += fmt.Sprintf("aws_access_key_id = %s\n", creds.KeyID)
 	newLine += fmt.Sprintf("aws_secret_access_key = %s\n", creds.AccessKey)
 	err := AppendLine(newLine, creds.Path)

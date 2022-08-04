@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 )
-
 func DocumentDownload(downloadKey string, policies []Policy) error {
 	//create a file with list of policies
 	file, err := os.Create(downloadKey + ".txt")

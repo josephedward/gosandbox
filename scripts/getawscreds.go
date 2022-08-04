@@ -1,4 +1,4 @@
-package acloud
+package scripts
 
 import (
 	"fmt"

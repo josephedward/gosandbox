@@ -15,7 +15,7 @@ type SandboxCredentials struct {
 	AccessKey string
 }
 
-func Sandbox(connect proxy.Connection, url string) (rod.Elements, error) {
+func Sandbox(connect proxy.Connection) (rod.Elements, error) {
 	//start a sandbox
 	connect.Page.MustElementR("button", "Start AWS Sandbox").MustClick()
 
@@ -24,12 +24,12 @@ func Sandbox(connect proxy.Connection, url string) (rod.Elements, error) {
 	connect.Page.MustWaitLoad().MustScreenshot("creds.png")
 
 	//find the right elements with traversal pattern div[attr^="elem"]
-	vals := connect.Page.MustWaitLoad().MustElements("div[class^='CopyableInstanceField__Value']")
+	elems := connect.Page.MustWaitLoad().MustElements("div[class^='CopyableInstanceField__Value']")
 
-	return vals, nil
+	return elems, nil
 }
 
-func Copy(vals rod.Elements) (SandboxCredentials, error) {
+func Copy(elems rod.Elements) (SandboxCredentials, error) {
 	//initialize cliboard package
 	err := clipboard.Init()
 	if err != nil {
@@ -37,26 +37,26 @@ func Copy(vals rod.Elements) (SandboxCredentials, error) {
 	}
 
 	//have to copy to clipboard to get whole string
-	vals[0].MustElement("svg[aria-label='copy icon']").MustClick()
+	elems[0].MustElement("svg[aria-label='copy icon']").MustClick()
 	// write/read text format data of the clipboard, and
 	// the byte buffer regarding the text are UTF8 encoded.
 	un := clipboard.Read(clipboard.FmtText)
 	//zero out the clipboard just in case
 	clipboard.Write(clipboard.FmtText, nil)
 
-	vals[1].MustElement("svg[aria-label='copy icon']").MustClick()
+	elems[1].MustElement("svg[aria-label='copy icon']").MustClick()
 	pw := clipboard.Read(clipboard.FmtText)
 	clipboard.Write(clipboard.FmtText, nil)
 
-	vals[2].MustElement("svg[aria-label='copy icon']").MustClick()
+	elems[2].MustElement("svg[aria-label='copy icon']").MustClick()
 	url := clipboard.Read(clipboard.FmtText)
 	clipboard.Write(clipboard.FmtText, nil)
 
-	vals[3].MustElement("svg[aria-label='copy icon']").MustClick()
+	elems[3].MustElement("svg[aria-label='copy icon']").MustClick()
 	keyid := clipboard.Read(clipboard.FmtText)
 	clipboard.Write(clipboard.FmtText, nil)
 
-	vals[4].MustElement("svg[aria-label='copy icon']").MustClick()
+	elems[4].MustElement("svg[aria-label='copy icon']").MustClick()
 	accesskey := clipboard.Read(clipboard.FmtText)
 	clipboard.Write(clipboard.FmtText, nil)
 
@@ -67,4 +67,15 @@ func Copy(vals rod.Elements) (SandboxCredentials, error) {
 		KeyID:     string(keyid),
 		AccessKey: string(accesskey),
 	}, nil
+}
+
+func KeyVals(creds SandboxCredentials) ([]string, []string) {
+	keys := []string{"username", "password", "url", "keyid", "accesskey"}
+	vals := []string{string(creds.User),
+		string(creds.Password),
+		string(creds.URL),
+		string(creds.KeyID),
+		string(creds.AccessKey)}
+
+	return keys, vals
 }

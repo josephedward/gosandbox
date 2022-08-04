@@ -4,10 +4,6 @@ import (
 	"fmt"
 )
 
-type Policy struct {
-	CarrierID    string
-	PolicyNumber string
-}
 
 
 func Policies(keys, vals []string) ([]Policy, error) {
