@@ -27,7 +27,6 @@ func StringPrompt(label string) string {
 // }
 
 
-
 func PanicIfErr(err error) {
 	if err != nil {
 		fmt.Println(err)

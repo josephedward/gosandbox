@@ -1,9 +1,9 @@
 package acloud
 
 import (
-	"goscraper/proxy"
 	"github.com/go-rod/rod"
 	"golang.design/x/clipboard"
+	"goscraper/proxy"
 	"time"
 )
 
