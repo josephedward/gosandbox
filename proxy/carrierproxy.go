@@ -1,16 +1,13 @@
 package proxy
 
 import (
-	"goscraper/local"
-	"github.com/go-rod/rod"
-	"io"
-	"github.com/go-rod/rod/lib/input"
-	"os"
 	"fmt"
-
+	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/input"
+	"goscraper/local"
+	"io"
+	"os"
 )
-
-
 
 //original
 type PolicyProvider interface {
@@ -19,8 +16,6 @@ type PolicyProvider interface {
 	DocumentDownload(downloadKey string) (io.ReadCloser, error)
 }
 
-
-
 //My Implementation Signatures
 // type PolicyProvider interface {
 // 	Login(login local.WebsiteLogin) (Connection, error)
@@ -28,12 +23,10 @@ type PolicyProvider interface {
 // 	DocumentDownload(downloadKey string, policies []Policy)  error
 // }
 
-
 type Policy struct {
 	CarrierID    string
 	PolicyNumber string
 }
-
 
 func Policies(keys, vals []string) ([]Policy, error) {
 	//if keys and vals aren't the same length, return an error
@@ -53,30 +46,25 @@ func Policies(keys, vals []string) ([]Policy, error) {
 	return policies, nil
 }
 
-
-
 type Connection struct {
 	Browser *rod.Browser
-	Page *rod.Page
+	Page    *rod.Page
 }
 
-
-func Login(login local.WebsiteLogin) (Connection, error ){
+func Login(login local.WebsiteLogin) (Connection, error) {
 	// Launch a new browser with default options, and connect to it.
-	browser:= rod.New().MustConnect()
-	
+	browser := rod.New().MustConnect()
+
 	// Create a new page
 	page := browser.MustPage(login.Url)
 	// fmt.Println(page)
-	
+
 	//login to the page
 	page.MustElement("input[name='email']").MustInput(login.Username).MustType(input.Enter)
 	page.MustElement("input[name='password']").MustInput(login.Password).MustType(input.Enter)
-	
+
 	return Connection{Browser: browser, Page: page}, nil
 }
-
-
 
 func DocumentDownload(downloadKey string, policies []Policy) error {
 	//create a file with list of policies

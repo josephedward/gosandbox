@@ -1,27 +1,25 @@
 package local
 
-import(
+import (
+	"fmt"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"fmt"
 )
 
-
 type WebsiteLogin struct {
-	Url string
+	Url      string
 	Username string
 	Password string
 }
 
 type ACloudEnv struct {
-	Url string
-	Username string
-	Password string
-	Aws_path string
+	Url          string
+	Username     string
+	Password     string
+	Aws_path     string
 	Download_key string
 }
-
 
 func LoadEnv() (login ACloudEnv, err error) {
 	//load env variables
@@ -30,6 +28,7 @@ func LoadEnv() (login ACloudEnv, err error) {
 		log.Fatalf("Could not load .env file - Err: %s", err)
 	}
 
+	//set all needed vendor credentials
 	username := os.Getenv("USERNAME")
 	password := os.Getenv("PASSWORD")
 	url := os.Getenv("URL")
@@ -39,48 +38,10 @@ func LoadEnv() (login ACloudEnv, err error) {
 	fmt.Println(password)
 	fmt.Println(url)
 	return ACloudEnv{
-		Url: url,
-		Username: username,
-		Password: password,
-		Aws_path: aws_path,
+		Url:          url,
+		Username:     username,
+		Password:     password,
+		Aws_path:     aws_path,
 		Download_key: download_key,
-		}, err
+	}, err
 }
-
-/*
-package local
-
-import (
-	// "fmt"
-	// "goscraper/proxy"
-	
-	"os"
-	"github.com/joho/godotenv"
-)
-
-
-
-
-
-
-
-func LoadEnv() error{
-	//load env variables
-	err := godotenv.Load("../.env")
-	PanicIfErr(err)
-	return err
-}
-
-
-func SetACloudEnv()(env ACloudEnv, err error) {
-	
-	err = LoadEnv()
-	PanicIfErr(err)
-	env.un = os.Getenv("USERNAME")
-	env.pw = os.Getenv("PASSWORD")
-	env.url = os.Getenv("URL")
-	env.aws_path = os.Getenv("AWS_RELATIVE_PATH")
-	env.download_key = os.Getenv("DOWNLOAD_KEY")
-	return env, err
-}
-*/

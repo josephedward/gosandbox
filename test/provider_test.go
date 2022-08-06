@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"goscraper/acloud"
 	"goscraper/local"
-	// "goscraper/proxy"
 	"testing"
-
 )
 
 
@@ -36,9 +34,9 @@ func TestProvider(t *testing.T) {
 	t.Log("policies : ", policies)
 
 	// //document download
-	// err = acgProvider.DocumentDownload("", policies)
-	// local.PanicIfErr(err)
-	// fmt.Println("Document Downloaded")
-	// t.Log("Document Downloaded")
+	err = p.DocumentDownload("creds", policies)
+	local.PanicIfErr(err)
+	fmt.Println("Document Downloaded")
+	t.Log("Document Downloaded")
 
 }
