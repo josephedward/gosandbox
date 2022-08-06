@@ -2,13 +2,8 @@ package acloud
 
 import (
 	"fmt"
-	"goscraper/proxy"
-	// 	// "github.com/go-rod/rod"
-	// 	// "golang.design/x/clipboard"
-	// 	// "time"
 	"goscraper/local"
-	// 	// "github.com/go-rod/rod"
-	// 	// "github.com/go-rod/rod/lib/input"
+	"goscraper/proxy"
 )
 
 type ACloudProvider struct {
