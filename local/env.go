@@ -7,11 +7,6 @@ import (
 	"os"
 )
 
-type WebsiteLogin struct {
-	Url      string
-	Username string
-	Password string
-}
 
 type ACloudEnv struct {
 	Url          string

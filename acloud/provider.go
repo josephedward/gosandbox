@@ -20,7 +20,7 @@ func (p *ACloudProvider) Login(username, password string) (err error) {
 	fmt.Println("login : ", login)
 
 	//connect to website
-	connect, err := proxy.Login(local.WebsiteLogin{Url: login.Url, Username: username, Password: password})
+	connect, err := proxy.Login(proxy.WebsiteLogin{Url: login.Url, Username: username, Password: password})
 	local.PanicIfErr(err)
 	fmt.Println("connect : ", connect)
 

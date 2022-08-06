@@ -19,7 +19,7 @@ func TestMethods(t *testing.T) {
 	t.Log("login : ", login)
 	
 	//connect to website
-	connect, err := proxy.Login(local.WebsiteLogin{Url: login.Url, Username: login.Username, Password: login.Password})
+	connect, err := proxy.Login(proxy.WebsiteLogin{Url: login.Url, Username: login.Username, Password: login.Password})
 	local.PanicIfErr(err)
 	fmt.Println("connect : ", connect)
 	t.Log("connect : ", connect)

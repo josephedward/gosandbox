@@ -18,7 +18,7 @@ type PolicyProvider interface {
 
 //My Implementation Signatures
 // type PolicyProvider interface {
-// 	Login(login local.WebsiteLogin) (Connection, error)
+// 	Login(login WebsiteLogin) (Connection, error)
 // 	Policies(keys, vals []string) ([]Policy, error)
 // 	DocumentDownload(downloadKey string, policies []Policy)  error
 // }
@@ -46,23 +46,29 @@ func Policies(keys, vals []string) ([]Policy, error) {
 	return policies, nil
 }
 
+type WebsiteLogin struct {
+	Url      string
+	Username string
+	Password string
+}
+
 type Connection struct {
 	Browser *rod.Browser
 	Page    *rod.Page
 }
 
-func Login(login local.WebsiteLogin) (Connection, error) {
+func Login(login WebsiteLogin) (Connection, error) {
 	// Launch a new browser with default options, and connect to it.
 	browser := rod.New().MustConnect()
 
 	// Create a new page
 	page := browser.MustPage(login.Url)
-	// fmt.Println(page)
 
 	//login to the page
 	page.MustElement("input[name='email']").MustInput(login.Username).MustType(input.Enter)
 	page.MustElement("input[name='password']").MustInput(login.Password).MustType(input.Enter)
 
+	//create connection object to return
 	return Connection{Browser: browser, Page: page}, nil
 }
 
