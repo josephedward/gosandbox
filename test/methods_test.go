@@ -6,10 +6,7 @@ import (
 	"goscraper/local"
 	"goscraper/proxy"
 	"testing"
-
 )
-
-
 
 func TestMethods(t *testing.T) {
 	//load env credentials from .env file
@@ -17,7 +14,7 @@ func TestMethods(t *testing.T) {
 	local.PanicIfErr(err)
 	fmt.Println("login : ", login)
 	t.Log("login : ", login)
-	
+
 	//connect to website
 	connect, err := proxy.Login(proxy.WebsiteLogin{Url: login.Url, Username: login.Username, Password: login.Password})
 	local.PanicIfErr(err)
@@ -60,6 +57,4 @@ func TestMethods(t *testing.T) {
 	fmt.Println("aws credentials appended")
 	t.Log("aws credentials appended")
 
-
 }
-

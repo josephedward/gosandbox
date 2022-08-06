@@ -7,17 +7,14 @@ import (
 	"testing"
 )
 
-
-
 func TestProvider(t *testing.T) {
 
 	//load env credentials from .env file
 	login, err := local.LoadEnv()
 	local.PanicIfErr(err)
 
-
 	var p acloud.ACloudProvider
-	
+
 	//use acloud provider to login
 	err = p.Login(login.Username, login.Password)
 	local.PanicIfErr(err)
@@ -27,7 +24,7 @@ func TestProvider(t *testing.T) {
 	fmt.Println("p : ", p)
 	fmt.Println("p.Connection : ", p.Connection)
 
-	//create policies 
+	//create policies
 	policies, err := p.Policies()
 	local.PanicIfErr(err)
 	fmt.Println("policies : ", policies)
