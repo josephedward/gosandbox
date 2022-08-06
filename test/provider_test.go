@@ -10,44 +10,35 @@ import (
 )
 
 
-// type ACloudProvider struct {
-// 	loginInfo proxy.WebsiteLogin
-// 	acgConnect proxy.Connection
-// 	sandboxElems rod.Elements
-// 	policyObjs []proxy.Policy
-// 	downloadKey string 
-// 	creds SandboxCredentials
-// 	local local.LocalCreds
-// }
-
-
 
 func TestProvider(t *testing.T) {
 
-	acgProvider := acloud.ACloudProvider{}
-	
-	//login
-	login, err := local.SetEnv()
+	//load env credentials from .env file
+	login, err := local.LoadEnv()
 	local.PanicIfErr(err)
-	fmt.Println("login : ", login)
-	t.Log("login : ", login)
 
+
+	var p acloud.ACloudProvider
+	
 	//use acloud provider to login
-	connect, err := acgProvider.Login(login)
+	err = p.Login(login.Username, login.Password)
 	local.PanicIfErr(err)
-	fmt.Println("login : ", connect)
-	t.Log("login : ", connect)
+	//print p ACloudEnv
+	fmt.Println("p.ACloudEnv : ", p.ACloudEnv)
+	//just print p
+	fmt.Println("p : ", p)
+	fmt.Println("p.Connection : ", p.Connection)
 
 	//create policies 
-	policies, err := acgProvider.Policies([]string{""}, []string{""})
+	policies, err := p.Policies()
 	local.PanicIfErr(err)
 	fmt.Println("policies : ", policies)
 	t.Log("policies : ", policies)
 
-	//document download
-	err = acgProvider.DocumentDownload("", policies)
-	local.PanicIfErr(err)
-	fmt.Println("Document Downloaded")
-	t.Log("Document Downloaded")
+	// //document download
+	// err = acgProvider.DocumentDownload("", policies)
+	// local.PanicIfErr(err)
+	// fmt.Println("Document Downloaded")
+	// t.Log("Document Downloaded")
 
 }

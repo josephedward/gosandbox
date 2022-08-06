@@ -1,12 +1,22 @@
 version: "3"
 
 tasks:
-  test-env:
+  test-methods:
     cmds:
       - echo "Task test-env"
       - go clean -modcache
       - go test ./test/methods_test.go -v 
-  test-env-slow:
+  test-methods-slow:
+    cmds:
+      - echo "Task test-env-slow"
+      - go clean -modcache
+      - go test ./test/methods_test.go -v -rod="show,slow=1s,trace"   
+  test-provider:
+    cmds:
+      - echo "Task test-env"
+      - go clean -modcache
+      - go test ./test/provider_test.go -v 
+  test-provider-slow:
     cmds:
       - echo "Task test-env-slow"
       - go clean -modcache

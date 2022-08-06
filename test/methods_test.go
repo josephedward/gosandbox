@@ -19,27 +19,25 @@ func TestMethods(t *testing.T) {
 	t.Log("login : ", login)
 	
 	//connect to website
-	connect, err := proxy.Login(login)
+	connect, err := proxy.Login(local.WebsiteLogin{Url: login.Url, Username: login.Username, Password: login.Password})
 	local.PanicIfErr(err)
 	fmt.Println("connect : ", connect)
 	t.Log("connect : ", connect)
 
 	//scrape credentials
-	vals, err := acloud.Sandbox(connect, login.Url)
+	elems, err := acloud.Sandbox(connect)
 	local.PanicIfErr(err)
-	fmt.Println("vals : ", vals)
-	t.Log("vals : ", vals)
 
 	//copy credentials to clipboard
-	creds, err := acloud.Copy(vals)
+	creds, err := acloud.Copy(elems)
 	local.PanicIfErr(err)
 	fmt.Println("creds : ", creds.User)
 	t.Log("creds : ", creds.User)
 
-keys, KeyVals := acloud.KeyVals(creds)
+	keys, vals := acloud.KeyVals(creds)
 
 	//create policies with map
-	policies, err := proxy.Policies(keys, keyVals)
+	policies, err := proxy.Policies(keys, vals)
 	local.PanicIfErr(err)
 	fmt.Println("policies : ", policies)
 	t.Log("policies : ", policies)
