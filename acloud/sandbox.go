@@ -16,14 +16,13 @@ type SandboxCredentials struct {
 }
 
 func Sandbox(connect proxy.Connection) (rod.Elements, error) {
-	//start a sandbox
-	connect.Page.MustElementR("button", "Start AWS Sandbox").MustClick()
 
+	connect.Page.MustElementR("button", "Start AWS Sandbox").MustClick()
 	//wait for the page to load (I know it is not best practice, but it works)
 	time.Sleep(6 * time.Second)
 	connect.Page.MustWaitLoad().MustScreenshot("creds.png")
 
-	//find the right elements with traversal pattern div[attr^="elem"]
+	// find the right elements with traversal pattern div[attr^="elem"]
 	elems := connect.Page.MustWaitLoad().MustElements("div[class^='CopyableInstanceField__Value']")
 
 	return elems, nil

@@ -14,6 +14,7 @@ func TestProvider(t *testing.T) {
 	local.PanicIfErr(err)
 
 	var p acloud.ACloudProvider
+	
 
 	//use acloud provider to login
 	err = p.Login(login.Username, login.Password)

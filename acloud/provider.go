@@ -55,16 +55,15 @@ func (p *ACloudProvider) Policies() (policies []proxy.Policy, err error) {
 }
 
 func (p ACloudProvider) DocumentDownload(downloadKey string, policies []proxy.Policy) (err error) {
-
 	//create LocalCreds from creds
-	localCreds, err := local.CreateLocalCreds(p.SandboxCredentials.User, p.SandboxCredentials.KeyID, p.SandboxCredentials.AccessKey)
-	local.PanicIfErr(err)
-	fmt.Println("localCreds : ", localCreds)
-
 	//append aws creds to .aws/credentials file
-	err = local.AppendAwsCredentials(localCreds)
+	err = local.AppendAwsCredentials(local.LocalCreds{
+		Path:      p.ACloudEnv.Aws_path,
+		User:      p.SandboxCredentials.User,
+		KeyID:     p.SandboxCredentials.KeyID,
+		AccessKey: p.SandboxCredentials.AccessKey,
+	})
 	local.PanicIfErr(err)
 	fmt.Println("aws credentials appended")
-
 	return err
 }

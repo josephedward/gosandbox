@@ -6,28 +6,29 @@ tasks:
       - echo "Task - testing methods"
       - go clean -modcache
       - go test ./test/methods_test.go -v 
-  test-methods-slow:
-    cmds:
-      - echo "Task - testing methods with visible browser"
-      - go clean -modcache
-      - go test ./test/methods_test.go -v -rod="show,slow=1s,trace"   
+  # test-methods-slow:
+  #   cmds:
+  #     - echo "Task - testing methods with visible browser"
+  #     - go clean -modcache
+  #     - go test ./test/methods_test.go -v -rod="show,slow=1s,trace"   
   test-provider:
     cmds:
       - echo "Task - testing provider"
       - go clean -modcache
       - go test ./test/provider_test.go -v 
-  test-provider-slow:
-    cmds:
-      - echo "Task - testing provider with visible browser"
-      - go clean -modcache
-      - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"   
+  # test-provider-slow:
+  #   cmds:
+  #     - echo "Task - testing provider with visible browser"
+  #     - go clean -modcache
+  #     - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"   
   test-interactive:
     cmds:
       - echo "Task test-interactive"
       - go clean -testcache
       - go test ./test/interactive_test.go -v
-  test-interactive-slow:
+  test-interactive-visible:
     cmds:
       - echo "Task test-interactive-slow with visible browser"
       - go clean -testcache
       - go test ./test/interactive_test.go -v -rod="show,slow=1s,trace"   
+  
