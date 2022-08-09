@@ -1,40 +1,37 @@
 package test
 
 import (
-	"fmt"
 	"goscraper/acloud"
-	"goscraper/local"
+	"goscraper/core"
 	"testing"
 )
 
 func TestProvider(t *testing.T) {
+	//create provicer 
+	var p acloud.ACloudProvider
+
+	//declare empty error 
+	var err error
 
 	//load env credentials from .env file
-	login, err := local.LoadEnv()
-	local.PanicIfErr(err)
-
-	var p acloud.ACloudProvider
-	
+	p.ACloudEnv, err = core.LoadEnv()
+	core.PrintIfErr(err)
+	//print p ACloudEnv
+	t.Log("p.ACloudEnv : ", p.ACloudEnv)
 
 	//use acloud provider to login
-	err = p.Login(login.Username, login.Password)
-	local.PanicIfErr(err)
-	//print p ACloudEnv
-	fmt.Println("p.ACloudEnv : ", p.ACloudEnv)
-	//just print p
-	fmt.Println("p : ", p)
-	fmt.Println("p.Connection : ", p.Connection)
+	err = p.Login(p.ACloudEnv.Username, p.ACloudEnv.Password)
+	core.PrintIfErr(err)
+	t.Log("p.Connection : ", p.Connection)
 
 	//create policies
 	policies, err := p.Policies()
-	local.PanicIfErr(err)
-	fmt.Println("policies : ", policies)
+	core.PrintIfErr(err)
 	t.Log("policies : ", policies)
 
 	// //document download
-	err = p.DocumentDownload("creds", policies)
-	local.PanicIfErr(err)
-	fmt.Println("Document Downloaded")
+	err = p.DocumentDownload(p.ACloudEnv.Download_key, policies)
+	core.PrintIfErr(err)
 	t.Log("Document Downloaded")
 
 }

@@ -1,9 +1,7 @@
-package local
+package core
 
 import (
-	"fmt"
 	"github.com/joho/godotenv"
-	// "log"
 	"os"
 )
 
@@ -19,12 +17,7 @@ func LoadEnv() (login ACloudEnv, err error) {
 
 	//load env variables
 	err = godotenv.Load("../.env")
-	if err != nil {
-		fmt.Println("Could not load .env file - Err: ", err)
-		// log.Fatalf("Could not load .env file - Err: %s", err)
-
-	}
-
+	
 	//set all needed vendor credentials
 	username := os.Getenv("USERNAME")
 	password := os.Getenv("PASSWORD")
@@ -44,9 +37,6 @@ func LoadEnvPath(path string) (login ACloudEnv, err error) {
 
 	//load env variables
 	err = godotenv.Load(path)
-	if err != nil {
-		fmt.Println("Could not load .env file - Err: ", err)
-	}
 
 	//set all needed vendor credentials
 	username := os.Getenv("USERNAME")

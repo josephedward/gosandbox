@@ -1,10 +1,11 @@
 package acloud
 
 import (
+	"goscraper/core"
+	"time"
+
 	"github.com/go-rod/rod"
 	"golang.design/x/clipboard"
-	"goscraper/proxy"
-	"time"
 )
 
 type SandboxCredentials struct {
@@ -15,7 +16,7 @@ type SandboxCredentials struct {
 	AccessKey string
 }
 
-func Sandbox(connect proxy.Connection) (rod.Elements, error) {
+func Sandbox(connect core.Connection) (rod.Elements, error) {
 
 	connect.Page.MustElementR("button", "Start AWS Sandbox").MustClick()
 	//wait for the page to load (I know it is not best practice, but it works)

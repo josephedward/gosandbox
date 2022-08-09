@@ -2,26 +2,26 @@ package acloud
 
 import (
 	"fmt"
-	"goscraper/local"
+	"goscraper/core"
 	"goscraper/proxy"
 )
 
 type ACloudProvider struct {
-	ACloudEnv *local.ACloudEnv
-	proxy.Connection
+	core.ACloudEnv
+	core.Connection
 	SandboxCredentials
 }
 
 func (p *ACloudProvider) Login(username, password string) (err error) {
 
 	//load env credentials from .env file
-	login, err := local.LoadEnv()
-	local.PanicIfErr(err)
+	login, err := core.LoadEnv()
+	core.PrintIfErr(err)
 	fmt.Println("login : ", login)
 
 	//connect to website
-	connect, err := proxy.Login(proxy.WebsiteLogin{Url: login.Url, Username: username, Password: password})
-	local.PanicIfErr(err)
+	connect, err := core.Login(core.WebsiteLogin{Url: login.Url, Username: username, Password: password})
+	core.PrintIfErr(err)
 	fmt.Println("connect : ", connect)
 
 	//set the provider's connection
@@ -33,11 +33,11 @@ func (p *ACloudProvider) Policies() (policies []proxy.Policy, err error) {
 
 	//scrape credentials
 	elems, err := Sandbox(p.Connection)
-	local.PanicIfErr(err)
+	core.PrintIfErr(err)
 
 	//copy credentials to clipboard
 	creds, err := Copy(elems)
-	local.PanicIfErr(err)
+	core.PrintIfErr(err)
 	fmt.Println("creds : ", creds.User)
 
 	//set the provider's credentials
@@ -48,22 +48,29 @@ func (p *ACloudProvider) Policies() (policies []proxy.Policy, err error) {
 
 	//create policies with map
 	policies, err = proxy.Policies(keys, vals)
-	local.PanicIfErr(err)
+	core.PrintIfErr(err)
 	fmt.Println("policies : ", policies)
 
 	return policies, err
 }
 
-func (p ACloudProvider) DocumentDownload(downloadKey string, policies []proxy.Policy) (err error) {
+func (p *ACloudProvider) DocumentDownload(downloadKey string, policies []proxy.Policy) (err error) {
+
+	//download text file of policies
+	err = core.DocumentDownload(downloadKey, policies)
+	core.PrintIfErr(err)
+	fmt.Println("download text file of policies : ", downloadKey)
+
 	//create LocalCreds from creds
 	//append aws creds to .aws/credentials file
-	err = local.AppendAwsCredentials(local.LocalCreds{
+	fmt.Println("p  :",p)
+	err = core.AppendAwsCredentials(core.LocalCreds{
 		Path:      p.ACloudEnv.Aws_path,
 		User:      p.SandboxCredentials.User,
 		KeyID:     p.SandboxCredentials.KeyID,
 		AccessKey: p.SandboxCredentials.AccessKey,
 	})
-	local.PanicIfErr(err)
-	fmt.Println("aws credentials appended")
+	core.PrintIfErr(err)
+	fmt.Println("append aws creds to .aws/credentials file @ ", p.ACloudEnv.Aws_path)
 	return err
 }

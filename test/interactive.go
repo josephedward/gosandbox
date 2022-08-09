@@ -3,51 +3,50 @@ package main
 import (
 	"fmt"
 	"goscraper/acloud"
-	"goscraper/local"
 	"goscraper/proxy"
 )
 
 func main() {
 
-	cliEnv, err := local.Execute()
-	local.PanicIfErr(err)
+	cliEnv, err := core.Execute()
+	core.PrintIfErr(err)
 	fmt.Println("cliEnv : ", cliEnv)
 
 	//connect to website
-	connect, err := proxy.Login(proxy.WebsiteLogin{Url: cliEnv.Url, Username: cliEnv.Username, Password: cliEnv.Password})
-	local.PanicIfErr(err)
+	connect, err := core.Login(core.WebsiteLogin{Url: cliEnv.Url, Username: cliEnv.Username, Password: cliEnv.Password})
+	core.PrintIfErr(err)
 	fmt.Println("connect : ", connect)
 
 	//scrape credentials
 	elems, err := acloud.Sandbox(connect)
-	local.PanicIfErr(err)
+	core.PrintIfErr(err)
 
 	//copy credentials to clipboard
 	creds, err := acloud.Copy(elems)
-	local.PanicIfErr(err)
+	core.PrintIfErr(err)
 	fmt.Println("creds : ", creds.User)
 
 	keys, vals := acloud.KeyVals(creds)
 
 	//create policies with map
 	policies, err := proxy.Policies(keys, vals)
-	local.PanicIfErr(err)
+	core.PrintIfErr(err)
 	fmt.Println("policies : ", policies)
 
 	//download text file of policies
-	err = proxy.DocumentDownload("creds", policies)
-	local.PanicIfErr(err)
+	err = core.DocumentDownload("creds", policies)
+	core.PrintIfErr(err)
 	fmt.Println("Document Downloaded")
 
-//create LocalCreds from creds
+	//create LocalCreds from creds
 	//append aws creds to .aws/credentials file
-	err = local.AppendAwsCredentials(local.LocalCreds{
+	err = core.AppendAwsCredentials(core.LocalCreds{
 		Path:      cliEnv.Aws_path,
 		User:      creds.User,
 		KeyID:     creds.KeyID,
 		AccessKey: creds.AccessKey,
 	})
-	local.PanicIfErr(err)
+	core.PrintIfErr(err)
 	fmt.Println("aws credentials appended")
 
 }

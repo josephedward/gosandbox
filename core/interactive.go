@@ -1,11 +1,10 @@
-package local
+package core
 
 import (
 	"errors"
 	"fmt"
-	"github.com/manifoldco/promptui"
-	// "github.com/spf13/cobra"
 	"os"
+	"github.com/manifoldco/promptui"
 )
 
 type promptContent struct {
@@ -19,7 +18,7 @@ type promptContent struct {
 func Execute() (ACloudEnv, error) {
 
 	choice := promptGetInput(promptContent{
-		Label: "Welcome to the ACloud Sandbox Procurer. Would you like to use an .env file or enter your credentials manually? (env/manual) ",
+		Label: "Welcome to the ACloud Sandbox Procurer. Would you like to use an .env file or enter your credentials manually (env/manual) ",
 	})
 	tempEnv := ACloudEnv{}
 	if choice == "env" {
@@ -38,7 +37,7 @@ func Execute() (ACloudEnv, error) {
 func promptEnvFile(tempEnv ACloudEnv) (ACloudEnv, error) {
 	//load env variables
 	env_path := promptGetInput(promptContent{
-		Label: "Please enter the path to the .env file from this directory (Default is .env)",
+		Label: "Please enter the path to the .env file from this directory",
 	})
 	// if env_path == "" {
 	// 	env_path = ".env"
@@ -54,24 +53,24 @@ func promptEnvFile(tempEnv ACloudEnv) (ACloudEnv, error) {
 func promptManual(tempEnv ACloudEnv) (ACloudEnv, error) {
 	// get env vars via cli prompt
 	tempEnv.Url = promptGetInput(promptContent{
-		Label: "Name of web property URL you would like to login to? (Default is https://learn.acloud.guru/cloud-playground/cloud-sandboxes)",
+		Label: "Name of web property URL you would like to login to",
 	})
 	// if tempEnv.Url == "" {
 	// 	tempEnv.Url = "https://learn.acloud.guru/cloud-playground/cloud-sandboxes"
 	// }
 	tempEnv.Username = promptGetInput(promptContent{
-		Label: "What is your username?",
+		Label: "What is your username",
 	})
 	tempEnv.Password = promptGetInput(promptContent{
-		Label: "What is your password?",
+		Label: "What is your password",
 	})
 	// get aws_path via cli prompt
 	tempEnv.Aws_path = promptGetInput(promptContent{
-		Label: "Where would you like your sandbox credentials appended?",
+		Label: "Where would you like your sandbox credentials appended",
 	})
 	// get download path via cli prompt
 	tempEnv.Download_key = promptGetInput(promptContent{
-		Label: "What would you like the name of your sandbox credentials file to be?",
+		Label: "What would you like the name of your sandbox credentials file to be",
 	})
 	//if all env vars are set, return the env
 	if tempEnv.Url != "" && tempEnv.Username != "" && tempEnv.Password != "" && tempEnv.Aws_path != "" && tempEnv.Download_key != "" {
@@ -106,4 +105,11 @@ func promptGetInput(pc promptContent) string {
 	fmt.Printf("Input: %s\n", result)
 
 	return result
+}
+
+
+func PrintIfErr(err error) {
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }

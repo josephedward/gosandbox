@@ -5,30 +5,17 @@ tasks:
     cmds:
       - echo "Task - testing methods"
       - go clean -modcache
-      - go test ./test/methods_test.go -v 
-  # test-methods-slow:
-  #   cmds:
-  #     - echo "Task - testing methods with visible browser"
-  #     - go clean -modcache
-  #     - go test ./test/methods_test.go -v -rod="show,slow=1s,trace"   
+      # setting rod to default to visible until I have the error handling/race condition set up 
+      - go test ./test/methods_test.go -v -rod="show,slow=1s,trace" 
   test-provider:
     cmds:
       - echo "Task - testing provider"
       - go clean -modcache
-      - go test ./test/provider_test.go -v 
-  # test-provider-slow:
-  #   cmds:
-  #     - echo "Task - testing provider with visible browser"
-  #     - go clean -modcache
-  #     - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"   
+      - go test ./test/provider_test.go -v -rod="show,slow=1s,trace" 
   test-interactive:
     cmds:
-      - echo "Task test-interactive"
+      - echo "Task - testing interactive CLI"
       - go clean -testcache
-      - go test ./test/interactive_test.go -v
-  test-interactive-visible:
-    cmds:
-      - echo "Task test-interactive-slow with visible browser"
-      - go clean -testcache
-      - go test ./test/interactive_test.go -v -rod="show,slow=1s,trace"   
+      - go run ./test/interactive.go -v -rod="show,slow=1s,trace" 
+
   
