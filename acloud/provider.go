@@ -71,6 +71,6 @@ func (p *ACloudProvider) DocumentDownload(downloadKey string, policies []proxy.P
 		AccessKey: p.SandboxCredentials.AccessKey,
 	})
 	core.PrintIfErr(err)
-	fmt.Println("append aws creds to .aws/credentials file @ ", p.ACloudEnv.Aws_path)
+	fmt.Println("appended aws creds to .aws/credentials file @ ", p.ACloudEnv.Aws_path)
 	return err
 }

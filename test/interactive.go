@@ -26,6 +26,7 @@ func main() {
 	core.PrintIfErr(err)
 	fmt.Println("creds : ", creds.User)
 
+	//create string arrays of credentials
 	keys, vals := acloud.KeyVals(creds)
 
 	//create policies with map
