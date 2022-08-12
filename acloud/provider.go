@@ -2,8 +2,8 @@ package acloud
 
 import (
 	"fmt"
-	"goscraper/core"
-	"goscraper/proxy"
+	"gosandbox/core"
+	"gosandbox/proxy"
 )
 
 type ACloudProvider struct {
@@ -32,7 +32,7 @@ func (p *ACloudProvider) Login(username, password string) (err error) {
 func (p *ACloudProvider) Policies() (policies []proxy.Policy, err error) {
 
 	//scrape credentials
-	elems, err := Sandbox(p.Connection)
+	elems, err := Sandbox(p.Connection, p.ACloudEnv.Download_key)
 	core.PrintIfErr(err)
 
 	//copy credentials to clipboard
@@ -63,7 +63,7 @@ func (p *ACloudProvider) DocumentDownload(downloadKey string, policies []proxy.P
 
 	//create LocalCreds from creds
 	//append aws creds to .aws/credentials file
-	fmt.Println("p  :",p)
+	fmt.Println("p  :", p)
 	err = core.AppendAwsCredentials(core.LocalCreds{
 		Path:      p.ACloudEnv.Aws_path,
 		User:      p.SandboxCredentials.User,

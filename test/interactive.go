@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"goscraper/acloud"
-	"goscraper/proxy"
+	"gosandbox/acloud"
+	"gosandbox/proxy"
 )
 
 func main() {

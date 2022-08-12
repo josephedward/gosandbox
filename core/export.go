@@ -2,8 +2,8 @@ package core
 
 import (
 	"fmt"
+	"gosandbox/proxy"
 	"os"
-	"goscraper/proxy"
 )
 
 type LocalCreds struct {
@@ -63,4 +63,8 @@ func DocumentDownload(downloadKey string, policies []proxy.Policy) error {
 
 	return nil
 
+}
+
+func ScreenShot(filename string, connect Connection) {
+	connect.Page.MustWaitLoad().MustScreenshot(filename + ".png")
 }

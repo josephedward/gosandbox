@@ -2,9 +2,9 @@ package test
 
 import (
 	"fmt"
-	"goscraper/acloud"
-	"goscraper/core"
-	"goscraper/proxy"
+	"gosandbox/acloud"
+	"gosandbox/core"
+	"gosandbox/proxy"
 	"testing"
 )
 

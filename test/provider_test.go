@@ -1,16 +1,16 @@
 package test
 
 import (
-	"goscraper/acloud"
-	"goscraper/core"
+	"gosandbox/acloud"
+	"gosandbox/core"
 	"testing"
 )
 
 func TestProvider(t *testing.T) {
-	//create provicer 
+	//create provider
 	var p acloud.ACloudProvider
 
-	//declare empty error 
+	//declare empty error
 	var err error
 
 	//load env credentials from .env file

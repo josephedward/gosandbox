@@ -1,11 +1,11 @@
 package acloud
 
 import (
-	"goscraper/core"
-	"time"
-
+	"gosandbox/core"
+	"errors"
 	"github.com/go-rod/rod"
 	"golang.design/x/clipboard"
+	"time"
 )
 
 type SandboxCredentials struct {
@@ -16,17 +16,31 @@ type SandboxCredentials struct {
 	AccessKey string
 }
 
-func Sandbox(connect core.Connection) (rod.Elements, error) {
+func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) {
 
-	connect.Page.MustElementR("button", "Start AWS Sandbox").MustClick()
-	//wait for the page to load (I know it is not best practice, but it works)
-	time.Sleep(6 * time.Second)
-	connect.Page.MustWaitLoad().MustScreenshot("creds.png")
+	elems := make(rod.Elements, 0)
+	time.Sleep(3 * time.Second)
+	// It will keep polling until one selector has found a match
+	connect.Page.Race().ElementR("button", "Start AWS Sandbox").MustHandle(func(e *rod.Element) {
+		e.MustClick()
+		time.Sleep(3 * time.Second)
+		core.ScreenShot(downloadKey, connect)
+		elems = Scrape(connect)
+	}).Element("div[class^='CopyableInstanceField__Value']").MustHandle(func(e *rod.Element) {
+		time.Sleep(3 * time.Second)
+		core.ScreenShot(downloadKey, connect)
+		elems = Scrape(connect)
+	}).MustDo()
 
-	// find the right elements with traversal pattern div[attr^="elem"]
-	elems := connect.Page.MustWaitLoad().MustElements("div[class^='CopyableInstanceField__Value']")
-
+	if len(elems) == 0 {
+		return nil, errors.New("no elements found")
+	}
 	return elems, nil
+}
+
+func Scrape(connect core.Connection) rod.Elements {
+	elems := connect.Page.MustWaitLoad().MustElements("div[class^='CopyableInstanceField__Value']")
+	return elems
 }
 
 func Copy(elems rod.Elements) (SandboxCredentials, error) {

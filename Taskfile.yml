@@ -5,17 +5,20 @@ tasks:
     cmds:
       - echo "Task - testing methods"
       - go clean -modcache
-      # setting rod to default to visible until I have the error handling/race condition set up 
-      - go test ./test/methods_test.go -v -rod="show,slow=1s,trace" 
-  test-provider:
+      # setting rod to default to visible until I have the error handling/race condition set up
+      - go test ./test/methods_test.go -v -rod="show,slow=1s,trace"
+  test-provider-slow:
     cmds:
       - echo "Task - testing provider"
       - go clean -modcache
-      - go test ./test/provider_test.go -v -rod="show,slow=1s,trace" 
+      - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"
+  test-provider-fast:
+    cmds:
+      - echo "Task - testing provider"
+      - go clean -modcache
+      - go test ./test/provider_test.go -v
   test-interactive:
     cmds:
       - echo "Task - testing interactive CLI"
       - go clean -testcache
-      - go run ./test/interactive.go -v -rod="show,slow=1s,trace" 
-
-  
+      - go run ./test/interactive.go -v -rod="show,slow=1s,trace"
