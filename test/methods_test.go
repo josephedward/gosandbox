@@ -22,7 +22,7 @@ func TestMethods(t *testing.T) {
 	t.Log("connect : ", connect)
 
 	//scrape credentials
-	elems, err := acloud.Sandbox(connect)
+	elems, err := acloud.Sandbox(connect, login.Download_key)
 	core.PrintIfErr(err)
 
 	//copy credentials to clipboard

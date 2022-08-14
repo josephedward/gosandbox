@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gosandbox/acloud"
 	"gosandbox/proxy"
+	"gosandbox/core"
 )
 
 func main() {
@@ -18,7 +19,7 @@ func main() {
 	fmt.Println("connect : ", connect)
 
 	//scrape credentials
-	elems, err := acloud.Sandbox(connect)
+	elems, err := acloud.Sandbox(connect, cliEnv.Download_key)
 	core.PrintIfErr(err)
 
 	//copy credentials to clipboard
@@ -51,3 +52,4 @@ func main() {
 	fmt.Println("aws credentials appended")
 
 }
+

@@ -1,24 +1,24 @@
 version: "3"
 
 tasks:
-  test-methods:
+  test-all:
     cmds:
-      - echo "Task - testing methods"
+      - echo "Task - testing all methods"
       - go clean -modcache
-      # setting rod to default to visible until I have the error handling/race condition set up
-      - go test ./test/methods_test.go -v -rod="show,slow=1s,trace"
-  test-provider-slow:
+      - cd /test
+      - go test -v
+  get-creds-visible:
     cmds:
       - echo "Task - testing provider"
       - go clean -modcache
       - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"
-  test-provider-fast:
+  get-aws-creds:
     cmds:
       - echo "Task - testing provider"
       - go clean -modcache
       - go test ./test/provider_test.go -v
-  test-interactive:
+  run-cli:
     cmds:
       - echo "Task - testing interactive CLI"
       - go clean -testcache
-      - go run ./test/interactive.go -v -rod="show,slow=1s,trace"
+      - go run ./scripts/interactive.go -v -rod="show,slow=1s,trace"

@@ -1,4 +1,4 @@
-package scripts
+package main
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func getSandboxCreds() {
+func main() {
 	// Launch a new browser with default options, and connect to it.
 	browser := rod.New().MustConnect()
 
