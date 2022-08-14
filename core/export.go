@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+// LocalCreds is a struct that holds the credentials for a user
 type LocalCreds struct {
 	Path      string
 	User      string
@@ -13,6 +14,7 @@ type LocalCreds struct {
 	AccessKey string
 }
 
+// Adds CLI credentials to the config file
 func AppendAwsCredentials(creds LocalCreds) error {
 	newLine := fmt.Sprintf("\n\n[%s]\n", creds.User)
 	newLine += fmt.Sprintf("aws_access_key_id = %s\n", creds.KeyID)
@@ -22,6 +24,7 @@ func AppendAwsCredentials(creds LocalCreds) error {
 	return err
 }
 
+// Appends a line to a specified text file
 func AppendLine(newLine string, path string) error {
 	f, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
@@ -45,6 +48,8 @@ func AppendLine(newLine string, path string) error {
 	return err
 }
 
+
+//Creates a text file with exported 'policies'
 func DocumentDownload(downloadKey string, policies []proxy.Policy) error {
 	//create a file with list of policies
 	file, err := os.Create(downloadKey + ".txt")
@@ -65,6 +70,7 @@ func DocumentDownload(downloadKey string, policies []proxy.Policy) error {
 
 }
 
+//screenshots the current browser window of the connection passed to it. 
 func ScreenShot(filename string, connect Connection) {
 	connect.Page.MustWaitLoad().MustScreenshot(filename + ".png")
 }

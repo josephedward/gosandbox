@@ -1,6 +1,16 @@
 version: "3"
 
 tasks:
+  get-aws-creds:
+    cmds:
+      - echo "Task - testing provider"
+      - go clean -modcache
+      - go test ./test/provider_test.go -v
+  run-cli:
+    cmds:
+      - echo "Task - testing interactive CLI"
+      - go clean -testcache
+      - go run ./scripts/interactive.go -v -rod="show,slow=1s,trace"
   test-all:
     cmds:
       - echo "Task - testing all methods"
@@ -12,13 +22,3 @@ tasks:
       - echo "Task - testing provider"
       - go clean -modcache
       - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"
-  get-aws-creds:
-    cmds:
-      - echo "Task - testing provider"
-      - go clean -modcache
-      - go test ./test/provider_test.go -v
-  run-cli:
-    cmds:
-      - echo "Task - testing interactive CLI"
-      - go clean -testcache
-      - go run ./scripts/interactive.go -v -rod="show,slow=1s,trace"
