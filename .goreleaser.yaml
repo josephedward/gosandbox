@@ -39,7 +39,7 @@ brews:
     homepage: "https://github.com/josephedward/gosandbox"
     tap:
       owner: josephedward
-      name: homebrew  
+      name: homebrew-aptnative  
     commit_author:
       name: josephedward
       email: josephedwardwork@gmail.com
