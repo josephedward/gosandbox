@@ -7,3 +7,5 @@ test/creds.txt
 creds.txt
 *.txt
 .DS_Store
+
+dist/
