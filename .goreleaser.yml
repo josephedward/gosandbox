@@ -1,6 +1,7 @@
 
 builds:
   - binary: gosandbox
+    id: gosandbox
     goos:
       - darwin
       - linux
@@ -11,7 +12,6 @@ builds:
       - CGO_ENABLED=0
     flags:
       - -mod=vendor
-    skip: true
     main: ./scripts/interactive
 
 release:
