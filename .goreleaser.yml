@@ -12,7 +12,7 @@ builds:
     flags:
       - -mod=vendor
     skip: true
-    main: ./scripts/interactive.go
+    main: ./scripts/interactive
 
 release:
   prerelease: auto
