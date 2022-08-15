@@ -3,6 +3,7 @@ package core
 import (
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/input"
+	"errors"
 )
 
 type WebsiteLogin struct {
@@ -23,8 +24,18 @@ func Login(login WebsiteLogin) (Connection, error) {
 	// Create a new page
 	page := browser.MustPage(login.Url)
 
+	//if browser is nil, page is nil
+	if browser == nil || page == nil {
+		return Connection{}, errors.New("browser or page is nil")
+	}
+
 	//login to the page
-	page.MustElement("input[name='email']").MustInput(login.Username).MustType(input.Enter)
+	page.Race().Element("input[name='email']").MustHandle(func(e *rod.Element) {
+		e.MustInput(login.Username).MustType(input.Enter)
+	}).Element("input[name='username']").MustHandle(func(e *rod.Element) {
+		e.MustInput(login.Username).MustType(input.Enter)
+	}).MustDo()
+
 	page.MustElement("input[name='password']").MustInput(login.Password).MustType(input.Enter)
 
 	//create connection object to return
