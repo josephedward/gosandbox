@@ -62,3 +62,10 @@ obtains credentials for a Cloud Sandbox using environment variables, except it u
 - **core_test.go** : unit tests for the /core folder code
 - **proxy_test.go** : unit tests for the /proxy folder code
 
+
+## Brew Package
+Install (macos and linux): 
+```
+brew tap josephedward/homebrew-aptnative
+brew install gosandbox
+```
