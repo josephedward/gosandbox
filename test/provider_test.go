@@ -3,6 +3,7 @@ package test
 import (
 	"gosandbox/acloud"
 	"gosandbox/core"
+	"gosandbox/aws"
 	"testing"
 )
 
@@ -33,5 +34,14 @@ func TestProvider(t *testing.T) {
 	err = p.DocumentDownload(p.ACloudEnv.Download_key, policies)
 	core.PrintIfErr(err)
 	t.Log("Document Downloaded")
+
+	//login to AWS (for final verification of credentials)))
+	awsConnect, err := aws.Login(core.WebsiteLogin{
+		Url:     p.SandboxCredentials.URL,
+		Username: p.SandboxCredentials.User,
+		Password: p.SandboxCredentials.Password,
+	})
+	core.PrintIfErr(err)
+	t.Log("awsConnect : ", awsConnect)
 
 }

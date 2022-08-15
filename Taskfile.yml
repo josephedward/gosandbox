@@ -19,6 +19,6 @@ tasks:
       - go test -v
   get-creds-visible:
     cmds:
-      - echo "Task - testing provider"
+      - echo "Task - testing provider with visible browser"
       - go clean -modcache
       - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"
