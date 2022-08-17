@@ -10,8 +10,8 @@ builds:
   - env:
       - CGO_ENABLED=1
     goos:
-      - linux
-      - windows
+      # - linux
+      # - windows
       - darwin
     binary: gosandbox
     main: ./scripts/cli.go
@@ -19,10 +19,11 @@ builds:
 archives:
   - replacements:
       darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
+      # linux: Linux
+      # windows: Windows
+      # 386: i386
+      # amd64: x86_64
+      arm64: arm64
 checksum:
   name_template: 'checksums.txt'
 snapshot:
