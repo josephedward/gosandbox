@@ -10,7 +10,7 @@ tasks:
     cmds:
       - echo "Task - testing interactive CLI"
       - go clean -testcache
-      - go run ./scripts/interactive.go -v -rod="show,slow=1s,trace"
+      - go run ./scripts/cli.go -v -rod="show,slow=1s,trace"
   test-all:
     cmds:
       - echo "Task - testing all methods"

@@ -3,54 +3,109 @@ package core
 import (
 	"errors"
 	"fmt"
-	"os"
 	"github.com/manifoldco/promptui"
+	"os"
+	"strings"
 )
 
 type promptContent struct {
 	Label    string
-	Items    []string
+	// Items    []string
 	errorMsg string
+}
+
+type promptOptions struct {
+	Label string
+	Key   int64
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() (ACloudEnv, error) {
 
-	choice := promptGetInput(promptContent{
-		Label: "Welcome to the ACloud Sandbox Procurer. Would you like to use an .env file or enter your credentials manually (env/manual) ",
-	})
-	tempEnv := ACloudEnv{}
-	if choice == "env" {
-		//get env vars via path from prompt
-		return promptEnvFile(tempEnv)
-	} else if choice == "manual" {
-		// get env vars via cli prompt
-		return promptManual(tempEnv)
-	} else {
-		fmt.Println("Invalid choice. Please try again.")
-		Execute()
+	options := []promptOptions{
+		{
+			Label: "Get sandbox credentials with .env file located in your current directory",
+			Key:   1,
+		}, {
+
+			Label: "Get sandbox credentials from .env file in a custom location",
+			Key:   2,
+		}, {
+			Label: "Get sandbox credentials manually with env information entered via cli prompt",
+			Key:   3,
+		},
 	}
-	return ACloudEnv{}, errors.New("Error")
+
+	templates := &promptui.SelectTemplates{
+		Label:    "{{ . }}?",
+		Active:   "\U0001F336 {{ .Label | cyan }} ",
+		Inactive: "  {{ .Label | cyan }} ",
+		Selected: "\U0001F336 {{ .Label | red | cyan }}",
+	}
+
+	searcher := func(input string, index int) bool {
+		option := options[index]
+		name := strings.Replace(strings.ToLower(option.Label), " ", "", -1)
+		input = strings.Replace(strings.ToLower(input), " ", "", -1)
+
+		return strings.Contains(name, input)
+	}
+
+	prompt := promptui.Select{
+		Label:     "Welcome to GOSANDBOX. Please choose your .env file options: ",
+		Items:     options,
+		Templates: templates,
+		// Size:      4,
+		Searcher: searcher,
+	}
+
+	i, _, err := prompt.Run()
+
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+		return ACloudEnv{}, err
+	}
+
+	fmt.Printf("You choose number %d: %s\n", i+1, options[i].Label)
+
+	switch options[i].Key {
+	case 1:
+		return getEnv(".env")
+	case 2:
+		return promptEnvFile()
+	case 3:
+		return promptManual()
+	}
+	return getEnv(".env")
 }
 
-func promptEnvFile(tempEnv ACloudEnv) (ACloudEnv, error) {
+func getEnv(env_path string) (ACloudEnv, error) {
+
+	env, err := LoadEnvPath(env_path)
+	if err != nil {
+		fmt.Println("Could not load .env file - Err: ", err)
+		promptEnvFile()
+	}
+	return env, nil
+
+}
+
+func promptEnvFile() (ACloudEnv, error) {
 	//load env variables
 	env_path := promptGetInput(promptContent{
 		Label: "Please enter the path to the .env file from this directory",
 	})
-	// if env_path == "" {
-	// 	env_path = ".env"
-	// }
-	tempEnv, err := LoadEnvPath(env_path)
-	if err != nil {
-		fmt.Println("Could not load .env file - Err: ", err)
-		promptEnvFile(tempEnv)
-	}
-	return tempEnv, nil
+
+	env, err := getEnv(env_path)
+
+	return env, err
 }
 
-func promptManual(tempEnv ACloudEnv) (ACloudEnv, error) {
+func promptManual() (ACloudEnv, error) {
+
+	tempEnv := ACloudEnv{}
+
 	// get env vars via cli prompt
 	tempEnv.Url = promptGetInput(promptContent{
 		Label: "Name of web property URL you would like to login to",
@@ -77,7 +132,7 @@ func promptManual(tempEnv ACloudEnv) (ACloudEnv, error) {
 		return tempEnv, nil
 	} else {
 		fmt.Println("Please fill out all fields")
-		promptManual(tempEnv)
+		promptManual()
 	}
 	return tempEnv, nil
 }
@@ -106,7 +161,6 @@ func promptGetInput(pc promptContent) string {
 
 	return result
 }
-
 
 func PrintIfErr(err error) {
 	if err != nil {
