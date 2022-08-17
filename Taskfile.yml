@@ -5,10 +5,20 @@ tasks:
     cmds:
       - echo "Task - testing provider"
       - go clean -modcache
-      - go test ./test/provider_test.go -v
+      - go test ./test/provider_test.go
+  debug:
+    cmds:
+      - echo "Task - testing provider with visible browser and added logging"
+      - go clean -modcache
+      - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"
   run-cli:
     cmds:
-      - echo "Task - testing interactive CLI"
+      - echo "Task - running interactive CLI"
+      - go clean -testcache
+      - go run ./scripts/cli.go 
+  cli-debug:
+    cmds:
+      - echo "Task - running interactive CLI"
       - go clean -testcache
       - go run ./scripts/cli.go -v -rod="show,slow=1s,trace"
   test-all:
@@ -17,8 +27,4 @@ tasks:
       - go clean -modcache
       - cd /test
       - go test -v
-  get-creds-visible:
-    cmds:
-      - echo "Task - testing provider with visible browser"
-      - go clean -modcache
-      - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"
+  
