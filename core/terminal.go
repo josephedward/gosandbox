@@ -19,6 +19,18 @@ type promptOptions struct {
 	Key   int64
 }
 
+
+var Reset  = "\033[0m"
+var Red    = "\033[31m"
+var Green  = "\033[32m"
+var Yellow = "\033[33m"
+var Blue   = "\033[34m"
+var Purple = "\033[35m"
+var Cyan   = "\033[36m"
+var Gray   = "\033[37m"
+var White  = "\033[97m"
+
+
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() (ACloudEnv, error) {
