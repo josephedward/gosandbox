@@ -16,7 +16,7 @@ func main() {
 
 	cliEnv, err := core.Execute()
 	core.PrintIfErr(err)
-	fmt.Println(core.Green+"cliEnv : "+core.Reset.cliEnv)
+	fmt.Println(core.Green+"cliEnv : "+core.Reset,cliEnv)
 
 	//connect to website
 	connect, err := core.Login(core.WebsiteLogin{Url: cliEnv.Url, Username: cliEnv.Username, Password: cliEnv.Password})
