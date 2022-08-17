@@ -9,7 +9,7 @@ import (
 )
 
 type promptContent struct {
-	Label    string
+	Label string
 	// Items    []string
 	errorMsg string
 }
@@ -19,17 +19,15 @@ type promptOptions struct {
 	Key   int64
 }
 
-
-var Reset  = "\033[0m"
-var Red    = "\033[31m"
-var Green  = "\033[32m"
+var Reset = "\033[0m"
+var Red = "\033[31m"
+var Green = "\033[32m"
 var Yellow = "\033[33m"
-var Blue   = "\033[34m"
+var Blue = "\033[34m"
 var Purple = "\033[35m"
-var Cyan   = "\033[36m"
-var Gray   = "\033[37m"
-var White  = "\033[97m"
-
+var Cyan = "\033[36m"
+var Gray = "\033[37m"
+var White = "\033[97m"
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -156,26 +154,82 @@ func promptGetInput(pc promptContent) string {
 		}
 		return nil
 	}
-
 	prompt := promptui.Prompt{
 		Label: pc.Label,
 		// Templates: templates,
 		Validate: validate,
 	}
-
 	result, err := prompt.Run()
 	if err != nil {
 		fmt.Printf("Prompt failed %v\n", err)
 		os.Exit(1)
 	}
-
 	fmt.Printf("Input: %s\n", result)
-
 	return result
 }
 
+
+func PromptDownload() bool{
+	willDownload := promptGetInput(
+		promptContent{Label: "Would you like to download the sandbox credentials file in plaintext? (yes/no)"})
+	if willDownload == "yes" {
+		fmt.Println("Downloading Sandbox Credentials...")
+		return true		
+	} else if willDownload == "no" {
+		fmt.Println("Not downloading...")
+		return false
+	} else {
+		fmt.Println("Invalid Answer")
+		PromptDownload()
+	}
+	return false
+}
+
+func PromptFileName() string {
+	filename := promptGetInput(promptContent{Label: "What would you like to name the file?"})
+	return filename
+}
+
+func PromptFilePath() string {
+	filepath := promptGetInput(promptContent{Label: "Where would you like to save the file to?"})
+	return filepath
+}
+
+
+func PromptConfig() bool{
+	willAppend := promptGetInput(
+		promptContent{Label: "Would you like to append the sandbox credentials file to your AWS config file? (yes/no)"})
+	if willAppend == "yes" {
+		fmt.Println("Appending Sandbox Credentials to AWS configs...")
+		return true
+
+	} else if willAppend == "no" {
+		fmt.Println("Not Appending to AWS configs...")
+		return false
+	} else {
+		fmt.Println("Invalid Answer")
+		PromptConfig()
+	}	
+	return false
+}
+
+
+
 func PrintIfErr(err error) {
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(Red + err.Error() + Reset)
 	}
 }
+
+func Success(message ...any) {
+	for _, msg := range message {
+		s, ok := msg.(string) // the "ok" boolean will flag success.
+		if ok {
+			fmt.Print(Green + string(s) + Reset)
+		} else {
+			fmt.Println(msg)
+		}
+	}
+}
+
+

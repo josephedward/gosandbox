@@ -31,7 +31,6 @@ func AppendLine(newLine string, path string) error {
 		fmt.Println(err)
 		return err
 	}
-
 	_, err = fmt.Fprintln(f, newLine)
 	if err != nil {
 		fmt.Println(err)
@@ -43,11 +42,9 @@ func AppendLine(newLine string, path string) error {
 		fmt.Println(err)
 		return err
 	}
-
 	fmt.Println("file appended successfully")
 	return err
 }
-
 
 //Creates a text file with exported 'policies'
 func DocumentDownload(downloadKey string, policies []proxy.Policy) error {
@@ -57,7 +54,6 @@ func DocumentDownload(downloadKey string, policies []proxy.Policy) error {
 		return err
 	}
 	defer file.Close()
-
 	//write the policies to the file
 	for _, policy := range policies {
 		_, err := fmt.Fprintln(file, policy.CarrierID, policy.PolicyNumber)
@@ -65,12 +61,10 @@ func DocumentDownload(downloadKey string, policies []proxy.Policy) error {
 			return err
 		}
 	}
-
 	return nil
-
 }
 
-//screenshots the current browser window of the connection passed to it. 
+//screenshots the current browser window of the connection passed to it.
 func ScreenShot(filename string, connect Connection) {
 	connect.Page.MustWaitLoad().MustScreenshot(filename + ".png")
 }

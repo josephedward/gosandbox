@@ -6,6 +6,7 @@ import (
 	"github.com/go-rod/rod"
 	"golang.design/x/clipboard"
 	"time"
+	"fmt"
 )
 
 type SandboxCredentials struct {
@@ -92,4 +93,17 @@ func KeyVals(creds SandboxCredentials) ([]string, []string) {
 		string(creds.AccessKey)}
 
 	return keys, vals
+}
+
+
+func DisplayCreds(creds SandboxCredentials) {
+	fmt.Println("--------------------------------------------------------------------------------")
+	fmt.Println("Sandbox Credentials:")
+	fmt.Println("--------------------------------------------------------------------------------")
+	fmt.Println("          "+core.Cyan+"Username: " +core.Yellow+ creds.User+core.Reset)
+	fmt.Println("          "+core.Cyan+"Password: " +core.Yellow+ creds.Password+core.Reset)
+	fmt.Println("          "+core.Cyan+"URL: " +core.Yellow+ creds.URL+core.Reset)
+	fmt.Println("          "+core.Cyan+"KeyID: " +core.Yellow+ creds.KeyID+core.Reset)
+	fmt.Println("          "+core.Cyan+"AccessKey: " +core.Yellow+ creds.AccessKey+core.Reset)
+	fmt.Println("--------------------------------------------------------------------------------")
 }

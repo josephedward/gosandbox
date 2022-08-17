@@ -1,6 +1,6 @@
 module gosandbox
 
-go 1.17
+go 1.18
 
 require (
 	github.com/go-rod/rod v0.108.1
