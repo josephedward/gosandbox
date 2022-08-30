@@ -17,6 +17,8 @@ type SandboxCredentials struct {
 	AccessKey string
 }
 
+
+
 func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) {
 
 	elems := make(rod.Elements, 0)
@@ -98,7 +100,7 @@ func KeyVals(creds SandboxCredentials) ([]string, []string) {
 
 func DisplayCreds(creds SandboxCredentials) {
 	fmt.Println("--------------------------------------------------------------------------------")
-	fmt.Println("Sandbox Credentials:")
+	fmt.Println("Sandbox Credentials: ")
 	fmt.Println("--------------------------------------------------------------------------------")
 	fmt.Println("          "+core.Cyan+"Username: " +core.Yellow+ creds.User+core.Reset)
 	fmt.Println("          "+core.Cyan+"Password: " +core.Yellow+ creds.Password+core.Reset)

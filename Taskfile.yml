@@ -5,7 +5,7 @@ tasks:
     cmds:
       - echo "Task - testing provider"
       - go clean -modcache
-      - go test ./test/provider_test.go
+      - go test ./test/provider_test.go -v
   debug:
     cmds:
       - echo "Task - testing provider with visible browser and added logging"
@@ -15,7 +15,7 @@ tasks:
     cmds:
       - echo "Task - running interactive CLI"
       - go clean -testcache
-      - go run ./scripts/cli.go 
+      - go run ./scripts/cli.go  -v 
   cli-debug:
     cmds:
       - echo "Task - running interactive CLI"
