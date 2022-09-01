@@ -13,8 +13,6 @@ import (
 	"context"
 	"fmt"
 	"gosandbox/core"
-	// "github.com/google/go-github/github"
-	// "github.com/shurcooL/githubv4"
 )
 
 var (
@@ -47,7 +45,7 @@ func GetRepositories() {
 
 }
 
-//	go run main.go -owner google -repo go-github SECRET_VARIABLE
+
 
 func SecretEnv()(){
 	flag.Parse()
@@ -88,8 +86,6 @@ func SecretEnv()(){
 	fmt.Printf("Added secret %q to the repo %v/%v\n", secretName, *owner, *repo)
 }
 
-
-
 func getSecretName() (string, error) {
 	secretName := flag.Arg(0)
 	fmt.Println("secretName: ",secretName)
@@ -100,9 +96,10 @@ func getSecretName() (string, error) {
 }
 
 func getSecretValue(secretName string) (string, error) {
-	secretValue := os.Getenv(secretName)
+	// secretValue := os.Getenv(secretName)
+	secretValue := flag.Arg(1)
 	if secretValue == "" {
-		return "", fmt.Errorf("secret value not found under env variable %q", secretName)
+		return "", fmt.Errorf("missing argument secret value")
 	}
 	return secretValue, nil
 }

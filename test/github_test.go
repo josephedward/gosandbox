@@ -9,7 +9,7 @@ import (
 )
 
 func TestGithub(t *testing.T) {
-	//	go run main.go -owner google -repo go-github SECRET_VARIABLE
+	
 	gh.SecretEnv()
 
 }

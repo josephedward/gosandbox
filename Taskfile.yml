@@ -31,5 +31,6 @@ tasks:
     cmds:
       - echo "***Testing GitHub API***"
       - go clean -modcache
+      # SECRET_NAME SECRET_VAL
       - go test ./test/github_test.go -v -owner josephedward -repo gosandbox {{.CLI_ARGS}}
-      #go run main.go -owner google -repo go-github SECRET_VARIABLE
+      
