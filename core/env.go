@@ -14,10 +14,8 @@ type ACloudEnv struct {
 }
 
 func LoadEnv() (login ACloudEnv, err error) {
-
 	//load env variables
 	err = godotenv.Load("../.env")
-	
 	//set all needed vendor credentials
 	username := os.Getenv("USERNAME")
 	password := os.Getenv("PASSWORD")
@@ -34,10 +32,8 @@ func LoadEnv() (login ACloudEnv, err error) {
 }
 
 func LoadEnvPath(path string) (login ACloudEnv, err error) {
-
 	//load env variables
 	err = godotenv.Load(path)
-
 	//set all needed vendor credentials
 	username := os.Getenv("USERNAME")
 	password := os.Getenv("PASSWORD")

@@ -46,7 +46,6 @@ func GetRepositories() {
 }
 
 
-
 func SecretEnv()(){
 	flag.Parse()
 	err := godotenv.Load("../gh/.env")

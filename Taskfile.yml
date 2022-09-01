@@ -1,7 +1,7 @@
 version: "3"
 
 tasks:
-  get-aws-creds:
+  aws-creds:
     cmds:
       - echo "Task - testing provider"
       - go clean -modcache
@@ -11,7 +11,7 @@ tasks:
       - echo "Task - testing provider with visible browser and added logging"
       - go clean -modcache
       - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"
-  run-cli:
+  cli:
     cmds:
       - echo "Task - running interactive CLI"
       - go clean -testcache
