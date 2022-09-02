@@ -44,7 +44,7 @@
 #       email: josephedwardwork@gmail.com
 builds:
   - id: darwin-amd64
-    main: ./scripts/
+    main: /scripts/cli
     # skip: true
     binary: golang-cross
     goos:
