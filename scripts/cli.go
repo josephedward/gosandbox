@@ -18,6 +18,7 @@ func main() {
 	Execute()
 }
 
+
 func GetTemplates() *promptui.SelectTemplates {
 	templates := &promptui.SelectTemplates{
 		Label:    "{{ . }}",
