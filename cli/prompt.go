@@ -132,3 +132,22 @@ func PromptConfig() bool {
 	}
 	return false
 }
+
+func PromptRepoOwner()(owner string, err error){
+	owner = PromptGetInput(PromptContent{Label: "What is the name of the repository owner?"})
+	if owner == "" {
+		err = errors.New("please enter a valid repository owner")
+		PromptRepoOwner()
+	}
+	return owner, err
+}
+
+
+func PromptRepoName()(repo string, err error){
+	repo = PromptGetInput(PromptContent{Label: "What is the name of the repository?"})
+	if repo == "" {
+		err = errors.New("please enter a valid repository name")
+		PromptRepoName()
+	}
+	return repo, err
+}

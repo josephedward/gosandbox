@@ -37,14 +37,13 @@ func GetRepositories() {
 	}
 }
 
-func GetToken()(token string, err error) {
-	err = godotenv.Load("../gh/.env")
+func GetToken() (token string, err error) {
+	err = godotenv.Load("./gh/.env")
 	cli.PrintIfErr(err)
 	token = os.Getenv("TOKEN")
 	if token == "" {
-		cli.Error("please provide a GitHub API token via env variable GITHUB_AUTH_TOKEN")
+		cli.Error("please provide a GitHub API token via env variable TOKEN")
 	}
-
 
 	return token, err
 }
@@ -64,7 +63,7 @@ func SecretEnv() {
 	if err != nil {
 		cli.Error("unable to authorize using env TOKEN: %v", err)
 	}
-	
+
 	if *repo == "" {
 		cli.Error("please provide required flag --repo to specify GitHub repository ")
 	}
@@ -73,8 +72,7 @@ func SecretEnv() {
 		cli.Error("please provide required flag --owner to specify GitHub user/org owner")
 	}
 
-
-	if err := addRepoSecret(ctx, client, *owner, *repo, secretName, secretValue); err != nil {
+	if err := AddRepoSecret(ctx, client, *owner, *repo, secretName, secretValue); err != nil {
 		cli.Error(err)
 	}
 
@@ -108,7 +106,7 @@ func GithubAuth(token string) (context.Context, *github.Client, error) {
 	return ctx, client, nil
 }
 
-func addRepoSecret(ctx context.Context, client *github.Client, owner string, repo, secretName string, secretValue string) error {
+func AddRepoSecret(ctx context.Context, client *github.Client, owner string, repo, secretName string, secretValue string) error {
 	publicKey, _, err := client.Actions.GetRepoPublicKey(ctx, owner, repo)
 	if err != nil {
 		return err

@@ -2,14 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/manifoldco/promptui"
 	"gosandbox/acloud"
 	"gosandbox/cli"
 	"gosandbox/core"
 	"gosandbox/gh"
 	"gosandbox/proxy"
+	// "log"
 	"os"
 	"strings"
+
+	"github.com/manifoldco/promptui"
 )
 
 func main() {
@@ -121,7 +123,6 @@ func Execute() {
 		//set sandbox creds in github secret
 		SandboxToGithub(p.SandboxCredentials)
 	}
-
 	main()
 }
 
@@ -130,33 +131,43 @@ func SandboxToGithub(creds acloud.SandboxCredentials) {
 	token, err := gh.GetToken()
 	cli.PrintIfErr(err)
 
+	//if token is empty, return error
+	if len(token) == 0 {
+		cli.Error("Github token is empty")
+		return
+	}
+
+	//if credentials are empty, return error
+	if len(creds.AccessKey) == 0 || len(creds.KeyID) == 0 || len(creds.User) == 0 {
+		cli.Error("credentials are empty")
+		return
+	}
+
 	// authorize using env TOKEN
 	ctx, client, err := gh.GithubAuth(token)
 	cli.PrintIfErr(err)
 
-	// if *repo == "" {
-	// 	cli.Error("please provide required flag --repo to specify GitHub repository ")
-	// }
+	// get repo owner
+	owner, err := cli.PromptRepoOwner()
 
-	// if *owner == "" {
-	// 	cli.Error("please provide required flag --owner to specify GitHub user/org owner")
-	// }
+	// get repo name
+	repo, err := cli.PromptRepoName()
 
 	//create string arrays of credentials
 	keys, vals := acloud.KeyVals(creds)
 
+	cli.Success("writing credentials to github secrets....")
 	//loop over keys and vals
 	for i, key := range keys {
 		//create secret in github
 		// err := gh.CreateSecret(key, vals[i])
-		cli.PrintIfErr(err)
+		if err := gh.AddRepoSecret(ctx, client, owner, repo, key, vals[i]); err != nil {
+			cli.PrintIfErr(err)
+		}
+		cli.Success("secret : "+key)
+		fmt.Println("value : "+vals[i])
 	}
-
-	// if err := addRepoSecret(ctx, client, *owner, *repo, secretName, secretValue); err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	fmt.Printf("Added secret %q to the repo %v/%v\n", secretName, *owner, *repo)
+	cli.Success("credentials written to "+owner+"/"+repo)
 }
 
 func DownloadTextFile(creds acloud.SandboxCredentials) {
@@ -184,7 +195,7 @@ func DownloadTextFile(creds acloud.SandboxCredentials) {
 func AppendCreds(creds acloud.SandboxCredentials) {
 	//ask if they want the credentials to be added to their aws config
 	path := cli.PromptGetInput(cli.PromptContent{
-		Label: "Where would you like your sandbox credentials appended",
+		Label: "Where would you like your sandbox credentials appended?",
 	})
 
 	//if credentials are empty, return error

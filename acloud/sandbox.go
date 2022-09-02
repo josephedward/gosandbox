@@ -103,13 +103,13 @@ func DisplayCreds(creds SandboxCredentials) {
 		return
 	}
 
-	fmt.Println("--------------------------------------------------------------------------------")
+	fmt.Println("-----------------------------------------------------------------------------------")
 	fmt.Println("Sandbox Credentials: ")
-	fmt.Println("--------------------------------------------------------------------------------")
+	fmt.Println("-----------------------------------------------------------------------------------")
 	fmt.Println("          " + cli.Cyan + "Username: " + cli.Yellow + creds.User + cli.Reset)
 	fmt.Println("          " + cli.Cyan + "Password: " + cli.Yellow + creds.Password + cli.Reset)
 	fmt.Println("          " + cli.Cyan + "URL: " + cli.Yellow + creds.URL + cli.Reset)
 	fmt.Println("          " + cli.Cyan + "KeyID: " + cli.Yellow + creds.KeyID + cli.Reset)
 	fmt.Println("          " + cli.Cyan + "AccessKey: " + cli.Yellow + creds.AccessKey + cli.Reset)
-	fmt.Println("--------------------------------------------------------------------------------")
+	fmt.Println("-----------------------------------------------------------------------------------")
 }

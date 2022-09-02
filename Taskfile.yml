@@ -27,7 +27,7 @@ tasks:
       - go clean -modcache
       - cd /test
       - go test -v
-  test-gh-secret:
+  test-gh:
     cmds:
       - echo "***Testing GitHub API***"
       - go clean -modcache
