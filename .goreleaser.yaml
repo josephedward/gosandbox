@@ -41,7 +41,7 @@ brews:
       name: homebrew-aptnative  
     commit_author:
       name: josephedward
-#       email: josephedwardwork@gmail.com
+      email: josephedwardwork@gmail.com
 # builds:
 #   - id: darwin-amd64
 #     main: ./scripts/cli/main.go
