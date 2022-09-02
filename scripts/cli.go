@@ -6,6 +6,7 @@ import (
 	"gosandbox/acloud"
 	"gosandbox/cli"
 	"gosandbox/core"
+	"gosandbox/gh"
 	"gosandbox/proxy"
 	"os"
 	"strings"
@@ -118,10 +119,44 @@ func Execute() {
 		acloud.DisplayCreds(p.SandboxCredentials)
 	case 5:
 		//set sandbox creds in github secret
-
+		SandboxToGithub(p.SandboxCredentials)
 	}
-	// return cli.GetEnv(".env")
+
 	main()
+}
+
+func SandboxToGithub(creds acloud.SandboxCredentials) {
+	//github PAT
+	token, err := gh.GetToken()
+	cli.PrintIfErr(err)
+
+	// authorize using env TOKEN
+	ctx, client, err := gh.GithubAuth(token)
+	cli.PrintIfErr(err)
+
+	// if *repo == "" {
+	// 	cli.Error("please provide required flag --repo to specify GitHub repository ")
+	// }
+
+	// if *owner == "" {
+	// 	cli.Error("please provide required flag --owner to specify GitHub user/org owner")
+	// }
+
+	//create string arrays of credentials
+	keys, vals := acloud.KeyVals(creds)
+
+	//loop over keys and vals
+	for i, key := range keys {
+		//create secret in github
+		// err := gh.CreateSecret(key, vals[i])
+		cli.PrintIfErr(err)
+	}
+
+	// if err := addRepoSecret(ctx, client, *owner, *repo, secretName, secretValue); err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	fmt.Printf("Added secret %q to the repo %v/%v\n", secretName, *owner, *repo)
 }
 
 func DownloadTextFile(creds acloud.SandboxCredentials) {

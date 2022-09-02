@@ -6,9 +6,8 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"log"
-	"os"
 	"gosandbox/cli"
+	"os"
 
 	sodium "github.com/GoKillers/libsodium-go/cryptobox"
 	"github.com/google/go-github/v47/github"
@@ -29,75 +28,76 @@ func GetRepositories() {
 	)
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
-	cli.Success("client: ",client)	
+	cli.Success("client: ", client)
 	// list all repositories for the authenticated user
 	repos, _, err := client.Repositories.List(ctx, "josephedward", nil)
-	cli.Success("repos: ",repos)
+	cli.Success("repos: ", repos)
 	if err != nil {
 		fmt.Println(err)
 	}
 }
 
-
-func SecretEnv()(){
-	flag.Parse()
-	err := godotenv.Load("../gh/.env")
+func GetToken()(token string, err error) {
+	err = godotenv.Load("../gh/.env")
 	cli.PrintIfErr(err)
-	token := os.Getenv("TOKEN")
+	token = os.Getenv("TOKEN")
 	if token == "" {
-		log.Fatal("please provide a GitHub API token via env variable GITHUB_AUTH_TOKEN")
+		cli.Error("please provide a GitHub API token via env variable GITHUB_AUTH_TOKEN")
 	}
 
+
+	return token, err
+}
+
+func SecretEnv() {
+	flag.Parse()
+
+	secretName, err := GetSecretName(flag.Arg(0))
+	secretValue, err := GetSecretValue(flag.Arg(1))
+
+	token, err := GetToken()
+	if err != nil {
+		cli.Error(err)
+	}
+
+	ctx, client, err := GithubAuth(token)
+	if err != nil {
+		cli.Error("unable to authorize using env TOKEN: %v", err)
+	}
+	
 	if *repo == "" {
-		log.Fatal("please provide required flag --repo to specify GitHub repository ")
+		cli.Error("please provide required flag --repo to specify GitHub repository ")
 	}
 
 	if *owner == "" {
-		log.Fatal("please provide required flag --owner to specify GitHub user/org owner")
+		cli.Error("please provide required flag --owner to specify GitHub user/org owner")
 	}
 
-	secretName, err := getSecretName()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	secretValue, err := getSecretValue(secretName)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	ctx, client, err := githubAuth(token)
-	if err != nil {
-		log.Fatalf("unable to authorize using env GITHUB_AUTH_TOKEN: %v", err)
-	}
 
 	if err := addRepoSecret(ctx, client, *owner, *repo, secretName, secretValue); err != nil {
-		log.Fatal(err)
+		cli.Error(err)
 	}
 
 	fmt.Printf("Added secret %q to the repo %v/%v\n", secretName, *owner, *repo)
 }
 
-func getSecretName() (string, error) {
-	secretName := flag.Arg(0)
-	fmt.Println("secretName: ",secretName)
+func GetSecretName(secretName string) (string, error) {
+	fmt.Println("secretName: ", secretName)
 	if secretName == "" {
 		return "", fmt.Errorf("missing argument secret name")
 	}
 	return secretName, nil
 }
 
-func getSecretValue(secretName string) (string, error) {
-	// secretValue := os.Getenv(secretName)
-	secretValue := flag.Arg(1)
+func GetSecretValue(secretValue string) (string, error) {
 	if secretValue == "" {
 		return "", fmt.Errorf("missing argument secret value")
 	}
 	return secretValue, nil
 }
 
-// githubAuth returns a GitHub client and context.
-func githubAuth(token string) (context.Context, *github.Client, error) {
+// GithubAuth returns a GitHub client and context.
+func GithubAuth(token string) (context.Context, *github.Client, error) {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
@@ -107,7 +107,6 @@ func githubAuth(token string) (context.Context, *github.Client, error) {
 	client := github.NewClient(tc)
 	return ctx, client, nil
 }
-
 
 func addRepoSecret(ctx context.Context, client *github.Client, owner string, repo, secretName string, secretValue string) error {
 	publicKey, _, err := client.Actions.GetRepoPublicKey(ctx, owner, repo)
