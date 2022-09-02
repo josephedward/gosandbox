@@ -18,7 +18,7 @@ builds:
     # skip: true
 archives:
   - replacements:
-      darwin: Darwin
+      # darwin: Darwin
       # linux: Linux
       # windows: Windows
       # 386: i386
