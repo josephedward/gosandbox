@@ -1,12 +1,13 @@
 package acloud
 
 import (
-	"gosandbox/core"
 	"errors"
+	"fmt"
+	"gosandbox/core"
+	"time"
+	"gosandbox/cli"
 	"github.com/go-rod/rod"
 	"golang.design/x/clipboard"
-	"time"
-	"fmt"
 )
 
 type SandboxCredentials struct {
@@ -16,8 +17,6 @@ type SandboxCredentials struct {
 	KeyID     string
 	AccessKey string
 }
-
-
 
 func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) {
 
@@ -97,15 +96,20 @@ func KeyVals(creds SandboxCredentials) ([]string, []string) {
 	return keys, vals
 }
 
-
 func DisplayCreds(creds SandboxCredentials) {
+	//if creds are empty, throw message and return
+	if creds.User == "" {
+		cli.Error("Warning: No Credentials Found")
+		return
+	}
+
 	fmt.Println("--------------------------------------------------------------------------------")
 	fmt.Println("Sandbox Credentials: ")
 	fmt.Println("--------------------------------------------------------------------------------")
-	fmt.Println("          "+core.Cyan+"Username: " +core.Yellow+ creds.User+core.Reset)
-	fmt.Println("          "+core.Cyan+"Password: " +core.Yellow+ creds.Password+core.Reset)
-	fmt.Println("          "+core.Cyan+"URL: " +core.Yellow+ creds.URL+core.Reset)
-	fmt.Println("          "+core.Cyan+"KeyID: " +core.Yellow+ creds.KeyID+core.Reset)
-	fmt.Println("          "+core.Cyan+"AccessKey: " +core.Yellow+ creds.AccessKey+core.Reset)
+	fmt.Println("          " + cli.Cyan + "Username: " + cli.Yellow + creds.User + cli.Reset)
+	fmt.Println("          " + cli.Cyan + "Password: " + cli.Yellow + creds.Password + cli.Reset)
+	fmt.Println("          " + cli.Cyan + "URL: " + cli.Yellow + creds.URL + cli.Reset)
+	fmt.Println("          " + cli.Cyan + "KeyID: " + cli.Yellow + creds.KeyID + cli.Reset)
+	fmt.Println("          " + cli.Cyan + "AccessKey: " + cli.Yellow + creds.AccessKey + cli.Reset)
 	fmt.Println("--------------------------------------------------------------------------------")
 }

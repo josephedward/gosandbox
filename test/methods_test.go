@@ -11,23 +11,23 @@ import (
 func TestMethods(t *testing.T) {
 	//load env credentials from .env file
 	login, err := core.LoadEnv()
-	core.PrintIfErr(err)
+	cli.PrintIfErr(err)
 	fmt.Println("login : ", login)
 	t.Log("login : ", login)
 
 	//connect to website
 	connect, err := core.Login(core.WebsiteLogin{Url: login.Url, Username: login.Username, Password: login.Password})
-	core.PrintIfErr(err)
+	cli.PrintIfErr(err)
 	fmt.Println("connect : ", connect)
 	t.Log("connect : ", connect)
 
 	//scrape credentials
 	elems, err := acloud.Sandbox(connect, login.Download_key)
-	core.PrintIfErr(err)
+	cli.PrintIfErr(err)
 
 	//copy credentials to clipboard
 	creds, err := acloud.Copy(elems)
-	core.PrintIfErr(err)
+	cli.PrintIfErr(err)
 	fmt.Println("creds : ", creds.User)
 	t.Log("creds : ", creds.User)
 
@@ -35,13 +35,13 @@ func TestMethods(t *testing.T) {
 
 	//create policies with map
 	policies, err := proxy.Policies(keys, vals)
-	core.PrintIfErr(err)
+	cli.PrintIfErr(err)
 	fmt.Println("policies : ", policies)
 	t.Log("policies : ", policies)
 
 	//download text file of policies
 	err = core.DocumentDownload("creds", policies)
-	core.PrintIfErr(err)
+	cli.PrintIfErr(err)
 	fmt.Println("Document Downloaded")
 	t.Log("Document Downloaded")
 
@@ -53,7 +53,7 @@ func TestMethods(t *testing.T) {
 		KeyID:     creds.KeyID,
 		AccessKey: creds.AccessKey,
 	})
-	core.PrintIfErr(err)
+	cli.PrintIfErr(err)
 	fmt.Println("aws credentials appended")
 	t.Log("aws credentials appended")
 

@@ -1,4 +1,4 @@
-package core
+package cli
 
 import (
 	"fmt"
@@ -16,7 +16,7 @@ var White = "\033[97m"
 
 func PrintIfErr(err error) {
 	if err != nil {
-		fmt.Println(Red + err.Error() + Reset)
+		Error(err.Error())
 	}
 }
 
@@ -25,6 +25,17 @@ func Success(message ...interface{}) {
 		s, ok := msg.(string) // the "ok" boolean will flag success.
 		if ok {
 			fmt.Print(Green + string(s) + Reset)
+		} else {
+			fmt.Println(msg)
+		}
+	}
+}
+
+func Error(message ...interface{}) {
+	for _, msg := range message {
+		s, ok := msg.(string) // the "ok" boolean will flag success.
+		if ok {
+			fmt.Print(Red + string(s) + Reset)
 		} else {
 			fmt.Println(msg)
 		}

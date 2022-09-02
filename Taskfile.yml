@@ -3,27 +3,27 @@ version: "3"
 tasks:
   aws-creds:
     cmds:
-      - echo "Task - testing provider"
+      - echo "***Running Provider***"
       - go clean -modcache
       - go test ./test/provider_test.go -v
   debug:
     cmds:
-      - echo "Task - testing provider with visible browser and added logging"
+      - echo "***Running Debug***"
       - go clean -modcache
       - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"
   cli:
     cmds:
-      - echo "Task - running interactive CLI"
+      - echo "***Running CLI***"
       - go clean -testcache
-      - go run ./scripts/cli.go  -v 
+      - go run ./scripts/cli.go  -v
   cli-debug:
     cmds:
-      - echo "Task - running interactive CLI"
+      - echo "***CLI Debug***"
       - go clean -testcache
       - go run ./scripts/cli.go -v -rod="show,slow=1s,trace"
   test-all:
     cmds:
-      - echo "Task - testing all methods"
+      - echo "***Running All Tests***"
       - go clean -modcache
       - cd /test
       - go test -v
@@ -33,4 +33,3 @@ tasks:
       - go clean -modcache
       # SECRET_NAME SECRET_VAL
       - go test ./test/github_test.go -v -owner josephedward -repo gosandbox {{.CLI_ARGS}}
-      

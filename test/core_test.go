@@ -223,7 +223,7 @@ func TestScreenShot(t *testing.T) {
 
 // func Test_promptGetInput(t *testing.T) {
 // 	type args struct {
-// 		pc core.promptContent
+// 		pc core.PromptContent
 // 	}
 // 	tests := []struct {
 // 		name string
@@ -253,7 +253,7 @@ func TestScreenShot(t *testing.T) {
 // 	}
 // 	for _, tt := range tests {
 // 		t.Run(tt.name, func(t *testing.T) {
-// 			core.PrintIfErr(tt.args.err)
+// 			cli.PrintIfErr(tt.args.err)
 // 		})
 // 	}
 // }

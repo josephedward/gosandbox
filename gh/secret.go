@@ -1,26 +1,25 @@
 package gh
 
 import (
+	"context"
 	"encoding/base64"
 	"errors"
 	"flag"
+	"fmt"
 	"log"
+	"os"
+	"gosandbox/cli"
+
 	sodium "github.com/GoKillers/libsodium-go/cryptobox"
 	"github.com/google/go-github/v47/github"
-	"golang.org/x/oauth2"
-	"os"
 	"github.com/joho/godotenv"
-	"context"
-	"fmt"
-	"gosandbox/core"
+	"golang.org/x/oauth2"
 )
 
 var (
 	repo  = flag.String("repo", "", "The repo that the secret should be added to, ex. go-github")
 	owner = flag.String("owner", "", "The owner of there repo this should be added to, ex. google")
 )
-
-
 
 func GetRepositories() {
 	err := godotenv.Load("./gh/.env")
@@ -29,27 +28,21 @@ func GetRepositories() {
 		&oauth2.Token{AccessToken: os.Getenv("TOKEN")},
 	)
 	tc := oauth2.NewClient(ctx, ts)
-
 	client := github.NewClient(tc)
-
-	core.Success("client: ",client)	
-
+	cli.Success("client: ",client)	
 	// list all repositories for the authenticated user
 	repos, _, err := client.Repositories.List(ctx, "josephedward", nil)
-
-	core.Success("repos: ",repos)
-
+	cli.Success("repos: ",repos)
 	if err != nil {
 		fmt.Println(err)
 	}
-
 }
 
 
 func SecretEnv()(){
 	flag.Parse()
 	err := godotenv.Load("../gh/.env")
-	core.PrintIfErr(err)
+	cli.PrintIfErr(err)
 	token := os.Getenv("TOKEN")
 	if token == "" {
 		log.Fatal("please provide a GitHub API token via env variable GITHUB_AUTH_TOKEN")
