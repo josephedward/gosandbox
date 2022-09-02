@@ -1,107 +1,117 @@
-# This is an example .goreleaser.yml file with some sensible defaults.
-# Make sure to check the documentation at https://goreleaser.com
-before:
-  hooks:
-    # You may remove this if you don't use go modules.
-    - go mod tidy
-builds:
-  - env:
-      - CGO_ENABLED=1
-    goos:
-      - linux
-      - windows
-      - darwin
-    binary: gosandbox
-    main: ./scripts/cli.go
-    skip: true
-archives:
-  - replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
-      arm64: arm64
-checksum:
-  name_template: 'checksums.txt'
-snapshot:
-  name_template: "{{ incpatch .Version }}-next"
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
-brews:
-  -
-    name: gosandbox
-    homepage: "https://github.com/josephedward/gosandbox"
-    tap:
-      owner: josephedward
-      name: homebrew-aptnative  
-    commit_author:
-      name: josephedward
-      email: josephedwardwork@gmail.com
+# # This is an example .goreleaser.yml file with some sensible defaults.
+# # Make sure to check the documentation at https://goreleaser.com
+# before:
+#   hooks:
+#     # You may remove this if you don't use go modules.
+#     - go mod tidy
 # builds:
-#   - id: darwin-amd64
-#     main: ./scripts/cli/main.go
-#     # skip: true
-#     binary: golang-cross
-#     goos:
-#       - darwin
-#     goarch:
-#       - amd64
-#     env:
-#       - PKG_CONFIG_SYSROOT_DIR=/sysroot/macos/amd64
-#       - PKG_CONFIG_PATH=/sysroot/macos/amd64/usr/local/lib/pkgconfig
-#       - CC=o64-clang
-#       - CXX=o64-clang++
-#     flags:
-#       - -mod=readonly
-#     ldflags:
-#       - -s -w -X main.version={{.Version}}
-#   - id: linux-armhf
-#     main: ./
-#     binary: golang-cross
+#   - env:
+#       - CGO_ENABLED=1
 #     goos:
 #       - linux
-#     goarch:
-#       - arm
-#     goarm:
-#       - 7
-#     env:
-#       - CC=arm-linux-gnueabihf-gcc
-#       - CXX=arm-linux-gnueabihf-g++
-#       - CGO_CFLAGS=--sysroot=/sysroot/linux/armhf
-#       - CGO_LDFLAGS=--sysroot=/sysroot/linux/armhf
-#       - PKG_CONFIG_SYSROOT_DIR=/sysroot/linux/armhf
-#       - PKG_CONFIG_PATH=/sysroot/linux/armhf/opt/vc/lib/pkgconfig:/sysroot/linux/armhf/usr/lib/arm-linux-gnueabihf/pkgconfig:/sysroot/linux/armhf/usr/lib/pkgconfig:/sysroot/linux/armhf/usr/local/lib/pkgconfig
-#     flags:
-#       - -mod=readonly
-#     ldflags:
-#       - -s -w -X main.version={{.Version}}
+#       - windows
+#       - darwin
+#     binary: gosandbox
+#     main: ./scripts/cli.go
+#     skip: true
 # archives:
-#   - id: golang-cross
-#     builds:
-#       - darwin-amd64
-#       - linux-armhf
-#     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-#     format: zip
-#     wrap_in_directory: true
+#   - replacements:
+#       darwin: Darwin
+#       linux: Linux
+#       windows: Windows
+#       386: i386
+#       amd64: x86_64
+#       arm64: arm64
 # checksum:
 #   name_template: 'checksums.txt'
 # snapshot:
-#   name_template: "{{ .Tag }}"
+#   name_template: "{{ incpatch .Version }}-next"
 # changelog:
 #   sort: asc
 #   filters:
 #     exclude:
 #       - '^docs:'
 #       - '^test:'
+# brews:
+#   -
+#     name: gosandbox
+#     homepage: "https://github.com/josephedward/gosandbox"
+#     tap:
+#       owner: josephedward
+#       name: homebrew-aptnative  
+#     commit_author:
+#       name: josephedward
+#       email: josephedwardwork@gmail.com
+builds:
+  - id: darwin-amd64
+    main: ./scripts/cli/main.go
+    # skip: true
+    binary: golang-cross
+    goos:
+      - darwin
+    goarch:
+      - amd64
+    env:
+      - PKG_CONFIG_SYSROOT_DIR=/sysroot/macos/amd64
+      - PKG_CONFIG_PATH=/sysroot/macos/amd64/usr/local/lib/pkgconfig
+      - CC=o64-clang
+      - CXX=o64-clang++
+    flags:
+      - -mod=readonly
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+  - id: linux-armhf
+    main: ./
+    binary: golang-cross
+    goos:
+      - linux
+    goarch:
+      - arm
+    goarm:
+      - 7
+    env:
+      - CC=arm-linux-gnueabihf-gcc
+      - CXX=arm-linux-gnueabihf-g++
+      - CGO_CFLAGS=--sysroot=/sysroot/linux/armhf
+      - CGO_LDFLAGS=--sysroot=/sysroot/linux/armhf
+      - PKG_CONFIG_SYSROOT_DIR=/sysroot/linux/armhf
+      - PKG_CONFIG_PATH=/sysroot/linux/armhf/opt/vc/lib/pkgconfig:/sysroot/linux/armhf/usr/lib/arm-linux-gnueabihf/pkgconfig:/sysroot/linux/armhf/usr/lib/pkgconfig:/sysroot/linux/armhf/usr/local/lib/pkgconfig
+    flags:
+      - -mod=readonly
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+archives:
+  - id: golang-cross
+    builds:
+      - darwin-amd64
+      - linux-armhf
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format: zip
+    wrap_in_directory: true
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
 
-# release:
-#   github:
-#     owner: goreleaser
-#     name: golang-cross-example
-#   prerelease: auto
-#   draft: false
+release:
+  github:
+    owner: goreleaser
+    name: golang-cross-example
+  prerelease: auto
+  draft: false
+brews:
+-
+  name: gosandbox
+  homepage: "https://github.com/josephedward/gosandbox"
+  tap:
+    owner: josephedward
+    name: homebrew-aptnative  
+  commit_author:
+    name: josephedward
+    email: josephedwardwork@gmail.com
