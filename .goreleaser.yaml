@@ -18,12 +18,12 @@ builds:
     # skip: true
 archives:
   - replacements:
-      # darwin: Darwin
+      darwin: arm64
       # linux: Linux
       # windows: Windows
       # 386: i386
       # amd64: x86_64
-      arm64: arm64
+      # arm64: arm64
 checksum:
   name_template: 'checksums.txt'
 snapshot:
