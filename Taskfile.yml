@@ -15,7 +15,7 @@ tasks:
     cmds:
       - echo "***Running CLI***"
       - go clean -testcache
-      - go run ./scripts/cli.go  -v
+      - go run ./scripts/main.go  -v
   cli-debug:
     cmds:
       - echo "***CLI Debug***"
