@@ -13,19 +13,19 @@ builds:
       # - linux
       # - windows
       - darwin
-    goarch: 
+    goarch:
       - arm64
     binary: gosandbox
     main: ./scripts/cli.go
     # skip: true
 archives:
   - replacements:
-      darwin: arm64
+      darwin: Darwin
       # linux: Linux
       # windows: Windows
       # 386: i386
-      # amd64: x86_64
-      # arm64: arm64
+      amd64: x86_64
+      arm64: arm64
 checksum:
   name_template: 'checksums.txt'
 snapshot:
