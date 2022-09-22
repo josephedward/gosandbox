@@ -1,35 +1,24 @@
 version: "3"
 
 tasks:
-  aws-creds:
-    cmds:
-      - echo "***Running Provider***"
-      - go clean -modcache
-      - go test ./test/provider_test.go -v
-  debug:
-    cmds:
-      - echo "***Running Debug***"
-      - go clean -modcache
-      - go test ./test/provider_test.go -v -rod="show,slow=1s,trace"
   cli:
     cmds:
       - echo "***Running CLI***"
       - go clean -testcache
-      - go run ./scripts/cli.go  -v
-  cli-debug:
+      - go run ./scripts/cli.go -v -rod="show,trace"
+  provider:
     cmds:
-      - echo "***CLI Debug***"
-      - go clean -testcache
-      - go run ./scripts/cli.go -v -rod="show,slow=1s,trace"
-  test-all:
+      - echo "***Testing Provider***"
+      - go clean -modcache
+      - go test ./test/provider_test.go -v -rod="show,trace"
+  set-github:
+    cmds:
+      - echo "***Pushing Secrets to GitHub Repo***"
+      - go clean -modcache
+      - go test ./test/github_test.go -v -owner josephedward -repo gosandbox {{.CLI_ARGS}}
+  test:
     cmds:
       - echo "***Running All Tests***"
       - go clean -modcache
       - cd /test
       - go test -v
-  test-gh:
-    cmds:
-      - echo "***Testing GitHub API***"
-      - go clean -modcache
-      # SECRET_NAME SECRET_VAL
-      - go test ./test/github_test.go -v -owner josephedward -repo gosandbox {{.CLI_ARGS}}

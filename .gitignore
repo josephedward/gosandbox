@@ -1,11 +1,8 @@
 .env
 misc
 *.png
-.txt
 test/creds.txt
-*.txt
 creds.txt
 *.txt
 .DS_Store
-
 dist/

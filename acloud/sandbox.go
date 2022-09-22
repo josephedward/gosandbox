@@ -28,7 +28,7 @@ func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) 
 		time.Sleep(3 * time.Second)
 		core.ScreenShot(downloadKey, connect)
 		elems = Scrape(connect)
-	}).Element("div[class^='CopyableInstanceField__Value']").MustHandle(func(e *rod.Element) {
+	}).Element("div[class^='CopyableInstanceField']").MustHandle(func(e *rod.Element) {
 		time.Sleep(3 * time.Second)
 		core.ScreenShot(downloadKey, connect)
 		elems = Scrape(connect)
@@ -41,7 +41,7 @@ func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) 
 }
 
 func Scrape(connect core.Connection) rod.Elements {
-	elems := connect.Page.MustWaitLoad().MustElements("div[class^='CopyableInstanceField__Value']")
+	elems := connect.Page.MustWaitLoad().MustElements("div[class^='CopyableInstanceField']")
 	return elems
 }
 
