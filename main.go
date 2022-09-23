@@ -7,18 +7,16 @@ import (
 	"gosandbox/core"
 	"gosandbox/gh"
 	"gosandbox/proxy"
-	// "log"
 	"os"
 	"strings"
-
 	"github.com/manifoldco/promptui"
 )
 
 func main() {
+	cli.Welcome()
 	var p acloud.ACloudProvider
 	Execute(p)
 }
-
 
 func GetTemplates() *promptui.SelectTemplates {
 	templates := &promptui.SelectTemplates{
@@ -35,7 +33,6 @@ func GetSearcher(options []cli.PromptOptions) func(input string, index int) bool
 		option := options[index]
 		name := strings.Replace(strings.ToLower(option.Label), " ", "", -1)
 		input = strings.Replace(strings.ToLower(input), " ", "", -1)
-
 		return strings.Contains(name, input)
 	}
 	return searcher
@@ -56,8 +53,9 @@ func Select(promptTitle string, options []cli.PromptOptions) *promptui.Select {
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute(p acloud.ACloudProvider) {
 	
+
 	//if p doesnt have ACloudEnv set, automatically load it
-	fmt.Println("p.ACloudEnv : ",p.ACloudEnv)
+	fmt.Println("Current Sandbox Credentials ? ",p.ACloudEnv)
 	if len(p.ACloudEnv.Url) == 0 {
 		env, err := cli.GetEnv(".env")
 		cli.PrintIfErr(err)
@@ -172,9 +170,11 @@ func SandboxToGithub(creds acloud.SandboxCredentials) {
 
 	// get repo owner
 	owner, err := cli.PromptRepoOwner()
+	cli.PrintIfErr(err)
 
 	// get repo name
 	repo, err := cli.PromptRepoName()
+	cli.PrintIfErr(err)
 
 	//create string arrays of credentials
 	keys, vals := acloud.KeyVals(creds)
@@ -252,8 +252,7 @@ func GetSandboxCreds(cliEnv core.ACloudEnv, p *acloud.ACloudProvider) (acloud.AC
 	//connect to website
 	connect, err := core.Login(core.WebsiteLogin{Url: cliEnv.Url, Username: cliEnv.Username, Password: cliEnv.Password})
 	cli.PrintIfErr(err)
-	// fmt.Println("connect : ", connect)
-	cli.Success("connection : ", connect)
+	cli.Success("Connection Successful: ", connect)
 	p.Connection = connect
 
 	//scrape credentials
