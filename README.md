@@ -26,8 +26,8 @@ uses a visible browser for ease of debugging, and runs a script with a CLI promp
 - `provider`:  
 this project was initially build as a demo implementation of the `PolicyProvider` [interface](./proxy/README.md) - this commands runs that provider
 
-- `get-creds-visible`: 
-obtains credentials for a Cloud Sandbox using environment variables, except it uses a visible browser for debugging
+- `set-github`: 
+sets current sandbox credentials as secrets with githubs api
 
 - `test`:  
 runs all integration and unit tests
