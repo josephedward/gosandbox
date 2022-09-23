@@ -15,7 +15,8 @@ import (
 )
 
 func main() {
-	Execute()
+	var p acloud.ACloudProvider
+	Execute(p)
 }
 
 
@@ -53,9 +54,10 @@ func Select(promptTitle string, options []cli.PromptOptions) *promptui.Select {
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
-	var p acloud.ACloudProvider
+func Execute(p acloud.ACloudProvider) {
+	
 	//if p doesnt have ACloudEnv set, automatically load it
+	fmt.Println("p.ACloudEnv : ",p.ACloudEnv)
 	if len(p.ACloudEnv.Url) == 0 {
 		env, err := cli.GetEnv(".env")
 		cli.PrintIfErr(err)
@@ -87,6 +89,10 @@ func Execute() {
 		{
 			Label: "Set Credentials in GitHub Secret",
 			Key:   5,
+		},
+		{
+			Label: "Open AWS Console for Sandbox",
+			Key:   6,
 		},
 	}
 
@@ -123,8 +129,24 @@ func Execute() {
 	case 5:
 		//set sandbox creds in github secret
 		SandboxToGithub(p.SandboxCredentials)
+	case 6:
+		//open aws console for sandbox
+		OpenAWSConsole(p.SandboxCredentials)
 	}
-	main()
+	Execute(p)
+}
+
+func OpenAWSConsole(creds acloud.SandboxCredentials) {
+	//if credentials are empty, return error
+	if len(creds.AccessKey) == 0 || len(creds.KeyID) == 0 || len(creds.User) == 0 {
+		cli.Error("Warning: credentials are empty")
+		return
+	}
+
+	//login to console with credentials url, username, and password
+	browser, err := core.Login(core.WebsiteLogin{creds.URL, creds.User, creds.Password})
+	cli.PrintIfErr(err)
+	cli.Success("browser : ",browser)
 }
 
 func SandboxToGithub(creds acloud.SandboxCredentials) {
