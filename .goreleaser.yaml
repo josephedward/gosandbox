@@ -8,24 +8,21 @@ before:
     - go generate ./...
 builds:
   - env:
-      - CGO_ENABLED=1
+      - CGO_ENABLED=0
     goos:
-      # - linux
-      # - windows
+      - linux
+      - windows
       - darwin
-    goarch:
-      - arm64
     binary: gosandbox
     main: ./scripts/cli.go
     # skip: true
 archives:
   - replacements:
       darwin: Darwin
-      # linux: Linux
-      # windows: Windows
-      # 386: i386
+      linux: Linux
+      windows: Windows
+      386: i386
       amd64: x86_64
-      arm64: arm64
 checksum:
   name_template: 'checksums.txt'
 snapshot:
