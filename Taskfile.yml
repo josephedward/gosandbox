@@ -5,7 +5,7 @@ tasks:
     cmds:
       - echo "***Running CLI***"
       - go clean -testcache
-      - go run ./scripts/cli.go -v -rod="show,trace"
+      - go run ./main.go -v -rod="show,trace"
   provider:
     cmds:
       - echo "***Testing Provider***"
