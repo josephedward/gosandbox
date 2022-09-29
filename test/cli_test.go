@@ -99,7 +99,7 @@ func TestExecute(t *testing.T) {
 
 func TestOpenAWSConsole(t *testing.T) {
 	type args struct {
-		creds acloud.SandboxCredentials
+		creds acloud.SandboxCredential
 	}
 	tests := []struct {
 		name string
@@ -116,7 +116,7 @@ func TestOpenAWSConsole(t *testing.T) {
 
 func TestSandboxToGithub(t *testing.T) {
 	type args struct {
-		creds acloud.SandboxCredentials
+		creds acloud.SandboxCredential
 	}
 	tests := []struct {
 		name string
@@ -133,7 +133,7 @@ func TestSandboxToGithub(t *testing.T) {
 
 func TestDownloadTextFile(t *testing.T) {
 	type args struct {
-		creds acloud.SandboxCredentials
+		creds acloud.SandboxCredential
 	}
 	tests := []struct {
 		name string
@@ -150,7 +150,7 @@ func TestDownloadTextFile(t *testing.T) {
 
 func TestAppendCreds(t *testing.T) {
 	type args struct {
-		creds acloud.SandboxCredentials
+		creds acloud.SandboxCredential
 	}
 	tests := []struct {
 		name string

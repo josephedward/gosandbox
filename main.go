@@ -9,6 +9,7 @@ import (
 	"gosandbox/proxy"
 	"os"
 	"strings"
+
 	"github.com/manifoldco/promptui"
 )
 
@@ -92,6 +93,10 @@ func Execute(p acloud.ACloudProvider) {
 			Label: "Open AWS Console for Sandbox",
 			Key:   6,
 		},
+		{
+			Label: "Create SQLite table",
+			Key:   7,
+		},
 	}
 
 	prompt := Select("Welcome to GOSANDBOX - Please select an option: ", options)
@@ -114,27 +119,36 @@ func Execute(p acloud.ACloudProvider) {
 		cli.Success("environment : ", p.ACloudEnv)
 		p, err = GetSandboxCreds(p.ACloudEnv, &p)
 		cli.PrintIfErr(err)
-		cli.Success("credentials : ", p.SandboxCredentials)
+		cli.Success("credentials : ", p.SandboxCredential)
 	case 2:
 		// download text file of policies
-		DownloadTextFile(p.SandboxCredentials)
+		DownloadTextFile(p.SandboxCredential)
 	case 3:
 		// append aws creds to .aws/credentials file
-		AppendCreds(p.SandboxCredentials)
+		AppendCreds(p.SandboxCredential)
 	case 4:
 		//DISPLAY WITH COLORS PROMINENTLY TO THE USER
-		acloud.DisplayCreds(p.SandboxCredentials)
+		acloud.DisplayCreds(p.SandboxCredential)
 	case 5:
 		//set sandbox creds in github secret
-		SandboxToGithub(p.SandboxCredentials)
+		SandboxToGithub(p.SandboxCredential)
 	case 6:
 		//open aws console for sandbox
-		OpenAWSConsole(p.SandboxCredentials)
+		OpenAWSConsole(p.SandboxCredential)
+	case 7:
+		//create sqlite table
+		CreateSQLiteTable()
 	}
 	Execute(p)
 }
 
-func OpenAWSConsole(creds acloud.SandboxCredentials) {
+
+func CreateSQLiteTable() {
+	// acloud.Migrate()
+}
+
+
+func OpenAWSConsole(creds acloud.SandboxCredential) {
 	//if credentials are empty, return error
 	if len(creds.AccessKey) == 0 || len(creds.KeyID) == 0 || len(creds.User) == 0 {
 		cli.Error("Warning: credentials are empty")
@@ -147,7 +161,7 @@ func OpenAWSConsole(creds acloud.SandboxCredentials) {
 	cli.Success("browser : ",browser)
 }
 
-func SandboxToGithub(creds acloud.SandboxCredentials) {
+func SandboxToGithub(creds acloud.SandboxCredential) {
 	//github PAT
 	token, err := gh.GetToken()
 	cli.PrintIfErr(err)
@@ -193,7 +207,7 @@ func SandboxToGithub(creds acloud.SandboxCredentials) {
 	cli.Success("credentials written to "+owner+"/"+repo)
 }
 
-func DownloadTextFile(creds acloud.SandboxCredentials) {
+func DownloadTextFile(creds acloud.SandboxCredential) {
 	//if credentials are empty, return error
 	if len(creds.AccessKey) == 0 || len(creds.KeyID) == 0 || len(creds.User) == 0 {
 		cli.Error("Warning: credentials are empty")
@@ -215,7 +229,7 @@ func DownloadTextFile(creds acloud.SandboxCredentials) {
 	}
 }
 
-func AppendCreds(creds acloud.SandboxCredentials) {
+func AppendCreds(creds acloud.SandboxCredential) {
 	//ask if they want the credentials to be added to their aws config
 	path := cli.PromptGetInput(cli.PromptContent{
 		Label: "Where would you like your sandbox credentials appended?",
@@ -264,7 +278,7 @@ func GetSandboxCreds(cliEnv core.ACloudEnv, p *acloud.ACloudProvider) (acloud.AC
 	creds, err := acloud.Copy(elems)
 	cli.PrintIfErr(err)
 	// cli.Success("credentials : ", creds)
-	p.SandboxCredentials = creds
+	p.SandboxCredential = creds
 
 	//DISPLAY WITH COLORS PROMINENTLY TO THE USER
 	acloud.DisplayCreds(creds)

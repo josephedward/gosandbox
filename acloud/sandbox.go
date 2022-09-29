@@ -3,14 +3,16 @@ package acloud
 import (
 	"errors"
 	"fmt"
+	"gosandbox/cli"
 	"gosandbox/core"
 	"time"
-	"gosandbox/cli"
+
 	"github.com/go-rod/rod"
 	"golang.design/x/clipboard"
 )
 
-type SandboxCredentials struct {
+type SandboxCredential struct {
+	ID  int64
 	User      string
 	Password  string
 	URL       string
@@ -45,7 +47,7 @@ func Scrape(connect core.Connection) rod.Elements {
 	return elems
 }
 
-func Copy(elems rod.Elements) (SandboxCredentials, error) {
+func Copy(elems rod.Elements) (SandboxCredential, error) {
 	//initialize cliboard package
 	err := clipboard.Init()
 	if err != nil {
@@ -76,7 +78,7 @@ func Copy(elems rod.Elements) (SandboxCredentials, error) {
 	accesskey := clipboard.Read(clipboard.FmtText)
 	clipboard.Write(clipboard.FmtText, nil)
 
-	return SandboxCredentials{
+	return SandboxCredential{
 		User:      string(un),
 		Password:  string(pw),
 		URL:       string(url),
@@ -85,7 +87,7 @@ func Copy(elems rod.Elements) (SandboxCredentials, error) {
 	}, nil
 }
 
-func KeyVals(creds SandboxCredentials) ([]string, []string) {
+func KeyVals(creds SandboxCredential) ([]string, []string) {
 	keys := []string{"username", "password", "url", "keyid", "accesskey"}
 	vals := []string{string(creds.User),
 		string(creds.Password),
@@ -96,7 +98,7 @@ func KeyVals(creds SandboxCredentials) ([]string, []string) {
 	return keys, vals
 }
 
-func DisplayCreds(creds SandboxCredentials) {
+func DisplayCreds(creds SandboxCredential) {
 	//if creds are empty, throw message and return
 	if creds.User == "" {
 		cli.Error("Warning: No Credentials Found")

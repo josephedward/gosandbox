@@ -2,15 +2,15 @@ package acloud
 
 import (
 	"fmt"
+	"gosandbox/cli"
 	"gosandbox/core"
 	"gosandbox/proxy"
-	"gosandbox/cli"
 )
 
 type ACloudProvider struct {
 	core.ACloudEnv
 	core.Connection
-	SandboxCredentials
+	SandboxCredential
 }
 
 func (p *ACloudProvider) Login(username, password string) (err error) {
@@ -42,7 +42,7 @@ func (p *ACloudProvider) Policies() (policies []proxy.Policy, err error) {
 	fmt.Println("creds : ", creds.User)
 
 	//set the provider's credentials
-	p.SandboxCredentials = creds
+	p.SandboxCredential = creds
 
 	//create string arrays of credentials
 	keys, vals := KeyVals(creds)
@@ -67,9 +67,9 @@ func (p *ACloudProvider) DocumentDownload(downloadKey string, policies []proxy.P
 	fmt.Println("p  :", p)
 	err = core.AppendAwsCredentials(core.LocalCreds{
 		Path:      p.ACloudEnv.Aws_path,
-		User:      p.SandboxCredentials.User,
-		KeyID:     p.SandboxCredentials.KeyID,
-		AccessKey: p.SandboxCredentials.AccessKey,
+		User:      p.SandboxCredential.User,
+		KeyID:     p.SandboxCredential.KeyID,
+		AccessKey: p.SandboxCredential.AccessKey,
 	})
 	cli.PrintIfErr(err)
 	fmt.Println("appended aws creds to .aws/credentials file @ ", p.ACloudEnv.Aws_path)

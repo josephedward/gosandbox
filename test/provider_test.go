@@ -37,9 +37,9 @@ func TestProvider(t *testing.T) {
 
 	//login to AWS (for final verification of credentials)))
 	awsConnect, err := core.Login(core.WebsiteLogin{
-		Url:      p.SandboxCredentials.URL,
-		Username: p.SandboxCredentials.User,
-		Password: p.SandboxCredentials.Password,
+		Url:      p.SandboxCredential.URL,
+		Username: p.SandboxCredential.User,
+		Password: p.SandboxCredential.Password,
 	})
 	cli.PrintIfErr(err)
 	t.Log("awsConnect : ", awsConnect)

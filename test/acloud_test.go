@@ -59,7 +59,7 @@ func TestCopy(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    acloud.SandboxCredentials
+		want    acloud.SandboxCredential
 		wantErr bool
 	}
 	for _, tt := range tests {
@@ -78,7 +78,7 @@ func TestCopy(t *testing.T) {
 
 func TestKeyVals(t *testing.T) {
 	type args struct {
-		creds acloud.SandboxCredentials
+		creds acloud.SandboxCredential
 	}
 	tests := []struct {
 		name  string
@@ -103,7 +103,7 @@ func TestACloudProvider_Login(t *testing.T) {
 	type fields struct {
 		ACloudEnv          core.ACloudEnv
 		Connection         core.Connection
-		SandboxCredentials acloud.SandboxCredentials
+		SandboxCredential acloud.SandboxCredential
 	}
 	type args struct {
 		username string
@@ -120,7 +120,7 @@ func TestACloudProvider_Login(t *testing.T) {
 			p := &acloud.ACloudProvider{
 				ACloudEnv:          tt.fields.ACloudEnv,
 				Connection:         tt.fields.Connection,
-				SandboxCredentials: tt.fields.SandboxCredentials,
+				SandboxCredential: tt.fields.SandboxCredential,
 			}
 			if err := p.Login(tt.args.username, tt.args.password); (err != nil) != tt.wantErr {
 				t.Errorf("ACloudProvider.Login() error = %v, wantErr %v", err, tt.wantErr)
@@ -133,7 +133,7 @@ func TestACloudProvider_Policies(t *testing.T) {
 	type fields struct {
 		ACloudEnv          core.ACloudEnv
 		Connection         core.Connection
-		SandboxCredentials acloud.SandboxCredentials
+		SandboxCredential acloud.SandboxCredential
 	}
 	tests := []struct {
 		name         string
@@ -146,7 +146,7 @@ func TestACloudProvider_Policies(t *testing.T) {
 			p := &acloud.ACloudProvider{
 				ACloudEnv:          tt.fields.ACloudEnv,
 				Connection:         tt.fields.Connection,
-				SandboxCredentials: tt.fields.SandboxCredentials,
+				SandboxCredential: tt.fields.SandboxCredential,
 			}
 			gotPolicies, err := p.Policies()
 			if (err != nil) != tt.wantErr {
@@ -164,7 +164,7 @@ func TestACloudProvider_DocumentDownload(t *testing.T) {
 	type fields struct {
 		ACloudEnv          core.ACloudEnv
 		Connection         core.Connection
-		SandboxCredentials acloud.SandboxCredentials
+		SandboxCredential acloud.SandboxCredential
 	}
 	type args struct {
 		downloadKey string
@@ -181,7 +181,7 @@ func TestACloudProvider_DocumentDownload(t *testing.T) {
 			p := &acloud.ACloudProvider{
 				ACloudEnv:          tt.fields.ACloudEnv,
 				Connection:         tt.fields.Connection,
-				SandboxCredentials: tt.fields.SandboxCredentials,
+				SandboxCredential: tt.fields.SandboxCredential,
 			}
 			if err := p.DocumentDownload(tt.args.downloadKey, tt.args.policies); (err != nil) != tt.wantErr {
 				t.Errorf("ACloudProvider.DocumentDownload() error = %v, wantErr %v", err, tt.wantErr)
