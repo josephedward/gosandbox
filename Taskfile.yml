@@ -16,6 +16,11 @@ tasks:
       - echo "***Pushing Secrets to GitHub Repo***"
       - go clean -modcache
       - go test ./test/github_test.go -v -owner josephedward -repo gosandbox {{.CLI_ARGS}}
+  db:
+    cmds: 
+      - echo "***Creating Database***"
+      - go clean -modcache
+      - go test ./test/db_test.go -v -rod="show,trace"
   test:
     cmds:
       - echo "***Running All Tests***"

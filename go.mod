@@ -8,6 +8,7 @@ require (
 	github.com/google/go-github/v47 v47.0.0
 	github.com/joho/godotenv v1.4.0
 	github.com/manifoldco/promptui v0.9.0
+	github.com/mattn/go-sqlite3 v1.14.15
 	golang.design/x/clipboard v0.6.2
 	golang.org/x/crypto v0.0.0-20220919173607-35f4265a4bc0
 	golang.org/x/oauth2 v0.0.0-20220909003341-f21342109be1
