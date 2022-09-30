@@ -1,7 +1,9 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	"github.com/manifoldco/promptui"
 	"gosandbox/acloud"
 	"gosandbox/cli"
 	"gosandbox/core"
@@ -9,14 +11,27 @@ import (
 	"gosandbox/proxy"
 	"os"
 	"strings"
-
-	"github.com/manifoldco/promptui"
 )
 
 func main() {
 	cli.Welcome()
 	var p acloud.ACloudProvider
+	p= bootstrap(p)
 	Execute(p)
+}
+
+func bootstrap(p acloud.ACloudProvider) acloud.ACloudProvider {
+	cli.Success("bootstrapping env, credentials, and sqlite table")
+	env, err := cli.GetEnv(".env")
+	cli.PrintIfErr(err)
+	p.ACloudEnv = env
+	//get sandbox creds
+	p, err = GetSandboxCreds(p.ACloudEnv, &p)
+	cli.PrintIfErr(err)
+	//create sqlite table
+	p.SQLiteRepository, err = ConnectSQLiteTable()
+	cli.PrintIfErr(err)
+	return p
 }
 
 func GetTemplates() *promptui.SelectTemplates {
@@ -53,17 +68,6 @@ func Select(promptTitle string, options []cli.PromptOptions) *promptui.Select {
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute(p acloud.ACloudProvider) {
-	
-
-	//if p doesnt have ACloudEnv set, automatically load it
-	fmt.Println("Current Sandbox Credentials ? ",p.ACloudEnv)
-	if len(p.ACloudEnv.Url) == 0 {
-		env, err := cli.GetEnv(".env")
-		cli.PrintIfErr(err)
-		p.ACloudEnv = env
-		//get sandbox creds
-		p, err = GetSandboxCreds(p.ACloudEnv, &p)
-	}
 
 	options := []cli.PromptOptions{
 		{
@@ -94,8 +98,12 @@ func Execute(p acloud.ACloudProvider) {
 			Key:   6,
 		},
 		{
-			Label: "Create SQLite table",
+			Label: "Write Credentials to SQLite table",
 			Key:   7,
+		},
+		{
+			Label: "Read Last Credentials in SQLite table",
+			Key:   8,
 		},
 	}
 
@@ -108,7 +116,7 @@ func Execute(p acloud.ACloudProvider) {
 		return //os.Exit(1)
 	}
 
-	fmt.Printf("You choose number %d: %s\n", i+1, options[i].Label)
+	fmt.Printf("Option %d: %s\n", i+1, options[i].Label)
 
 	switch options[i].Key {
 	case 0:
@@ -136,17 +144,41 @@ func Execute(p acloud.ACloudProvider) {
 		//open aws console for sandbox
 		OpenAWSConsole(p.SandboxCredential)
 	case 7:
-		//create sqlite table
-		CreateSQLiteTable()
+		//write to sqlite table
+		WriteCredsToSQLiteTable(p)
+	case 8:
+		//read from sqlite table
+		p.SandboxCredential=*GetLastWrittenCredsFromSQLiteTable(p)
+		acloud.DisplayCreds(p.SandboxCredential)
 	}
 	Execute(p)
 }
 
-
-func CreateSQLiteTable() {
-	// acloud.Migrate()
+func ConnectSQLiteTable() (*acloud.SQLiteRepository, error) {
+	fileName := "./data/sqlite.db"
+	db, err := sql.Open("sqlite3", fileName)
+	cli.Success("db : ", db)
+	cli.PrintIfErr(err)
+	sandboxRepository := acloud.NewSQLiteRepository(db)
+	sandboxRepository.Migrate()
+	cli.Success("sandboxRepository : ", sandboxRepository)
+	return sandboxRepository, err
 }
 
+func WriteCredsToSQLiteTable(p acloud.ACloudProvider) {
+	//write to sqlite table
+	created, err := p.SQLiteRepository.Create(p.SandboxCredential)
+	cli.Success("created : ", created)
+	cli.PrintIfErr(err)
+}
+
+func GetLastWrittenCredsFromSQLiteTable(p acloud.ACloudProvider) *acloud.SandboxCredential {
+	//read from sqlite table
+	creds, err := p.SQLiteRepository.Last()
+	cli.Success("creds : ", creds)
+	cli.PrintIfErr(err)
+	return creds
+}
 
 func OpenAWSConsole(creds acloud.SandboxCredential) {
 	//if credentials are empty, return error
@@ -158,7 +190,7 @@ func OpenAWSConsole(creds acloud.SandboxCredential) {
 	//login to console with credentials url, username, and password
 	browser, err := core.Login(core.WebsiteLogin{creds.URL, creds.User, creds.Password})
 	cli.PrintIfErr(err)
-	cli.Success("browser : ",browser)
+	cli.Success("browser : ", browser)
 }
 
 func SandboxToGithub(creds acloud.SandboxCredential) {
@@ -201,10 +233,10 @@ func SandboxToGithub(creds acloud.SandboxCredential) {
 		if err := gh.AddRepoSecret(ctx, client, owner, repo, key, vals[i]); err != nil {
 			cli.PrintIfErr(err)
 		}
-		cli.Success("secret : "+key)
-		fmt.Println("value : "+vals[i])
+		cli.Success("secret : " + key)
+		fmt.Println("value : " + vals[i])
 	}
-	cli.Success("credentials written to "+owner+"/"+repo)
+	cli.Success("credentials written to " + owner + "/" + repo)
 }
 
 func DownloadTextFile(creds acloud.SandboxCredential) {

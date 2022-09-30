@@ -6,15 +6,18 @@ import (
 	"gosandbox/acloud"
 	"os"
 	"testing"
+	"gosandbox/cli"
 )
 
 func TestDb(t *testing.T) {
-	const fileName = "sqlite.db"
+	const fileName = "../data/test.db"
 
 	os.Remove(fileName)
 
 	db, err := sql.Open("sqlite3", fileName)
-	fmt.Println("db : ", db)
+	// fmt.Println("db : ", db)
+	cli.Success("db : ", db)
+	cli.PrintIfErr(err)
 
 	sandboxRepository := acloud.NewSQLiteRepository(db)
 

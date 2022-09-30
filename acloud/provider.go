@@ -11,6 +11,7 @@ type ACloudProvider struct {
 	core.ACloudEnv
 	core.Connection
 	SandboxCredential
+	*SQLiteRepository
 }
 
 func (p *ACloudProvider) Login(username, password string) (err error) {

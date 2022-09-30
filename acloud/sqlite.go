@@ -45,6 +45,8 @@ func (r *SQLiteRepository) Migrate() error {
 
 func (r *SQLiteRepository) Create(creds SandboxCredential) (*SandboxCredential, error) {
 	fmt.Println("Create")
+	fmt.Println("r: ", r)
+	fmt.Println("creds: ", creds)
 	res, err := r.db.Exec("INSERT INTO SandboxCredentials(User, Password ,URL, KeyID, AccessKey) values(?,?,?,?,?)",
 		creds.User, creds.Password, creds.URL, creds.KeyID, creds.AccessKey)
 	
@@ -65,11 +67,23 @@ func (r *SQLiteRepository) Create(creds SandboxCredential) (*SandboxCredential, 
 	if err != nil {
 		return nil, err
 	}
-	// fmt.Println("id : ", id)
 	creds.ID = id
-
 	return &creds, nil
-	// return &SandboxCredential, nil
+}
+
+
+func (r *SQLiteRepository) Last() (*SandboxCredential, error) {
+	
+	row := r.db.QueryRow("SELECT * FROM SandboxCredentials ORDER BY User DESC LIMIT 1;")
+
+	var SandboxCredential SandboxCredential
+	if err := row.Scan(&SandboxCredential.ID, &SandboxCredential.User, &SandboxCredential.Password, &SandboxCredential.URL, &SandboxCredential.KeyID, &SandboxCredential.AccessKey); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, ErrNotExists
+		}
+		return nil, err
+	}
+	return &SandboxCredential, nil
 }
 
 func (r *SQLiteRepository) All() ([]SandboxCredential, error) {
