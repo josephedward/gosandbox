@@ -6,3 +6,5 @@ creds.txt
 *.txt
 .DS_Store
 dist/
+
+dist/
