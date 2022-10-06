@@ -3,7 +3,7 @@ module gosandbox
 go 1.17
 
 require (
-	github.com/GoKillers/libsodium-go v0.0.0-20171022220152-dd733721c3cb
+	// github.com/GoKillers/libsodium-go v0.4.0
 	github.com/go-rod/rod v0.108.1
 	github.com/google/go-github/v47 v47.0.0
 	github.com/joho/godotenv v1.4.0
@@ -14,6 +14,8 @@ require (
 	golang.org/x/oauth2 v0.0.0-20220909003341-f21342109be1
 
 )
+
+require github.com/GoKillers/libsodium-go v0.0.0-20171022220152-dd733721c3cb
 
 require (
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect

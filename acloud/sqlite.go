@@ -5,6 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/mattn/go-sqlite3"
+
+	//sqlite3.Error
+	// "github.com/mattn/go-sqlite3/Error"
+
 )
 
 var (
