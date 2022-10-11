@@ -6,13 +6,12 @@ import (
 	"gosandbox/cli"
 	"gosandbox/core"
 	"time"
-
 	"github.com/go-rod/rod"
 	"golang.design/x/clipboard"
 )
 
 type SandboxCredential struct {
-	ID  int64
+	ID        int64
 	User      string
 	Password  string
 	URL       string

@@ -5,10 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/mattn/go-sqlite3"
-
 	//sqlite3.Error
 	// "github.com/mattn/go-sqlite3/Error"
-
 )
 
 var (
@@ -43,7 +41,7 @@ func (r *SQLiteRepository) Migrate() error {
 	`
 	fmt.Println("r.db.Exec(query) :")
 	_, err := r.db.Exec(query)
-	fmt.Println("err  :",err)
+	fmt.Println("err  :", err)
 	return err
 }
 
@@ -53,8 +51,7 @@ func (r *SQLiteRepository) Create(creds SandboxCredential) (*SandboxCredential, 
 	fmt.Println("creds: ", creds)
 	res, err := r.db.Exec("INSERT INTO SandboxCredentials(User, Password ,URL, KeyID, AccessKey) values(?,?,?,?,?)",
 		creds.User, creds.Password, creds.URL, creds.KeyID, creds.AccessKey)
-	
-	
+
 	fmt.Println("res : ", res)
 	fmt.Println("err : ", err)
 	if err != nil {
@@ -75,9 +72,8 @@ func (r *SQLiteRepository) Create(creds SandboxCredential) (*SandboxCredential, 
 	return &creds, nil
 }
 
-
 func (r *SQLiteRepository) Last() (*SandboxCredential, error) {
-	
+
 	row := r.db.QueryRow("SELECT * FROM SandboxCredentials ORDER BY User DESC LIMIT 1;")
 
 	var SandboxCredential SandboxCredential

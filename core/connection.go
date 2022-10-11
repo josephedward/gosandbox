@@ -1,9 +1,9 @@
 package core
 
 import (
+	"errors"
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/input"
-	"errors"
 )
 
 type WebsiteLogin struct {

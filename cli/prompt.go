@@ -3,10 +3,11 @@ package cli
 import (
 	"errors"
 	"fmt"
+	"github.com/manifoldco/promptui"
 	"gosandbox/core"
 	"os"
-	"github.com/manifoldco/promptui"
 )
+
 type PromptContent struct {
 	Label string
 	// Items    []string
@@ -133,7 +134,7 @@ func PromptConfig() bool {
 	return false
 }
 
-func PromptRepoOwner()(owner string, err error){
+func PromptRepoOwner() (owner string, err error) {
 	owner = PromptGetInput(PromptContent{Label: "What is the name of the repository owner?"})
 	if owner == "" {
 		err = errors.New("please enter a valid repository owner")
@@ -142,8 +143,7 @@ func PromptRepoOwner()(owner string, err error){
 	return owner, err
 }
 
-
-func PromptRepoName()(repo string, err error){
+func PromptRepoName() (repo string, err error) {
 	repo = PromptGetInput(PromptContent{Label: "What is the name of the repository?"})
 	if repo == "" {
 		err = errors.New("please enter a valid repository name")

@@ -46,7 +46,7 @@ func AppendLine(newLine string, path string) error {
 	return err
 }
 
-//Creates a text file with exported 'policies'
+// Creates a text file with exported 'policies'
 func DocumentDownload(downloadKey string, policies []proxy.Policy) error {
 	//create a file with list of policies
 	file, err := os.Create(downloadKey + ".txt")
@@ -64,7 +64,7 @@ func DocumentDownload(downloadKey string, policies []proxy.Policy) error {
 	return nil
 }
 
-//screenshots the current browser window of the connection passed to it.
+// screenshots the current browser window of the connection passed to it.
 func ScreenShot(filename string, connect Connection) {
 	connect.Page.MustWaitLoad().MustScreenshot(filename + ".png")
 }

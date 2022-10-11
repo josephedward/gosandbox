@@ -4,13 +4,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/go-rod/rod/lib/launcher"
+	"github.com/go-rod/rod/lib/utils"
 	"log"
 	"net"
 	"net/http"
 	"os"
-
-	"github.com/go-rod/rod/lib/launcher"
-	"github.com/go-rod/rod/lib/utils"
 )
 
 var addr = flag.String("address", "localhost:7317", "the address to listen to")

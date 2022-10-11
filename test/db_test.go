@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"gosandbox/acloud"
+	"gosandbox/cli"
 	"os"
 	"testing"
-	"gosandbox/cli"
 )
 
 func TestDb(t *testing.T) {

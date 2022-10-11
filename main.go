@@ -16,7 +16,7 @@ import (
 func main() {
 	cli.Welcome()
 	var p acloud.ACloudProvider
-	p= bootstrap(p)
+	p = bootstrap(p)
 	Execute(p)
 }
 
@@ -148,7 +148,7 @@ func Execute(p acloud.ACloudProvider) {
 		WriteCredsToSQLiteTable(p)
 	case 8:
 		//read from sqlite table
-		p.SandboxCredential=*GetLastWrittenCredsFromSQLiteTable(p)
+		p.SandboxCredential = *GetLastWrittenCredsFromSQLiteTable(p)
 		acloud.DisplayCreds(p.SandboxCredential)
 	}
 	Execute(p)
