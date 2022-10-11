@@ -1,0 +1,14 @@
+version: '3'
+services:
+  rod:
+     image: ghcr.io/go-rod/rod
+     container_name: rod_container
+     restart: always
+  gosandbox:
+    build: ./
+    depends_on:
+       - rod
+    container_name: gosandbox_container
+    restart: always
+    ports:
+      - "8080:80"

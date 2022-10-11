@@ -26,6 +26,11 @@ tasks:
       - echo "***Creating Database***"
       - go clean -modcache
       - go test ./test/db_test.go -v -rod="show,trace"
+  manager:
+    cmds: 
+      - echo "***Connecting to Rod Container using launcher.Manager***"
+      - go clean -modcache
+      - go run ./manager.go -rod="show,trace"
   test:
     cmds:
       - echo "***Running All Tests***"

@@ -55,7 +55,7 @@ func Welcome() {
 	fmt.Println(Cyan+" 88.    .88'  888   888 oo     .d8P d8(  888   888   888  888   888   888    .88P 888   888  .o8''88b    "+Reset)
 	fmt.Println(Cyan+" Y8bood8P'   'Y8bod8P' 8''88888P'  'Y888''8o o888o o888o 'Y8bod88P' o888bood8P'  'Y8bod8P' o88'   888o   "+Reset)
 	fmt.Println(Green+"---------------------------------------------------------------------------------------------------------------"+Reset)
-	fmt.Println(Yellow +"    ACloudGuru Sandbox Procurement Tool" + Reset)
+	fmt.Println(Yellow +"ACloudGuru Sandbox Procurement Tool" + Reset)
 	fmt.Println(Green+"---------------------------------------------------------------------------------------------------------------"+Reset)
 
 }
