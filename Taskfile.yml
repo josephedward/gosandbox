@@ -26,20 +26,21 @@ tasks:
       - echo "***Creating Database***"
       - go clean -modcache
       - go test ./test/db_test.go -v -rod="show,trace"
-  manager:
-    cmds: 
-      - echo "***Connecting to Rod Container using launcher.Manager***"
-      - go clean -modcache
-      - docker run -p 7317:7317 ghcr.io/go-rod/rod
-      # - go run ./manager.go 
-  remote:
-    cmds: 
-      - echo "***Connecting to Rod Container using launcher.Manager***"
-      - go clean -modcache
-      - go run ./remote.go -v -rod="show,trace"
   test:
     cmds:
       - echo "***Running All Tests***"
       - go clean -modcache
       - cd /test
       - go test -v
+
+  # manager:
+  #   cmds: 
+  #     - echo "***Connecting to Rod Container using launcher.Manager***"
+  #     - go clean -modcache
+  #     - docker run -p 7317:7317 ghcr.io/go-rod/rod
+  #     # - go run ./manager.go 
+  # remote:
+  #   cmds: 
+  #     - echo "***Connecting to Rod Container using launcher.Manager***"
+  #     - go clean -modcache
+  #     - go run ./remote.go -v -rod="show,trace"
