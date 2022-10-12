@@ -11,13 +11,20 @@ import (
 	"gosandbox/proxy"
 	"os"
 	"strings"
+	"time"
+	// "os/exec"
 )
+
+
 
 func main() {
 	cli.Welcome()
-	var p acloud.ACloudProvider
-	p = bootstrap(p)
-	Execute(p)
+	go core.Manager()	
+	time.Sleep(1 * time.Second)
+	core.Remote()	
+	// var p acloud.ACloudProvider
+	// p = bootstrap(p)
+	// Execute(p)
 }
 
 func bootstrap(p acloud.ACloudProvider) acloud.ACloudProvider {

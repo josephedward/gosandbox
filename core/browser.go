@@ -59,7 +59,7 @@ var quiet = flag.Bool("quiet", false, "silence the log")
 var allowAllPath = flag.Bool("allow-all", false, "allow all path set by the client")
 
 // A server to help launch browser remotely
-func manager() {
+func Manager() {
 	flag.Parse()
 
 	m := launcher.NewManager()
@@ -72,20 +72,21 @@ func manager() {
 		m.BeforeLaunch = func(l *launcher.Launcher, rw http.ResponseWriter, r *http.Request) {}
 	}
 
-	l, err := net.Listen("tcp", *addr)
+	listen, err := net.Listen("tcp", *addr)
 	if err != nil {
 		utils.E(err)
 	}
 
 	if !*quiet {
-		fmt.Println("rod-manager listening on:", l.Addr().String())
+		fmt.Println("rod-manager listening on:", listen.Addr().String())
 	}
 
 	srv := &http.Server{Handler: m}
-	utils.E(srv.Serve(l))
+	utils.E(srv.Serve(listen))
+
 }
 
-func remote() {
+func Remote() {
 	// This example is to launch a browser remotely, not connect to a running browser remotely,
 	// to connect to a running browser check the "../connect-browser" example.
 	// Rod provides a docker image for beginers, run the below to start a launcher.Manager:
@@ -100,7 +101,7 @@ func remote() {
 	l.Set("disable-gpu").Delete("disable-gpu")
 
 	// Launch with headful mode
-	// l.Headless(false).XVFB("--server-num=5", "--server-args=-screen 0 1600x900x16")
+	l.Headless(false).XVFB("--server-num=5", "--server-args=-screen 0 1600x900x16")
 
 	browser := rod.New().Client(l.MustClient()).MustConnect()
 

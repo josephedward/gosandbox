@@ -15,20 +15,18 @@ require (
 
 )
 
-require github.com/GoKillers/libsodium-go v0.0.0-20171022220152-dd733721c3cb
+require (
+	github.com/GoKillers/libsodium-go v0.0.0-20171022220152-dd733721c3cb
+	github.com/ysmood/leakless v0.8.0
+)
 
 require (
-	github.com/cespare/reflex v0.3.1 // indirect
+	github.com/Joker666/AsyncGoDemo v0.0.0-20201127222251-d25052ce6161 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
-	github.com/creack/pty v1.1.11 // indirect
-	github.com/fsnotify/fsnotify v1.4.7 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
-	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
-	github.com/ogier/pflag v0.0.1 // indirect
 	github.com/ysmood/goob v0.4.0 // indirect
 	github.com/ysmood/gson v0.7.2 // indirect
-	github.com/ysmood/leakless v0.8.0 // indirect
 	golang.org/x/exp v0.0.0-20200224162631-6cc2880d07d6 // indirect
 	golang.org/x/image v0.0.0-20211028202545-6944b10bf410 // indirect
 	golang.org/x/mobile v0.0.0-20210716004757-34ab1303b554 // indirect

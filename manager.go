@@ -10,6 +10,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"gosandbox/core"
 )
 
 var addr = flag.String("address", "localhost:7317", "the address to listen to")
@@ -40,4 +41,7 @@ func main() {
 
 	srv := &http.Server{Handler: m}
 	utils.E(srv.Serve(l))
+
+	core.Remote()
+
 }

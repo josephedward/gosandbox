@@ -5,7 +5,7 @@ tasks:
     cmds:
       - echo "***Running CLI***"
       - go clean -testcache
-      - go run ./main.go -v 
+      - go run ./main.go  
   cli-vis:
     cmds:
       - echo "***Running CLI***"
