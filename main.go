@@ -12,32 +12,93 @@ import (
 	"os"
 	"strings"
 	"time"
+	//rod
+	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/launcher"
 	// "os/exec"
 )
 
-
-
 func main() {
 	cli.Welcome()
-	go core.Manager()	
-	time.Sleep(1 * time.Second)
-	core.Remote()	
-	// var p acloud.ACloudProvider
-	// p = bootstrap(p)
+	
+	go core.Manager()
+	time.Sleep(2 * time.Second)
+	Remote()
+	browserino := core.CustomLaunch()
+	cli.Success("browserino : ", browserino)
+	var p acloud.ACloudProvider
+	p = bootstrap(p, browserino)
+	cli.Success("ACloudProvider Bootstrapped: ", p)
 	// Execute(p)
 }
 
-func bootstrap(p acloud.ACloudProvider) acloud.ACloudProvider {
-	cli.Success("bootstrapping env, credentials, and sqlite table")
+
+func Remote() (*rod.Browser) {
+	// frameShell()
+	// This example is to launch a browser remotely, not connect to a running browser remotely,
+	// to connect to a running browser check the "../connect-browser" example.
+	// Rod provides a docker image for beginers, run the below to start a launcher.Manager:
+	//
+	//     docker run -p 7317:7317 ghcr.io/go-rod/rod
+	//
+	// For more information, check the doc of launcher.Manager
+	l := launcher.MustNewManaged("")
+
+	// You can also set any flag remotely before you launch the remote browser.
+	// Available flags: https://peter.sh/experiments/chromium-command-line-switches
+	l.Set("disable-gpu").Delete("disable-gpu")
+
+	// Launch with headful mode
+	l.Headless(false).XVFB("--server-num=5", "--server-args=-screen 0 1600x900x16")
+
+	browser := rod.New().Client(l.MustClient()).MustConnect()
+
+	// You may want to start a server to watch the screenshots of the remote browser.
+	launcher.Open(browser.ServeMonitor(""))
+
+	// fmt.Println(
+	// 	browser.MustPage("https://google.com/").MustEval("() => document.title"),
+	// )
+	
+	// browser = browser.MustPage("https://google.com/").MustEval("() => document.title")
+
+	// utils.Pause()
+	return browser
+}
+
+
+
+// func frameShell(){
+// 	fmt.Println("Before shell script:")
+//     cmd := exec.Command("bash", "-c", "./scripts/frame.sh")
+//     cmd.Stdin = os.Stdin
+//     cmd.Stdout = os.Stdout
+//     cmd.Stderr = os.Stderr
+//     _ = cmd.Run() // add error checking
+//     fmt.Println("After shell script")
+// }
+
+
+func bootstrap(p acloud.ACloudProvider, browser *rod.Browser) acloud.ACloudProvider {
+	cli.Success("bootstrapping...")	
 	env, err := cli.GetEnv(".env")
 	cli.PrintIfErr(err)
 	p.ACloudEnv = env
+	cli.Success("p.ACloudEnv : ", p.ACloudEnv)
+	p.Connection = core.Connect(browser, p.ACloudEnv.Url)
+	cli.Success("p.Connection : ", p.Connection)
+
+	cli.Success("logging in...")	
+	core.RemoteLogin(p.Connection, core.WebsiteLogin{Url:      p.ACloudEnv.Url, Username: p.ACloudEnv.Username, Password: p.ACloudEnv.Password})
+	
 	//get sandbox creds
 	p, err = GetSandboxCreds(p.ACloudEnv, &p)
 	cli.PrintIfErr(err)
+	cli.Success("p.SandboxCredential : ", p.SandboxCredential)
 	//create sqlite table
 	p.SQLiteRepository, err = ConnectSQLiteTable()
 	cli.PrintIfErr(err)
+	cli.Success("p.SQLiteRepository : ", p.SQLiteRepository)
 	return p
 }
 
@@ -301,12 +362,6 @@ func AppendCreds(creds acloud.SandboxCredential) {
 }
 
 func GetSandboxCreds(cliEnv core.ACloudEnv, p *acloud.ACloudProvider) (acloud.ACloudProvider, error) {
-
-	//connect to website
-	connect, err := core.Login(core.WebsiteLogin{Url: cliEnv.Url, Username: cliEnv.Username, Password: cliEnv.Password})
-	cli.PrintIfErr(err)
-	cli.Success("Connection Successful: ", connect)
-	p.Connection = connect
 
 	//scrape credentials
 	elems, err := acloud.Sandbox(p.Connection, cliEnv.Download_key)
