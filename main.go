@@ -25,10 +25,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Script executed successfully")
+	cli.Success("Script executed successfully")
 
 	var p acloud.ACloudProvider
 	cli.Success("getting acloud provider login...")
+	
 	if len(os.Args) > 1 {
 		cli.Success("setting args to env...")
 		env, err :=core.ArgEnv()
@@ -39,6 +40,11 @@ func main() {
 	} else {
 		env, err := cli.GetEnv(".env")
 		cli.PrintIfErr(err)	
+		if err != nil {
+			cli.Error("Error: .env file not found")
+			env = core.Env()
+		}
+		cli.Success("env : ", env)
 		p.ACloudEnv = env
 		p = bootstrap(p)
 		Execute(p)
@@ -51,9 +57,10 @@ func bootstrap(p acloud.ACloudProvider) acloud.ACloudProvider {
 	//get sandbox creds
 	p, err := GetSandboxCreds(p.ACloudEnv, &p)
 	cli.PrintIfErr(err)
+
 	//create sqlite table
-	p.SQLiteRepository, err = ConnectSQLiteTable()
-	cli.PrintIfErr(err)
+	// p.SQLiteRepository, err = ConnectSQLiteTable()
+	// cli.PrintIfErr(err)
 	return p
 }
 

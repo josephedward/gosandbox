@@ -89,9 +89,6 @@ func Copy(elems rod.Elements) (SandboxCredential, error) {
 
 func CopyHtml(elems rod.Elements) (SandboxCredential, error) {
 
-	//same function as above, but do not use clipboard
-
-
 	elems[0].MustElement("svg[aria-label='copy icon']").MustClick()
 	un := elems[0].MustElement("input").MustProperty("value").String()
 

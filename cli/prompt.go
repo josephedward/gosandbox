@@ -23,7 +23,8 @@ func GetEnv(env_path string) (core.ACloudEnv, error) {
 	env, err := core.LoadEnvPath(env_path)
 	if err != nil {
 		fmt.Println("Could not load .env file - Err: ", err)
-		PromptEnvFile()
+		// PromptEnvFile()
+		env = core.Env()
 	}
 	return env, nil
 }
