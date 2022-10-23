@@ -15,5 +15,5 @@ jobs:
           username: josephedward
           password: ${{ secrets.PUBLISHER_TOKEN }}
           registry: docker.pkg.github.com
-          repository: josephedward/gosandbox
+          repository: josephedward/gosandbox/alpha-v1
           tag_with_sha: true
