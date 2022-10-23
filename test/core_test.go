@@ -146,3 +146,114 @@ func TestScreenShot(t *testing.T) {
 		})
 	}
 }
+
+// func TestExecute(t *testing.T) {
+// 	tests := []struct {
+// 		name    string
+// 		want    core.ACloudEnv
+// 		wantErr bool
+// 	}{
+// 		// TODO: Add test cases.
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			got, err := core.Execute()
+// 			if (err != nil) != tt.wantErr {
+// 				t.Errorf("Execute() error = %v, wantErr %v", err, tt.wantErr)
+// 				return
+// 			}
+// 			if !reflect.DeepEqual(got, tt.want) {
+// 				t.Errorf("Execute() = %v, want %v", got, tt.want)
+// 			}
+// 		})
+// 	}
+// }
+
+// func Test_promptEnvFile(t *testing.T) {
+// 	type args struct {
+// 		tempEnv core.ACloudEnv
+// 	}
+// 	tests := []struct {
+// 		name    string
+// 		args    args
+// 		want    core.ACloudEnv
+// 		wantErr bool
+// 	}{
+// 		// TODO: Add test cases.
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			got, err := core.promptEnvFile(tt.args.tempEnv)
+// 			if (err != nil) != tt.wantErr {
+// 				t.Errorf("promptEnvFile() error = %v, wantErr %v", err, tt.wantErr)
+// 				return
+// 			}
+// 			if !reflect.DeepEqual(got, tt.want) {
+// 				t.Errorf("promptEnvFile() = %v, want %v", got, tt.want)
+// 			}
+// 		})
+// 	}
+// }
+
+// func Test_promptManual(t *testing.T) {
+// 	type args struct {
+// 		tempEnv core.ACloudEnv
+// 	}
+// 	tests := []struct {
+// 		name    string
+// 		args    args
+// 		want   core.ACloudEnv
+// 		wantErr bool
+// 	}{
+// 		// TODO: Add test cases.
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			got, err := core.promptManual(tt.args.tempEnv)
+// 			if (err != nil) != tt.wantErr {
+// 				t.Errorf("promptManual() error = %v, wantErr %v", err, tt.wantErr)
+// 				return
+// 			}
+// 			if !reflect.DeepEqual(got, tt.want) {
+// 				t.Errorf("promptManual() = %v, want %v", got, tt.want)
+// 			}
+// 		})
+// 	}
+// }
+
+// func Test_promptGetInput(t *testing.T) {
+// 	type args struct {
+// 		pc core.PromptContent
+// 	}
+// 	tests := []struct {
+// 		name string
+// 		args args
+// 		want string
+// 	}{
+// 		// TODO: Add test cases.
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			if got := core.promptGetInput(tt.args.pc); got != tt.want {
+// 				t.Errorf("promptGetInput() = %v, want %v", got, tt.want)
+// 			}
+// 		})
+// 	}
+// }
+
+// func TestPrintIfErr(t *testing.T) {
+// 	type args struct {
+// 		err error
+// 	}
+// 	tests := []struct {
+// 		name string
+// 		args args
+// 	}{
+// 		// TODO: Add test cases.
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			cli.PrintIfErr(tt.args.err)
+// 		})
+// 	}
+// }

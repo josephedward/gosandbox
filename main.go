@@ -39,11 +39,9 @@ func bootstrap(p acloud.ACloudProvider) acloud.ACloudProvider {
 	//get sandbox creds
 	p, err := GetSandboxCreds(p.ACloudEnv, &p)
 	cli.PrintIfErr(err)
-	cli.Success("p.SandboxCredential : ", p.SandboxCredential)
 	//create sqlite table
 	p.SQLiteRepository, err = ConnectSQLiteTable()
 	cli.PrintIfErr(err)
-	cli.Success("p.SQLiteRepository : ", p.SQLiteRepository)
 	return p
 }
 
@@ -307,6 +305,12 @@ func AppendCreds(creds acloud.SandboxCredential) {
 }
 
 func GetSandboxCreds(cliEnv core.ACloudEnv, p *acloud.ACloudProvider) (acloud.ACloudProvider, error) {
+
+	//connect to website
+	connect, err := core.Login(core.WebsiteLogin{Url: cliEnv.Url, Username: cliEnv.Username, Password: cliEnv.Password})
+	cli.PrintIfErr(err)
+	cli.Success("Connection Successful: ", connect)
+	p.Connection = connect
 
 	//scrape credentials
 	elems, err := acloud.Sandbox(p.Connection, cliEnv.Download_key)

@@ -76,6 +76,3 @@ func (p *ACloudProvider) DocumentDownload(downloadKey string, policies []proxy.P
 	fmt.Println("appended aws creds to .aws/credentials file @ ", p.ACloudEnv.Aws_path)
 	return err
 }
-
-
-

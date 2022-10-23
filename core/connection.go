@@ -41,23 +41,3 @@ func Login(login WebsiteLogin) (Connection, error) {
 	//create connection object to return
 	return Connection{Browser: browser, Page: page}, nil
 }
-
-
-// should be able to work with most websites that use a login form
-func RemoteLogin(connect Connection, login WebsiteLogin) {
-	page := connect.Page
-	//Race Condition: It will keep polling until one selector has found a match
-	page.Race().Element("input[name='email']").MustHandle(func(e *rod.Element) {
-		e.MustInput(login.Username).MustType(input.Enter)
-	}).Element("input[name='username']").MustHandle(func(e *rod.Element) {
-		e.MustInput(login.Username).MustType(input.Enter)
-	}).MustDo()
-
-	page.MustElement("input[name='password']").MustInput(login.Password).MustType(input.Enter)
-}
-
-func Connect(browser *rod.Browser, url string) (Connection) {
-	page := browser.MustPage(url)
-	return Connection{Browser: browser, Page: page}
-}
-
