@@ -33,14 +33,14 @@ tasks:
       - cd /test
       - go test -v
 
-  # manager:
-  #   cmds: 
-  #     - echo "***Connecting to Rod Container using launcher.Manager***"
-  #     - go clean -modcache
-  #     - docker run -p 7317:7317 ghcr.io/go-rod/rod
-  #     # - go run ./manager.go 
-  # remote:
-  #   cmds: 
-  #     - echo "***Connecting to Rod Container using launcher.Manager***"
-  #     - go clean -modcache
-  #     - go run ./remote.go -v -rod="show,trace"
+  manager:
+    cmds: 
+      - echo "***Connecting to Rod Container using launcher.Manager***"
+      - go clean -modcache
+      - docker run -p 7317:7317 ghcr.io/go-rod/rod
+      # - go run ./manager.go 
+  remote:
+    cmds: 
+      - echo "***Connecting to Rod Container using launcher.Manager***"
+      - go clean -modcache
+      - go run ./misc/remote.go -v -rod="show,trace"
