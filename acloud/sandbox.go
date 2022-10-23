@@ -86,6 +86,37 @@ func Copy(elems rod.Elements) (SandboxCredential, error) {
 	}, nil
 }
 
+
+func CopyHtml(elems rod.Elements) (SandboxCredential, error) {
+
+	//same function as above, but do not use clipboard
+
+
+	elems[0].MustElement("svg[aria-label='copy icon']").MustClick()
+	un := elems[0].MustElement("input").MustProperty("value").String()
+
+	elems[1].MustElement("svg[aria-label='copy icon']").MustClick()
+	pw := elems[1].MustElement("input").MustProperty("value").String()
+
+	elems[2].MustElement("svg[aria-label='copy icon']").MustClick()
+	url := elems[2].MustElement("input").MustProperty("value").String()
+
+	elems[3].MustElement("svg[aria-label='copy icon']").MustClick()
+	keyid := elems[3].MustElement("input").MustProperty("value").String()
+
+	elems[4].MustElement("svg[aria-label='copy icon']").MustClick()
+	accesskey := elems[4].MustElement("input").MustProperty("value").String()
+
+	return SandboxCredential{
+		User:      string(un),
+		Password:  string(pw),
+		URL:       string(url),
+		KeyID:     string(keyid),
+		AccessKey: string(accesskey),
+	}, nil
+
+}
+
 func KeyVals(creds SandboxCredential) ([]string, []string) {
 	keys := []string{"username", "password", "url", "keyid", "accesskey"}
 	vals := []string{string(creds.User),

