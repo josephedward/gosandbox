@@ -11,29 +11,33 @@ import (
 	"gosandbox/proxy"
 	"os"
 	"strings"
-	"time"
-	// "os/exec"
 )
-
-
 
 func main() {
 	cli.Welcome()
-	go core.Manager()	
-	time.Sleep(1 * time.Second)
-	core.Remote()	
-	// var p acloud.ACloudProvider
-	// p = bootstrap(p)
-	// Execute(p)
+	var p acloud.ACloudProvider
+	cli.Success("getting acloud provider login...")
+	if len(os.Args) > 1 {
+		cli.Success("setting args to env...")
+		env, err :=core.ArgEnv()
+		cli.PrintIfErr(err)	
+		p.ACloudEnv = env
+		p = bootstrap(p)
+		Execute(p)
+	} else {
+		env, err := cli.GetEnv(".env")
+		cli.PrintIfErr(err)	
+		p.ACloudEnv = env
+		p = bootstrap(p)
+		Execute(p)
+	}
+
 }
 
 func bootstrap(p acloud.ACloudProvider) acloud.ACloudProvider {
-	cli.Success("bootstrapping env, credentials, and sqlite table")
-	env, err := cli.GetEnv(".env")
-	cli.PrintIfErr(err)
-	p.ACloudEnv = env
+	cli.Success("getting sandbox credentials...")
 	//get sandbox creds
-	p, err = GetSandboxCreds(p.ACloudEnv, &p)
+	p, err := GetSandboxCreds(p.ACloudEnv, &p)
 	cli.PrintIfErr(err)
 	//create sqlite table
 	p.SQLiteRepository, err = ConnectSQLiteTable()

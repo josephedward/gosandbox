@@ -48,3 +48,21 @@ func LoadEnvPath(path string) (login ACloudEnv, err error) {
 		Download_key: download_key,
 	}, err
 }
+
+func ArgEnv() (login ACloudEnv, err error) {
+	//set all needed vendor credentials from cli arg
+	username := os.Args[1]
+	password := os.Args[2]
+	url := os.Args[3]
+	download_key := os.Args[4]
+	//may not need this yet 
+	// aws_path := os.Args[3]
+	
+	return ACloudEnv{
+		Url:          url,
+		Username:     username,
+		Password:     password,
+		Aws_path:     "",
+		Download_key: download_key,
+	}, err
+}
