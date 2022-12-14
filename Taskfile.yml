@@ -1,12 +1,21 @@
 version: "3"
 
 tasks:
-  cli:
+  devtools:
+    cmds:
+      - echo "***Starting Devtools Session***"
+      - go clean -modcache
+      - $("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --remote-debugging-port=9222)
+  auth:
+    cmds:
+      - echo "***Authenticating with ACloudGuru***"
+      - go run ./test/authenticate.go  -v -rod="show,trace" {{.CLI_ARGS}}
+  main:
     cmds:
       - echo "***Running CLI***"
       - go clean -testcache
       - go run ./main.go  
-  cli-vis:
+  debug-cli:
     cmds:
       - echo "***Running CLI***"
       - go clean -testcache
