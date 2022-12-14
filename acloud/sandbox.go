@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"gosandbox/cli"
 	"gosandbox/core"
+	// "os"
 	"time"
+
 	"github.com/go-rod/rod"
 	"golang.design/x/clipboard"
 )
@@ -22,16 +24,16 @@ type SandboxCredential struct {
 func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) {
 
 	elems := make(rod.Elements, 0)
-	time.Sleep(3 * time.Second)
+
+	time.Sleep(1 * time.Second)
+
 	// It will keep polling until one selector has found a match
 	connect.Page.Race().ElementR("button", "Start AWS Sandbox").MustHandle(func(e *rod.Element) {
 		e.MustClick()
-		time.Sleep(3 * time.Second)
-		core.ScreenShot(downloadKey, connect)
+		time.Sleep(1 * time.Second)
 		elems = Scrape(connect)
-	}).Element("div[class^='CopyableInstanceField']").MustHandle(func(e *rod.Element) {
-		time.Sleep(3 * time.Second)
-		core.ScreenShot(downloadKey, connect)
+	}).Element("div[role='tabpanel']").MustHandle(func(e *rod.Element) {
+		time.Sleep(1 * time.Second)
 		elems = Scrape(connect)
 	}).MustDo()
 
@@ -42,7 +44,8 @@ func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) 
 }
 
 func Scrape(connect core.Connection) rod.Elements {
-	elems := connect.Page.MustWaitLoad().MustElements("div[class^='CopyableInstanceField']")
+
+	elems := connect.Page.MustWaitLoad().MustElements("svg[aria-label='copy icon']")
 	return elems
 }
 
@@ -86,6 +89,36 @@ func Copy(elems rod.Elements) (SandboxCredential, error) {
 	}, nil
 }
 
+func CopySvg(elems rod.Elements) (SandboxCredential, error) {
+	// initialize cliboard package
+	err := clipboard.Init()
+	if err != nil {
+		panic(err)
+	}
+
+	un := ClipBoard(elems[0])
+	pw := ClipBoard(elems[1])
+	url := ClipBoard(elems[2])
+	keyid := ClipBoard(elems[3])
+	accesskey := ClipBoard(elems[4])
+
+	return SandboxCredential{
+		User:      un,
+		Password:  pw,
+		URL:       url,
+		KeyID:     keyid,
+		AccessKey: accesskey,
+	}, nil
+}
+
+// have to copy to clipboard to get whole string
+func ClipBoard(elem *rod.Element) string {
+	elem.MustClick()
+	res := clipboard.Read(clipboard.FmtText)
+	cli.Success("clipboard val : ", string(res))
+	clipboard.Write(clipboard.FmtText, nil)
+	return string(res)
+}
 
 func CopyHtml(elems rod.Elements) (SandboxCredential, error) {
 
