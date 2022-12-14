@@ -6,12 +6,14 @@ import (
 	"github.com/go-rod/rod/lib/input"
 )
 
+// for holding information about a login
 type WebsiteLogin struct {
 	Url      string
 	Username string
 	Password string
 }
 
+// for holding information about a rod connection
 type Connection struct {
 	Browser *rod.Browser
 	Page    *rod.Page
@@ -40,4 +42,26 @@ func Login(login WebsiteLogin) (Connection, error) {
 
 	//create connection object to return
 	return Connection{Browser: browser, Page: page}, nil
+}
+
+// should be able to work with most websites that use a login form
+func SimpleLogin(connect Connection, login WebsiteLogin) (Connection, error) {
+	//navigate to login page
+	page := connect.Page.MustNavigate(login.Url)
+
+	//Race Condition: It will keep polling until one selector has found a match
+	page.Race().Element("input[name='email']").MustHandle(func(e *rod.Element) {
+		e.MustInput(login.Username).MustType(input.Enter)
+	}).Element("input[name='username']").MustHandle(func(e *rod.Element) {
+		e.MustInput(login.Username).MustType(input.Enter)
+	}).MustDo()
+
+	page.MustElement("input[name='password']").MustInput(login.Password).MustType(input.Enter)
+
+	return Connection{Browser: connect.Browser, Page: page}, nil
+}
+
+func Connect(browser *rod.Browser, url string) Connection {
+	page := browser.MustPage(url)
+	return Connection{Browser: browser, Page: page}
 }
