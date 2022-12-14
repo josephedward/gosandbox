@@ -3,66 +3,105 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"github.com/manifoldco/promptui"
 	"gosandbox/acloud"
 	"gosandbox/cli"
 	"gosandbox/core"
 	"gosandbox/gh"
 	"gosandbox/proxy"
 	"os"
-	"os/exec"
 	"strings"
-	"time"
+
+	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/launcher"
+	"github.com/manifoldco/promptui"
+	"github.com/rs/zerolog"
 )
 
 func main() {
-	cli.Welcome()
-	go core.Manager()
-	time.Sleep(1 * time.Second)
-	go core.Remote()
-	
-	_, err := exec.Command("/bin/sh", "./scripts/frame.sh").Output()
-	if err != nil {
-		panic(err)
-	}
-	cli.Success("Script executed successfully")
-
+	ZeroLog()
 	var p acloud.ACloudProvider
-	cli.Success("getting acloud provider login...")
-	
-	if len(os.Args) > 1 {
-		cli.Success("setting args to env...")
-		env, err :=core.ArgEnv()
-		cli.PrintIfErr(err)	
-		p.ACloudEnv = env
-		p = bootstrap(p)
-		Execute(p)
-	} else {
-		env, err := cli.GetEnv(".env")
-		cli.PrintIfErr(err)	
-		if err != nil {
-			cli.Error("Error: .env file not found")
-			env = core.Env()
-		}
-		cli.Success("env : ", env)
-		p.ACloudEnv = env
-		p = bootstrap(p)
+	p, err := Bootstrap(p)
+	cli.Success("Provider after Bootstrap: ", p)
+	cli.PrintIfErr(err)
+	exit := false
+	for !exit {
 		Execute(p)
 	}
+}
+
+func ZeroLog() {
+	//look through all os.Args and see if one is "prod"
+	for _, arg := range os.Args {
+		if arg == "prod" {
+			zerolog.SetGlobalLevel(zerolog.InfoLevel)
+			break
+		}
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	}
+	// print level of global logger
+	fmt.Println("global logger level : ")
+	cli.Success(zerolog.GlobalLevel())
 
 }
 
-func bootstrap(p acloud.ACloudProvider) acloud.ACloudProvider {
-	cli.Success("getting sandbox credentials...")
-	//get sandbox creds
-	p, err := GetSandboxCreds(p.ACloudEnv, &p)
+func Bootstrap(p acloud.ACloudProvider) (acloud.ACloudProvider, error) {
+
+	if zerolog.GlobalLevel() != zerolog.DebugLevel {
+		cli.Welcome()
+	}
+
+	cli.Success("len(os.Args) : ", len(os.Args))
+	cli.Success("os.Args : ", os.Args)
+	p, err := ConnectBrowser(p)
 	cli.PrintIfErr(err)
-
-	//create sqlite table
-	// p.SQLiteRepository, err = ConnectSQLiteTable()
-	// cli.PrintIfErr(err)
-	return p
+	cli.Success("environment : ", p.ACloudEnv)
+	p, err = Sandbox(&p)
+	cli.PrintIfErr(err)
+	cli.Success("p : ", p)
+	return p, err
 }
+
+func Sandbox(p *acloud.ACloudProvider) (acloud.ACloudProvider, error) {
+
+	//scrape credentials
+	elems, err := acloud.Sandbox(p.Connection, p.ACloudEnv.Download_key)
+	cli.PrintIfErr(err)
+	cli.Success("rod html elements : ", elems)
+
+	// copy credentials to clipboard
+	p.SandboxCredential, err = acloud.CopySvg(elems)
+	cli.PrintIfErr(err)
+	cli.Success("credentials : ", p.SandboxCredential)
+
+	// //DISPLAY WITH COLORS PROMINENTLY TO THE USER
+	// acloud.DisplayCreds(creds)
+
+	return *p, err
+}
+
+func ConnectBrowser(p acloud.ACloudProvider) (acloud.ACloudProvider, error) {
+	u := launcher.MustResolveURL("")
+	browser := rod.New().ControlURL(u).MustConnect()
+	ACloudEnv, err := cli.LoadEnv()
+	cli.PrintIfErr(err)
+	p.ACloudEnv = ACloudEnv
+	Connection := core.Connect(browser, p.ACloudEnv.Url)
+	cli.Success("Connection after: ", Connection)
+	p.Connection = Connection
+	return p, nil
+}
+
+// func bootstrap(p acloud.ACloudProvider) acloud.ACloudProvider {
+// 	cli.Success("getting sandbox credentials...")
+// 	//get sandbox creds
+// 	p, err := GetSandboxCreds(p.ACloudEnv, &p)
+// 	cli.PrintIfErr(err)
+
+// 	//create sqlite table
+// 	// p.SQLiteRepository, err = ConnectSQLiteTable()
+// 	// cli.PrintIfErr(err)
+// 	return p
+// }
 
 func GetTemplates() *promptui.SelectTemplates {
 	templates := &promptui.SelectTemplates{
@@ -152,12 +191,12 @@ func Execute(p acloud.ACloudProvider) {
 	case 0:
 		os.Exit(0)
 	case 1:
-		p.ACloudEnv, err = EnvLocation()
-		cli.PrintIfErr(err)
-		cli.Success("environment : ", p.ACloudEnv)
-		p, err = GetSandboxCreds(p.ACloudEnv, &p)
-		cli.PrintIfErr(err)
-		cli.Success("credentials : ", p.SandboxCredential)
+		// p.ACloudEnv, err = EnvLocation()
+		// cli.PrintIfErr(err)
+		// cli.Success("environment : ", p.ACloudEnv)
+		// p, err = Sandbox(p.ACloudEnv, &p)
+		// cli.PrintIfErr(err)
+		// cli.Success("credentials : ", p.SandboxCredential)
 	case 2:
 		// download text file of policies
 		DownloadTextFile(p.SandboxCredential)
@@ -323,32 +362,7 @@ func AppendCreds(creds acloud.SandboxCredential) {
 	}
 }
 
-func GetSandboxCreds(cliEnv core.ACloudEnv, p *acloud.ACloudProvider) (acloud.ACloudProvider, error) {
-
-	//connect to website
-	connect, err := core.Login(core.WebsiteLogin{Url: cliEnv.Url, Username: cliEnv.Username, Password: cliEnv.Password})
-	cli.PrintIfErr(err)
-	cli.Success("Connection Successful: ", connect)
-	p.Connection = connect
-
-	//scrape credentials
-	elems, err := acloud.Sandbox(p.Connection, cliEnv.Download_key)
-	cli.PrintIfErr(err)
-	// cli.Success("rod html elements : ", elems)
-
-	//copy credentials to clipboard
-	creds, err := acloud.CopyHtml(elems)
-	cli.PrintIfErr(err)
-	// cli.Success("credentials : ", creds)
-	p.SandboxCredential = creds
-
-	//DISPLAY WITH COLORS PROMINENTLY TO THE USER
-	acloud.DisplayCreds(creds)
-
-	return *p, err
-}
-
-func EnvLocation() (cliEnv core.ACloudEnv, err error) {
+func EnvLocation() (cliEnv cli.ACloudEnv, err error) {
 	options := []cli.PromptOptions{
 		{
 			Label: "Get sandbox credentials with .env file located in your current directory",
@@ -368,7 +382,7 @@ func EnvLocation() (cliEnv core.ACloudEnv, err error) {
 
 	if err != nil {
 		cli.PrintIfErr(err)
-		return core.ACloudEnv{}, err
+		return cli.ACloudEnv{}, err
 	}
 	cli.Success("You choose number %d: %s\n", i+1, options[i].Label)
 
@@ -383,7 +397,7 @@ func EnvLocation() (cliEnv core.ACloudEnv, err error) {
 	}
 	cli.PrintIfErr(err)
 	if err != nil {
-		return core.ACloudEnv{}, err
+		return cli.ACloudEnv{}, err
 	}
 
 	return cliEnv, nil
