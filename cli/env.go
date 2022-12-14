@@ -1,6 +1,7 @@
-package core
+package cli
 
 import (
+	// "fmt"
 	"github.com/joho/godotenv"
 	"os"
 )
@@ -13,13 +14,20 @@ type ACloudEnv struct {
 	Download_key string
 }
 
-func Env() (login ACloudEnv){
-	//set all needed vendor credentials
+func Env() (login ACloudEnv) {
 	username := os.Getenv("USERNAME")
+	//set env variable
+	os.Setenv("USERNAME", username)
 	password := os.Getenv("PASSWORD")
+	os.Setenv("PASSWORD", password)
 	url := os.Getenv("URL")
+	os.Setenv("URL", url)
 	aws_path := os.Getenv("AWS_RELATIVE_PATH")
+	os.Setenv("AWS_RELATIVE_PATH", aws_path)
 	download_key := os.Getenv("DOWNLOAD_KEY")
+	os.Setenv("DOWNLOAD_KEY", download_key)
+
+	// fmt.Print("env: ", username, password, url, aws_path, download_key)
 	return ACloudEnv{
 		Url:          url,
 		Username:     username,
@@ -31,21 +39,10 @@ func Env() (login ACloudEnv){
 
 func LoadEnv() (login ACloudEnv, err error) {
 	//load env variables
-	err = godotenv.Load("../.env")
+	err = godotenv.Load("./.env")
 	env := Env()
+	// fmt.Print("env: ", env)
 	return env, err
-	// username := os.Getenv("USERNAME")
-	// password := os.Getenv("PASSWORD")
-	// url := os.Getenv("URL")
-	// aws_path := os.Getenv("AWS_RELATIVE_PATH")
-	// download_key := os.Getenv("DOWNLOAD_KEY")
-	// return ACloudEnv{
-	// 	Url:          url,
-	// 	Username:     username,
-	// 	Password:     password,
-	// 	Aws_path:     aws_path,
-	// 	Download_key: download_key,
-	// }, err
 }
 
 func LoadEnvPath(path string) (login ACloudEnv, err error) {
@@ -61,9 +58,9 @@ func ArgEnv() (login ACloudEnv, err error) {
 	password := os.Args[2]
 	url := os.Args[3]
 	download_key := os.Args[4]
-	//may not need this yet 
+	//may not need this yet
 	// aws_path := os.Args[3]
-	
+
 	return ACloudEnv{
 		Url:          url,
 		Username:     username,
@@ -72,4 +69,3 @@ func ArgEnv() (login ACloudEnv, err error) {
 		Download_key: download_key,
 	}, err
 }
-

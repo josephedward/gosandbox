@@ -3,9 +3,9 @@ package cli
 import (
 	"errors"
 	"fmt"
-	"github.com/manifoldco/promptui"
-	"gosandbox/core"
 	"os"
+
+	"github.com/manifoldco/promptui"
 )
 
 type PromptContent struct {
@@ -19,17 +19,17 @@ type PromptOptions struct {
 	Key   int64
 }
 
-func GetEnv(env_path string) (core.ACloudEnv, error) {
-	env, err := core.LoadEnvPath(env_path)
+func GetEnv(env_path string) (ACloudEnv, error) {
+	env, err := LoadEnvPath(env_path)
 	if err != nil {
 		fmt.Println("Could not load .env file - Err: ", err)
 		// PromptEnvFile()
-		env = core.Env()
+		env = Env()
 	}
 	return env, nil
 }
 
-func PromptEnvFile() (core.ACloudEnv, error) {
+func PromptEnvFile() (ACloudEnv, error) {
 	//load env variables
 	env_path := PromptGetInput(PromptContent{
 		Label: "Please enter the path to the .env file from this directory",
@@ -38,8 +38,8 @@ func PromptEnvFile() (core.ACloudEnv, error) {
 	return env, err
 }
 
-func PromptManual() (core.ACloudEnv, error) {
-	tempEnv := core.ACloudEnv{}
+func PromptManual() (ACloudEnv, error) {
+	tempEnv := ACloudEnv{}
 	// get env vars via cli prompt
 	tempEnv.Url = PromptGetInput(PromptContent{
 		Label: "Name of web property URL you would like to login to",

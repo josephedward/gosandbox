@@ -1,4 +1,4 @@
-package gh
+package test
 
 import (
 	"context"

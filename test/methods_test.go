@@ -10,7 +10,7 @@ import (
 
 func TestMethods(t *testing.T) {
 	//load env credentials from .env file
-	login, err := core.LoadEnv()
+	login, err := cli.LoadEnv()
 	cli.PrintIfErr(err)
 	fmt.Println("login : ", login)
 	t.Log("login : ", login)

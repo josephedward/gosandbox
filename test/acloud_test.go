@@ -101,7 +101,7 @@ func TestKeyVals(t *testing.T) {
 
 func TestACloudProvider_Login(t *testing.T) {
 	type fields struct {
-		ACloudEnv          core.ACloudEnv
+		ACloudEnv          cli.ACloudEnv
 		Connection         core.Connection
 		SandboxCredential acloud.SandboxCredential
 	}
@@ -131,7 +131,7 @@ func TestACloudProvider_Login(t *testing.T) {
 
 func TestACloudProvider_Policies(t *testing.T) {
 	type fields struct {
-		ACloudEnv          core.ACloudEnv
+		ACloudEnv          cli.ACloudEnv
 		Connection         core.Connection
 		SandboxCredential acloud.SandboxCredential
 	}
@@ -162,7 +162,7 @@ func TestACloudProvider_Policies(t *testing.T) {
 
 func TestACloudProvider_DocumentDownload(t *testing.T) {
 	type fields struct {
-		ACloudEnv          core.ACloudEnv
+		ACloudEnv          cli.ACloudEnv
 		Connection         core.Connection
 		SandboxCredential acloud.SandboxCredential
 	}

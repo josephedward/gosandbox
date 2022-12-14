@@ -8,7 +8,7 @@ import (
 )
 
 type ACloudProvider struct {
-	core.ACloudEnv
+	cli.ACloudEnv
 	core.Connection
 	SandboxCredential
 	*SQLiteRepository
@@ -17,7 +17,7 @@ type ACloudProvider struct {
 func (p *ACloudProvider) Login(username, password string) (err error) {
 
 	//load env credentials from .env file
-	login, err := core.LoadEnv()
+	login, err := cli.LoadEnv()
 	cli.PrintIfErr(err)
 	fmt.Println("login : ", login)
 

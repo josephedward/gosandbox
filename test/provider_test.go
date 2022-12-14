@@ -15,7 +15,7 @@ func TestProvider(t *testing.T) {
 	var err error
 
 	//load env credentials from .env file
-	p.ACloudEnv, err = core.LoadEnv()
+	p.ACloudEnv, err = cli.LoadEnv()
 	cli.PrintIfErr(err)
 	//print p ACloudEnv
 	t.Log("p.ACloudEnv : ", p.ACloudEnv)

@@ -34,12 +34,12 @@ func TestLogin(t *testing.T) {
 func TestLoadEnv(t *testing.T) {
 	tests := []struct {
 		name      string
-		wantLogin core.ACloudEnv
+		wantLogin cli.ACloudEnv
 		wantErr   bool
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotLogin, err := core.LoadEnv()
+			gotLogin, err := cli.LoadEnv()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("LoadEnv() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -58,12 +58,12 @@ func TestLoadEnvPath(t *testing.T) {
 	tests := []struct {
 		name      string
 		args      args
-		wantLogin core.ACloudEnv
+		wantLogin cli.ACloudEnv
 		wantErr   bool
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotLogin, err := core.LoadEnvPath(tt.args.path)
+			gotLogin, err := cli.LoadEnvPath(tt.args.path)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("LoadEnvPath() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -150,7 +150,7 @@ func TestScreenShot(t *testing.T) {
 // func TestExecute(t *testing.T) {
 // 	tests := []struct {
 // 		name    string
-// 		want    core.ACloudEnv
+// 		want    cli.ACloudEnv
 // 		wantErr bool
 // 	}{
 // 		// TODO: Add test cases.
@@ -171,12 +171,12 @@ func TestScreenShot(t *testing.T) {
 
 // func Test_promptEnvFile(t *testing.T) {
 // 	type args struct {
-// 		tempEnv core.ACloudEnv
+// 		tempEnv cli.ACloudEnv
 // 	}
 // 	tests := []struct {
 // 		name    string
 // 		args    args
-// 		want    core.ACloudEnv
+// 		want    cli.ACloudEnv
 // 		wantErr bool
 // 	}{
 // 		// TODO: Add test cases.
@@ -197,12 +197,12 @@ func TestScreenShot(t *testing.T) {
 
 // func Test_promptManual(t *testing.T) {
 // 	type args struct {
-// 		tempEnv core.ACloudEnv
+// 		tempEnv cli.ACloudEnv
 // 	}
 // 	tests := []struct {
 // 		name    string
 // 		args    args
-// 		want   core.ACloudEnv
+// 		want   cli.ACloudEnv
 // 		wantErr bool
 // 	}{
 // 		// TODO: Add test cases.

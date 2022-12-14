@@ -167,7 +167,7 @@ func TestAppendCreds(t *testing.T) {
 
 func TestGetSandboxCreds(t *testing.T) {
 	type args struct {
-		cliEnv core.ACloudEnv
+		cliEnv cli.ACloudEnv
 		p      *acloud.ACloudProvider
 	}
 	tests := []struct {
@@ -195,7 +195,7 @@ func TestGetSandboxCreds(t *testing.T) {
 func TestEnvLocation(t *testing.T) {
 	tests := []struct {
 		name       string
-		wantCliEnv core.ACloudEnv
+		wantCliEnv cli.ACloudEnv
 		wantErr    bool
 	}{
 		// TODO: Add test cases.
