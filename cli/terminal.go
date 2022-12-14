@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"github.com/rs/zerolog"
 )
 
 var Reset = "\033[0m"
@@ -20,24 +21,33 @@ func PrintIfErr(err error) {
 	}
 }
 
+
 func Success(message ...interface{}) {
-	for _, msg := range message {
-		s, ok := msg.(string) // the "ok" boolean will flag success.
-		if ok {
-			fmt.Println(Green + string(s) + Reset)
-		} else {
-			fmt.Println(msg)
+
+	//if log level is debug, print success messages
+	if zerolog.GlobalLevel() == zerolog.DebugLevel {
+		for _, msg := range message {
+			s, ok := msg.(string) // the "ok" boolean will flag success.
+			if ok {
+				fmt.Println(Green + string(s) + Reset)
+			} else {
+				fmt.Println(msg)
+			}
 		}
 	}
 }
 
 func Error(message ...interface{}) {
-	for _, msg := range message {
-		s, ok := msg.(string) // the "ok" boolean will flag success.
-		if ok {
-			fmt.Println(Red + string(s) + Reset)
-		} else {
-			fmt.Println(msg)
+	//if log level is debug, print err messages
+	if zerolog.GlobalLevel() == zerolog.DebugLevel {
+
+		for _, msg := range message {
+			s, ok := msg.(string) // the "ok" boolean will flag success.
+			if ok {
+				fmt.Println(Red + string(s) + Reset)
+			} else {
+				fmt.Println(msg)
+			}
 		}
 	}
 }
