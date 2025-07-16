@@ -11,8 +11,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/go-rod/rod"
-	"github.com/go-rod/rod/lib/launcher"
 	"github.com/manifoldco/promptui"
 	"github.com/rs/zerolog"
 )
