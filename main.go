@@ -69,7 +69,8 @@ func Sandbox(p *acloud.ACloudProvider) (acloud.ACloudProvider, error) {
 	cli.Success("rod html elements : ", elems)
 
 	// copy credentials to clipboard
-	p.SandboxCredential, err = acloud.CopySvg(elems)
+		// extract sandbox credentials values from HTML inputs (avoiding OS clipboard)
+		p.SandboxCredential, err = acloud.CopyHtml(elems)
 	cli.PrintIfErr(err)
 	cli.Success("credentials : ", p.SandboxCredential)
 
@@ -80,15 +81,31 @@ func Sandbox(p *acloud.ACloudProvider) (acloud.ACloudProvider, error) {
 }
 
 func ConnectBrowser(p acloud.ACloudProvider) (acloud.ACloudProvider, error) {
-	u := launcher.MustResolveURL("")
-	browser := rod.New().ControlURL(u).MustConnect()
-	ACloudEnv, err := cli.LoadEnv()
-	cli.PrintIfErr(err)
-	p.ACloudEnv = ACloudEnv
-	Connection := core.Connect(browser, p.ACloudEnv.Url)
-	cli.Success("Connection after: ", Connection)
-	p.Connection = Connection
-	return p, nil
+		// launch Rod-controlled browser
+		u := launcher.MustResolveURL("")
+		browser := rod.New().ControlURL(u).MustConnect()
+
+		// load .env for sandbox URL and credentials
+		env, err := cli.LoadEnv()
+		cli.PrintIfErr(err)
+		p.ACloudEnv = env
+
+		// navigate to the sandbox URL and perform login
+		page := browser.MustPage(p.ACloudEnv.Url)
+		conn := core.Connection{Browser: browser, Page: page}
+		conn, err = core.SimpleLogin(conn, core.WebsiteLogin{
+			Url:      p.ACloudEnv.Url,
+			Username: p.ACloudEnv.Username,
+			Password: p.ACloudEnv.Password,
+		})
+		cli.PrintIfErr(err)
+		// wait for post-login navigation to complete
+		conn.Page.MustWaitNavigation()
+		conn.Page.MustWaitLoad()
+
+		cli.Success("Connected and logged in: ", conn)
+		p.Connection = conn
+		return p, nil
 }
 
 // func bootstrap(p acloud.ACloudProvider) acloud.ACloudProvider {
