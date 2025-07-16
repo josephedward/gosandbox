@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"gosandbox/cli"
+
+	"github.com/mattn/go-sqlite3"
 )
 
 var (
@@ -50,17 +52,15 @@ func (r *SQLiteRepository) Create(creds SandboxCredential) (*SandboxCredential, 
 	res, err := r.db.Exec("INSERT INTO SandboxCredentials(User, Password ,URL, KeyID, AccessKey) values(?,?,?,?,?)",
 		creds.User, creds.Password, creds.URL, creds.KeyID, creds.AccessKey)
 	fmt.Println("res : ", res)
-	cli.PrintIfErr(err)
-	// fmt.Println("err : ", err)
-	// if err != nil {
-	// 	var sqliteErr sqlite3.Error
-	// 	if errors.As(err, &sqliteErr) {
-	// 		if errors.Is(sqliteErr.ExtendedCode, sqlite3.ErrConstraintUnique) {
-	// 			return nil, ErrDuplicate
-	// 		}
-	// 	}
-	// 	return nil, err
-	// }
+	if err != nil {
+		var sqliteErr sqlite3.Error
+		if errors.As(err, &sqliteErr) {
+			if errors.Is(sqliteErr.ExtendedCode, sqlite3.ErrConstraintUnique) {
+				return nil, ErrDuplicate
+			}
+		}
+		return nil, err
+	}
 
 	id, err := res.LastInsertId()
 	if err != nil {

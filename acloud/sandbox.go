@@ -45,7 +45,7 @@ func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) 
 
 func Scrape(connect core.Connection) rod.Elements {
 
-	elems := connect.Page.MustWaitLoad().MustElements("svg[aria-label='copy icon']")
+	elems := connect.Page.MustWaitLoad().MustElements("div[class^='CopyableInstanceField']")
 	return elems
 }
 
