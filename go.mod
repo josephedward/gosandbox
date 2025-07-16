@@ -15,6 +15,7 @@ require (
 )
 
 require (
+	github.com/mattn/go-sqlite3 v1.14.28
 	github.com/rs/zerolog v1.28.0
 	github.com/ysmood/leakless v0.8.0
 )
