@@ -8,3 +8,6 @@ creds.txt
 dist/
 
 dist/
+.aider*
+/.gocache
+/.tmp
