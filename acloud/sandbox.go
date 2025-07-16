@@ -1,15 +1,15 @@
 package acloud
 
 import (
-	"errors"
-	"fmt"
-	"gosandbox/cli"
-	"gosandbox/core"
-	// "os"
-	"time"
+   "errors"
+   "fmt"
+   "os"
+   "gosandbox/cli"
+   "gosandbox/core"
+   "time"
 
-	"github.com/go-rod/rod"
-	"golang.design/x/clipboard"
+   "github.com/go-rod/rod"
+   "golang.design/x/clipboard"
 )
 
 type SandboxCredential struct {
@@ -23,19 +23,27 @@ type SandboxCredential struct {
 
 func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) {
 
-	elems := make(rod.Elements, 0)
-
-	time.Sleep(1 * time.Second)
-
-	// It will keep polling until one selector has found a match
-	connect.Page.Race().ElementR("button", "Start AWS Sandbox").MustHandle(func(e *rod.Element) {
-		e.MustClick()
-		time.Sleep(1 * time.Second)
-		elems = Scrape(connect)
-	}).Element("div[role='tabpanel']").MustHandle(func(e *rod.Element) {
-		time.Sleep(1 * time.Second)
-		elems = Scrape(connect)
-	}).MustDo()
+   elems := make(rod.Elements, 0)
+   time.Sleep(1 * time.Second)
+   sel := os.Getenv("ACLOUD_SELECTOR")
+   if sel != "" {
+       btn := connect.Page.MustElement(sel)
+       btn.MustClick()
+       time.Sleep(1 * time.Second)
+       core.ScreenShot(downloadKey, connect)
+       elems = Scrape(connect)
+   } else {
+       // default behavior: click the "Start AWS Sandbox" button and wait for panel
+       connect.Page.Race().ElementR("button", "Start AWS Sandbox").MustHandle(func(e *rod.Element) {
+           e.MustClick()
+           time.Sleep(1 * time.Second)
+           core.ScreenShot(downloadKey, connect)
+           elems = Scrape(connect)
+       }).Element("div[role='tabpanel']").MustHandle(func(e *rod.Element) {
+           time.Sleep(1 * time.Second)
+           elems = Scrape(connect)
+       }).MustDo()
+   }
 
 	if len(elems) == 0 {
 		return nil, errors.New("no elements found")
