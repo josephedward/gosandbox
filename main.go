@@ -81,31 +81,26 @@ func Sandbox(p *acloud.ACloudProvider) (acloud.ACloudProvider, error) {
 }
 
 func ConnectBrowser(p acloud.ACloudProvider) (acloud.ACloudProvider, error) {
-		// launch Rod-controlled browser
-		u := launcher.MustResolveURL("")
-		browser := rod.New().ControlURL(u).MustConnect()
+	ACloudEnv, err := cli.LoadEnv()
+	cli.PrintIfErr(err)
+	if err != nil {
+		return p, err
+	}
+	p.ACloudEnv = ACloudEnv
 
-		// load .env for sandbox URL and credentials
-		env, err := cli.LoadEnv()
-		cli.PrintIfErr(err)
-		p.ACloudEnv = env
+	loginDetails := core.WebsiteLogin{
+		Url:      ACloudEnv.Url,
+		Username: ACloudEnv.Username,
+		Password: ACloudEnv.Password,
+	}
 
-		// navigate to the sandbox URL and perform login
-		page := browser.MustPage(p.ACloudEnv.Url)
-		conn := core.Connection{Browser: browser, Page: page}
-		conn, err = core.SimpleLogin(conn, core.WebsiteLogin{
-			Url:      p.ACloudEnv.Url,
-			Username: p.ACloudEnv.Username,
-			Password: p.ACloudEnv.Password,
-		})
-		cli.PrintIfErr(err)
-		// wait for post-login navigation to complete
-		conn.Page.MustWaitNavigation()
-		conn.Page.MustWaitLoad()
+	p.Connection, err = core.Login(loginDetails)
+	if err != nil {
+		return p, err
+	}
+	cli.Success("Connection after login: ", p.Connection)
 
-		cli.Success("Connected and logged in: ", conn)
-		p.Connection = conn
-		return p, nil
+	return p, nil
 }
 
 // func bootstrap(p acloud.ACloudProvider) acloud.ACloudProvider {
