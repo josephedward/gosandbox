@@ -10,5 +10,10 @@ services:
          - rod
       container_name: gosandbox_container
       restart: always
+      env_file:
+        - .env
+      volumes:
+        - ./.env:/app/.env
+        - ./data:/app/data
    #  ports:
    #    - "8080:80"
