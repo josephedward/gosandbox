@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"gosandbox/cli"
 
 	"github.com/mattn/go-sqlite3"
 )
