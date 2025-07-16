@@ -18,17 +18,19 @@ func (p *ACloudProvider) Login(username, password string) (err error) {
 
 	//load env credentials from .env file
 	login, err := cli.LoadEnv()
-	cli.PrintIfErr(err)
-	fmt.Println("login : ", login)
+	if err != nil {
+		cli.PrintIfErr(err)
+		return err
+	}
 
 	//connect to website
-	connect, err := core.Login(core.WebsiteLogin{Url: login.Url, Username: username, Password: password})
-	cli.PrintIfErr(err)
-	fmt.Println("connect : ", connect)
+	p.Connection, err = core.Login(core.WebsiteLogin{Url: login.Url, Username: username, Password: password})
+	if err != nil {
+		cli.PrintIfErr(err)
+		return err
+	}
 
-	//set the provider's connection
-	p.Connection = connect
-	return err
+	return nil
 }
 
 func (p *ACloudProvider) Policies() (policies []proxy.Policy, err error) {

@@ -33,12 +33,14 @@ func Login(login WebsiteLogin) (Connection, error) {
 
 	//login to the page
 	page.Race().Element("input[name='email']").MustHandle(func(e *rod.Element) {
-		e.MustInput(login.Username).MustType(input.Enter)
+		e.MustInput(login.Username)
 	}).Element("input[name='username']").MustHandle(func(e *rod.Element) {
-		e.MustInput(login.Username).MustType(input.Enter)
+		e.MustInput(login.Username)
 	}).MustDo()
 
-	page.MustElement("input[name='password']").MustInput(login.Password).MustType(input.Enter)
+	page.MustElement("input[name='password']").MustInput(login.Password)
+	page.MustElement("button[type='submit']").MustClick()
+	page.MustWaitLoad()
 
 	//create connection object to return
 	return Connection{Browser: browser, Page: page}, nil
@@ -51,12 +53,14 @@ func SimpleLogin(connect Connection, login WebsiteLogin) (Connection, error) {
 
 	//Race Condition: It will keep polling until one selector has found a match
 	page.Race().Element("input[name='email']").MustHandle(func(e *rod.Element) {
-		e.MustInput(login.Username).MustType(input.Enter)
+		e.MustInput(login.Username)
 	}).Element("input[name='username']").MustHandle(func(e *rod.Element) {
-		e.MustInput(login.Username).MustType(input.Enter)
+		e.MustInput(login.Username)
 	}).MustDo()
 
-	page.MustElement("input[name='password']").MustInput(login.Password).MustType(input.Enter)
+	page.MustElement("input[name='password']").MustInput(login.Password)
+	page.MustElement("button[type='submit']").MustClick()
+	page.MustWaitLoad()
 
 	return Connection{Browser: connect.Browser, Page: page}, nil
 }
