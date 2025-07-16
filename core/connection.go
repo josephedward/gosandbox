@@ -3,7 +3,6 @@ package core
 import (
 	"errors"
 	"github.com/go-rod/rod"
-	"github.com/go-rod/rod/lib/input"
 )
 
 // for holding information about a login
