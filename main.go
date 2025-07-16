@@ -1,26 +1,34 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
-	"gosandbox/acloud"
-	"gosandbox/cli"
-	"gosandbox/core"
-	"gosandbox/gh"
-	"gosandbox/proxy"
-	"os"
-	"strings"
+   "database/sql"
+   "flag"
+   "fmt"
+   "gosandbox/acloud"
+   "gosandbox/cli"
+   "gosandbox/core"
+   "gosandbox/gh"
+   "gosandbox/proxy"
+   "os"
+   "strings"
 
-	"github.com/manifoldco/promptui"
-	"github.com/rs/zerolog"
+   "github.com/manifoldco/promptui"
+   "github.com/rs/zerolog"
 )
 
 func main() {
+	// parse flags for service mode
+	startService := flag.Bool("start-service", false, "run sandbox flow and exit")
+	flag.Parse()
 	ZeroLog()
 	var p acloud.ACloudProvider
 	p, err := Bootstrap(p)
 	cli.Success("Provider after Bootstrap: ", p)
 	cli.PrintIfErr(err)
+	if *startService {
+		acloud.DisplayCreds(p.SandboxCredential)
+		return
+	}
 	exit := false
 	for !exit {
 		Execute(p)
