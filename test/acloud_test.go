@@ -1,37 +1,49 @@
 package test
 
 import (
-	"github.com/go-rod/rod"
-	"gosandbox/acloud"
-	"gosandbox/core"
-	"gosandbox/proxy"
+	"os"
 	"reflect"
 	"testing"
+
+	"github.com/go-rod/rod"
+	"gosandbox/acloud"
+	"gosandbox/cli"
+	"gosandbox/core"
+	"gosandbox/proxy"
 )
 
-func TestSandbox(t *testing.T) {
-	type args struct {
-		connect     core.Connection
-		downloadKey string
+func TestSandbox_Integration(t *testing.T) {
+	if os.Getenv("INTEGRATION_TESTS") == "" {
+		t.Skip("skipping integration test")
 	}
-	tests := []struct {
-		name    string
-		args    args
-		want    rod.Elements
-		wantErr bool
+
+	loginEnv, err := cli.LoadEnv()
+	if err != nil {
+		t.Fatalf("failed to load env: %v", err)
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := acloud.Sandbox(tt.args.connect, tt.args.downloadKey)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Sandbox() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Sandbox() = %v, want %v", got, tt.want)
-			}
-		})
+
+	login := core.WebsiteLogin{
+		Url:      loginEnv.Url,
+		Username: loginEnv.Username,
+		Password: loginEnv.Password,
 	}
+
+	connection, err := core.Login(login)
+	if err != nil {
+		t.Fatalf("Login() error = %v", err)
+	}
+	defer connection.Browser.MustClose()
+
+	t.Run("scrape sandbox credentials", func(t *testing.T) {
+		elems, err := acloud.Sandbox(connection, "test-sandbox-screenshot")
+		if err != nil {
+			t.Fatalf("Sandbox() error = %v, wantErr %v", err, false)
+		}
+
+		if len(elems) == 0 {
+			t.Error("Sandbox() returned no elements, expected credentials")
+		}
+	})
 }
 
 func TestScrape(t *testing.T) {

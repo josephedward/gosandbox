@@ -1,34 +1,48 @@
 package test
 
 import (
-	"gosandbox/proxy"
+	"gosandbox/cli"
 	"gosandbox/core"
+	"gosandbox/proxy"
+	"os"
 	"reflect"
 	"testing"
 )
 
-func TestLogin(t *testing.T) {
-	type args struct {
-		login core.WebsiteLogin
+func TestLogin_Integration(t *testing.T) {
+	if os.Getenv("INTEGRATION_TESTS") == "" {
+		t.Skip("skipping integration test")
 	}
-	tests := []struct {
-		name    string
-		args    args
-		want    core.Connection
-		wantErr bool
+
+	loginEnv, err := cli.LoadEnv()
+	if err != nil {
+		t.Fatalf("failed to load env: %v", err)
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := core.Login(tt.args.login)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Login() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Login() = %v, want %v", got, tt.want)
-			}
-		})
+
+	login := core.WebsiteLogin{
+		Url:      loginEnv.Url,
+		Username: loginEnv.Username,
+		Password: loginEnv.Password,
 	}
+
+	t.Run("successful login", func(t *testing.T) {
+		connection, err := core.Login(login)
+		if err != nil {
+			t.Fatalf("Login() error = %v, wantErr %v", err, false)
+		}
+		defer connection.Browser.MustClose()
+
+		title, err := connection.Page.Title()
+		if err != nil {
+			t.Fatalf("failed to get page title: %v", err)
+		}
+
+		// A bit brittle, but confirms we are past the login page.
+		expectedTitle := "A Cloud Guru"
+		if title != expectedTitle {
+			t.Errorf("Login() wrong page title = %q, want %q", title, expectedTitle)
+		}
+	})
 }
 
 func TestLoadEnv(t *testing.T) {
