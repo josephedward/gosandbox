@@ -40,7 +40,7 @@ func (p *ACloudProvider) Policies() (policies []proxy.Policy, err error) {
 	cli.PrintIfErr(err)
 
 	//copy credentials to clipboard
-	creds, err := Copy(elems)
+	creds, err := CopyHtml(elems)
 	cli.PrintIfErr(err)
 	fmt.Println("creds : ", creds.User)
 
