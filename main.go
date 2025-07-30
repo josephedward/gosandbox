@@ -74,8 +74,8 @@ func Sandbox(p *acloud.ACloudProvider) (acloud.ACloudProvider, error) {
 	cli.PrintIfErr(err)
 	cli.Success("rod html elements : ", elems)
 
-	// copy credentials to clipboard
-	p.SandboxCredential, err = acloud.Copy(elems)
+	// copy credentials from html
+	p.SandboxCredential, err = acloud.CopyHtml(elems)
 	cli.PrintIfErr(err)
 	cli.Success("credentials : ", p.SandboxCredential)
 
