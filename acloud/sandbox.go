@@ -24,23 +24,23 @@ type SandboxCredential struct {
 func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) {
 
    elems := make(rod.Elements, 0)
-   time.Sleep(1 * time.Second)
+   time.Sleep(3 * time.Second)
    sel := os.Getenv("ACLOUD_SELECTOR")
    if sel != "" {
        btn := connect.Page.MustElement(sel)
        btn.MustClick()
-       time.Sleep(1 * time.Second)
+       time.Sleep(3 * time.Second)
        core.ScreenShot(downloadKey, connect)
        elems = Scrape(connect)
    } else {
        // default behavior: click the "Start AWS Sandbox" button and wait for panel
        connect.Page.Race().ElementR("button", "Start AWS Sandbox").MustHandle(func(e *rod.Element) {
            e.MustClick()
-           time.Sleep(1 * time.Second)
+           time.Sleep(3 * time.Second)
            core.ScreenShot(downloadKey, connect)
            elems = Scrape(connect)
        }).Element("div[role='tabpanel']").MustHandle(func(e *rod.Element) {
-           time.Sleep(1 * time.Second)
+           time.Sleep(3 * time.Second)
            elems = Scrape(connect)
        }).MustDo()
    }

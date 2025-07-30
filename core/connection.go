@@ -31,14 +31,10 @@ func Login(login WebsiteLogin) (Connection, error) {
 	}
 
 	//login to the page
-	page.Race().Element("input[name='email']").MustHandle(func(e *rod.Element) {
-		e.MustInput(login.Username)
-	}).Element("input[name='username']").MustHandle(func(e *rod.Element) {
-		e.MustInput(login.Username)
-	}).MustDo()
-
-	page.MustElement("input[name='password']").MustInput(login.Password)
-	page.MustElement("button[type='submit']").MustClick()
+	// Pluralsight login
+	page.MustElement("#Username").MustInput(login.Username)
+	page.MustElement("#Password").MustInput(login.Password)
+	page.MustElement("#login-button").MustClick()
 	page.MustWaitLoad()
 
 	//create connection object to return
@@ -51,14 +47,10 @@ func SimpleLogin(connect Connection, login WebsiteLogin) (Connection, error) {
 	page := connect.Page.MustNavigate(login.Url)
 
 	//Race Condition: It will keep polling until one selector has found a match
-	page.Race().Element("input[name='email']").MustHandle(func(e *rod.Element) {
-		e.MustInput(login.Username)
-	}).Element("input[name='username']").MustHandle(func(e *rod.Element) {
-		e.MustInput(login.Username)
-	}).MustDo()
-
-	page.MustElement("input[name='password']").MustInput(login.Password)
-	page.MustElement("button[type='submit']").MustClick()
+	// Pluralsight login
+	page.MustElement("#Username").MustInput(login.Username)
+	page.MustElement("#Password").MustInput(login.Password)
+	page.MustElement("#login-button").MustClick()
 	page.MustWaitLoad()
 
 	return Connection{Browser: connect.Browser, Page: page}, nil
