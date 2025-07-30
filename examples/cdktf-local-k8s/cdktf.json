@@ -1,0 +1,8 @@
+{
+  "language": "typescript",
+  "app": "npx ts-node main.ts",
+  "context": {
+    "excludeStackIdFromLogicalIds": "true",
+    "allowSepCharsInLogicalIds": "true"
+  }
+}

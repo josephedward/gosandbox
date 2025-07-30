@@ -1,0 +1,15 @@
+{
+  "name": "cdktf-local-k8s-example",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@cdktf/provider-kubernetes": "^9.0.2",
+    "cdktf": "^0.19.0",
+    "constructs": "^10.3.0"
+  },
+  "devDependencies": {
+    "cdktf-cli": "^0.19.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
