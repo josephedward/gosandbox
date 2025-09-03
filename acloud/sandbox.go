@@ -26,25 +26,16 @@ func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) 
    time.Sleep(3 * time.Second)
 
    // default behavior: click the "Start AWS Sandbox" button and wait for panel
-   cli.Success("Starting sandbox initialization...")
-   err := connect.Page.Race().ElementR("button", "Start AWS Sandbox").MustHandle(func(e *rod.Element) {
-       cli.Success("Found Start AWS Sandbox button")
+   // default behavior: click the "Start AWS Sandbox" button and wait for panel
+   connect.Page.Race().ElementR("button", "Start AWS Sandbox").MustHandle(func(e *rod.Element) {
        e.MustClick()
        time.Sleep(3 * time.Second)
        core.ScreenShot(downloadKey, connect)
        elems = Scrape(connect)
    }).Element("div[role='tabpanel']").MustHandle(func(e *rod.Element) {
-       cli.Success("Found existing sandbox panel")
        time.Sleep(3 * time.Second)
        elems = Scrape(connect)
-   })
-   ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-   defer cancel()
-   err = errContext.MustDo(ctx)
-   
-   if err != nil {
-       return nil, fmt.Errorf("sandbox initialization failed: %w", err)
-   }
+   }).MustDo()
 
 	if len(elems) == 0 {
 		return nil, errors.New("no elements found")
