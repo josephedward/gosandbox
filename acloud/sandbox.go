@@ -43,7 +43,8 @@ func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) 
 }
 
 func Scrape(connect core.Connection) rod.Elements {
-
+	html := connect.Page.MustWaitLoad().MustHTML()
+	cli.Success("Page HTML content:", html)
 	elems := connect.Page.MustWaitLoad().MustElements("div[class^='CopyableInstanceField']")
 	return elems
 }
