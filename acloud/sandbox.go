@@ -37,7 +37,10 @@ func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) 
        cli.Success("Found existing sandbox panel")
        time.Sleep(3 * time.Second)
        elems = Scrape(connect)
-   }).WithTimeout(30 * time.Second).MustDo()
+   })
+   ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+   defer cancel()
+   err = errContext.MustDo(ctx)
    
    if err != nil {
        return nil, fmt.Errorf("sandbox initialization failed: %w", err)
