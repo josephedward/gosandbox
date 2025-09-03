@@ -27,12 +27,16 @@ func main() {
 	cli.PrintIfErr(err)
 	if *startService {
 		acloud.DisplayCreds(p.SandboxCredential)
+		os.Exit(0)
 		return
 	}
-	exit := false
-	for !exit {
-		Execute(p)
-	}
+
+	performLoginWithAISelectors(p)
+
+	// exit := false
+	// for !exit {
+	// 	Execute(p)
+	// }
 }
 
 func ZeroLog() {
@@ -58,10 +62,14 @@ func Bootstrap(p acloud.ACloudProvider) (acloud.ACloudProvider, error) {
 
 	cli.Success("len(os.Args) : ", len(os.Args))
 	cli.Success("os.Args : ", os.Args)
+	cli.Success("Before ConnectBrowser")
 	p, err := ConnectBrowser(p)
+	cli.Success("After ConnectBrowser")
 	cli.PrintIfErr(err)
 	cli.Success("environment : ", p.ACloudEnv)
+	cli.Success("Before Sandbox")
 	p, err = Sandbox(&p)
+	cli.Success("After Sandbox")
 	cli.PrintIfErr(err)
 	cli.Success("p : ", p)
 	return p, err
@@ -102,6 +110,15 @@ func ConnectBrowser(p acloud.ACloudProvider) (acloud.ACloudProvider, error) {
 	p.Connection, err = core.Login(loginDetails)
 	if err != nil {
 		return p, err
+	}
+	// Print HTML content for debugging
+	html, err := p.Connection.Page.HTML()
+	if err != nil {
+		cli.PrintIfErr(err)
+	} else {
+		fmt.Println("--- Page HTML (after login attempt) ---")
+		fmt.Println(html)
+		fmt.Println("--- End Page HTML ---")
 	}
 	cli.Success("Connection after login: ", p.Connection)
 
@@ -153,6 +170,49 @@ func Select(promptTitle string, options []cli.PromptOptions) *promptui.Select {
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
+func performLoginWithAISelectors(p acloud.ACloudProvider) {
+	cli.Success("Before getting HTML")
+	html, err := p.Connection.Page.HTML()
+	cli.Success("After getting HTML")
+	if err != nil {
+		cli.PrintIfErr(err)
+		return
+	}
+
+	cli.Success("Before getting selectors from AI")
+	usernameSelector, passwordSelector, loginButtonSelector, err := acloud.GetLoginSelectorsFromAI(html)
+	cli.Success("After getting selectors from AI")
+	if err != nil {
+		cli.PrintIfErr(err)
+		return
+	}
+
+	cli.Success("Username Selector from AI: ", usernameSelector)
+	cli.Success("Password Selector from AI: ", passwordSelector)
+	cli.Success("Login Button Selector from AI: ", loginButtonSelector)
+
+	// Perform login using AI-provided selectors
+	cli.Success("Attempting login with AI-provided selectors...")
+	page := p.Connection.Page
+	cli.Success("Username Selector: " + usernameSelector)
+	cli.Success("Password Selector: " + passwordSelector)
+	cli.Success("Login Button Selector: " + loginButtonSelector)
+	page.MustElement(usernameSelector).MustInput("test@example.com")
+	page.MustElement(passwordSelector).MustInput("password123")
+	page.MustElement(loginButtonSelector).MustClick()
+	page.MustWaitLoad()
+	cli.Success("Login attempt complete.")
+
+	htmlAfterLogin, err := page.HTML()
+	if err != nil {
+		cli.PrintIfErr(err)
+	} else {
+		fmt.Println("--- Page HTML (after AI-driven login attempt) ---")
+		fmt.Println(htmlAfterLogin)
+		fmt.Println("--- End Page HTML ---")
+	}
+}
+
 func Execute(p acloud.ACloudProvider) {
 
 	options := []cli.PromptOptions{
