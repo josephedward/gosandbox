@@ -70,6 +70,7 @@ func Bootstrap(p acloud.ACloudProvider) (acloud.ACloudProvider, error) {
 	cli.Success("Before Sandbox")
 	p, err = Sandbox(&p)
 	cli.Success("After Sandbox")
+	cli.Success("Number of elements found:", len(p.SandboxCredential.User))
 	cli.PrintIfErr(err)
 	cli.Success("p : ", p)
 	return p, err
