@@ -1,6 +1,23 @@
-# GOSANDBOX
+# Cloud Credential Management System
 
-This project helps provide AWS credential information for user's of A Cloud Guru's sandbox [feature](https://help.acloud.guru/hc/en-us/articles/360001389256-AWS-Cloud-Sandbox). It obtains credentials for a Cloud Sandbox using environment variables ([.env](https://github.com/joho/godotenv)) from a file located in the root directory, outputs credentials and snapshots to the /test folder, and appends AWS-CLI credentials to the assumed default location in macos and most linux-based filesystems.
+## AI-Powered Login Automation (Python)
+
+The new Python-based login system in `scripts/acloud-login-system` provides intelligent automation using GPT-4 Vision and CAPTCHA solving services. Key features:
+
+- AI-powered element detection
+- Multi-service CAPTCHA integration
+- Stealth browser automation
+- Comprehensive logging/monitoring
+
+```bash
+cd scripts/acloud-login-system
+pip install -e .
+acloud-login --help
+```
+
+## Legacy Go Sandbox Tools
+
+Original Go utilities for A Cloud Guru sandbox credential management:
 
 ## A Cloud Guru Sandboxes
 
