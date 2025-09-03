@@ -34,7 +34,10 @@ func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) 
    }).Element("div[role='tabpanel']").MustHandle(func(e *rod.Element) {
        time.Sleep(3 * time.Second)
        elems = Scrape(connect)
-   }).MustDo()
+   })
+   ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+   defer cancel()
+   err := raceContext.MustDo(ctx)
 
 	if len(elems) == 0 {
 		return nil, errors.New("no elements found")
