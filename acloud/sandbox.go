@@ -1,7 +1,6 @@
 package acloud
 
 import (
-   "context"
    "errors"
    "fmt"
    "gosandbox/cli"
@@ -26,7 +25,6 @@ func Sandbox(connect core.Connection, downloadKey string) (rod.Elements, error) 
    elems := make(rod.Elements, 0)
    time.Sleep(3 * time.Second)
 
-   // default behavior: click the "Start AWS Sandbox" button and wait for panel
    // default behavior: click the "Start AWS Sandbox" button and wait for panel
    connect.Page.Race().ElementR("button", "Start AWS Sandbox").MustHandle(func(e *rod.Element) {
        e.MustClick()
