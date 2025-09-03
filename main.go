@@ -31,27 +31,10 @@ func main() {
 		return
 	}
 
-	performLoginWithAISelectors(p)
-
 	// exit := false
 	// for !exit {
 	// 	Execute(p)
 	// }
-}
-
-func ZeroLog() {
-	//look through all os.Args and see if one is "prod"
-	for _, arg := range os.Args {
-		if arg == "prod" {
-			zerolog.SetGlobalLevel(zerolog.InfoLevel)
-			break
-		}
-		zerolog.SetGlobalLevel(zerolog.DebugLevel)
-	}
-	// print level of global logger
-	fmt.Println("global logger level : ")
-	cli.Success(zerolog.GlobalLevel())
-
 }
 
 func Bootstrap(p acloud.ACloudProvider) (acloud.ACloudProvider, error) {
@@ -67,10 +50,13 @@ func Bootstrap(p acloud.ACloudProvider) (acloud.ACloudProvider, error) {
 	cli.Success("After ConnectBrowser")
 	cli.PrintIfErr(err)
 	cli.Success("environment : ", p.ACloudEnv)
+
+	// Perform login with AI selectors BEFORE attempting to access sandbox
+	performLoginWithAISelectors(p)
+
 	cli.Success("Before Sandbox")
 	p, err = Sandbox(&p)
 	cli.Success("After Sandbox")
-	cli.Success("Number of elements found:", len(p.SandboxCredential.User))
 	cli.PrintIfErr(err)
 	cli.Success("p : ", p)
 	return p, err
@@ -125,6 +111,23 @@ func ConnectBrowser(p acloud.ACloudProvider) (acloud.ACloudProvider, error) {
 
 	return p, nil
 }
+
+func ZeroLog() {
+	//look through all os.Args and see if one is "prod"
+	for _, arg := range os.Args {
+		if arg == "prod" {
+			zerolog.SetGlobalLevel(zerolog.InfoLevel)
+			break
+		}
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	}
+	// print level of global logger
+	fmt.Println("global logger level : ")
+	cli.Success(zerolog.GlobalLevel())
+
+}
+
+
 
 // func bootstrap(p acloud.ACloudProvider) acloud.ACloudProvider {
 // 	cli.Success("getting sandbox credentials...")
